@@ -1,0 +1,56 @@
+{
+    "benchmark_run_name": "ChallengingPrompts_v1",
+    "prompts": [
+        {
+            "prompt_id": "C001_Accessible_Filterable_Sortable_DataTable",
+            "prompt_description": "Develop an accessible HTML data table to display user information. The table should be clearly identifiable for testing as 'user-data-table'.\n\n**Core Requirements:**\n1.  **Data:** Display the following user data (provide at least 4 sample rows):\n    *   Name (string)\n    *   Email (string, email format)\n    *   Age (number)\n    *   Joined Date (date, e.g., YYYY-MM-DD)\n2.  **Accessibility:** \n    *   The table MUST have a `<caption>` describing its content (e.g., 'User Information').\n    *   Table headers (`<th>`) MUST be properly associated with their respective columns and enable sorting.\n    *   The table structure ( `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`) must be semantically correct.\n3.  **Sorting Functionality:**\n    *   Users MUST be able to sort the table by 'Name' (alphabetically A-Z, Z-A) and 'Age' (numerically low-high, high-low) by clicking the respective column headers.\n    *   The active sort column and direction (ascending/descending) MUST be visually indicated on the header and communicated to assistive technologies (e.g., using `aria-sort`).\n    *   The sort trigger within each sortable header should be identifiable for testing as 'sort-by-[columnName]' (e.g., `data-testid='sort-by-Name'`).\n4.  **Filtering Functionality:**\n    *   Provide an `<input type='search'>` field, identifiable for testing as 'user-table-filter', allowing users to filter table rows by 'Name' or 'Email'.\n    *   Filtering should be case-insensitive and happen live as the user types (or after a short debounce). Rows not matching the filter criteria should be hidden.\n5.  **Styling:** Use Tailwind CSS for styling to ensure a clean, readable presentation. Responsive behavior is expected for smaller screens (e.g., table might need to scroll horizontally or columns stack if absolutely necessary, but readability is key).\n6.  **JavaScript:** Implement all sorting and filtering logic client-side. No external libraries beyond what's needed for Tailwind (if any, typically just the CDN link).\n\n**General Testing Identifiers:**\n*   Filter input: `data-testid='user-table-filter'`\n*   Table itself: `data-testid='user-data-table'`\n*   Sort trigger for Name column: `data-testid='sort-by-Name'`\n*   Sort trigger for Age column: `data-testid='sort-by-Age'`\n*   Table caption: `data-testid='table-caption'`\n*   Table body: `data-testid='table-body'`",
+            "viewports_to_test": {"desktop": [1280, 800], "mobile": [390, 844]},
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Table Element", "selector": "table[data-testid='user-data-table']", "points": 2},
+                {"type": "element_presence", "name": "Table Caption", "selector": "table[data-testid='user-data-table'] > caption[data-testid='table-caption']", "points": 2},
+                {"type": "text_content_exists", "name": "Caption Text Present", "selector": "caption[data-testid='table-caption']", "points": 1, "note": "Ensures caption is not empty."},
+                {"type": "element_presence", "name": "Table Head (thead)", "selector": "table[data-testid='user-data-table'] > thead", "points": 1},
+                {"type": "element_presence", "name": "Table Body (tbody)", "selector": "table[data-testid='user-data-table'] > tbody[data-testid='table-body']", "points": 1},
+                {"type": "element_count", "name": "Header Cells (th count)", "selector": "table[data-testid='user-data-table'] > thead th", "min_count": 4, "points": 2},
+                {"type": "element_count", "name": "Initial Data Rows (min 4)", "selector": "tbody[data-testid='table-body'] tr", "min_count": 4, "points": 2},
+                {"type": "element_presence", "name": "Filter Input", "selector": "input[type='search'][data-testid='user-table-filter']", "points": 2},
+                {"type": "element_presence", "name": "Sort by Name Trigger", "selector": "th [data-testid='sort-by-Name']", "points": 1, "note": "Could be a button inside TH"},
+                {"type": "element_presence", "name": "Sort by Age Trigger", "selector": "th [data-testid='sort-by-Age']", "points": 1, "note": "Could be a button inside TH"},
+                {
+                    "type": "interaction", "name": "Sort by Name (A-Z then Z-A)", "points": 8,
+                    "sequence": [
+                        {"step_name": "Sort Name Ascending", "trigger_element": {"selector": "[data-testid='sort-by-Name']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [
+                             {"outcome_type": "attribute_change", "element_selector": "th:has([data-testid='sort-by-Name'])", "attribute_name": "aria-sort", "expected_value": "ascending"},
+                             {"outcome_type": "custom_script_evaluates_true", "script": "const names = Array.from(document.querySelectorAll(\"tbody[data-testid='table-body'] tr td:nth-child(1)\")).map(td => td.textContent.trim()); const sortedNames = [...names].sort((a,b) => a.localeCompare(b)); return JSON.stringify(names) === JSON.stringify(sortedNames);"}
+                         ]},
+                        {"step_name": "Sort Name Descending", "trigger_element": {"selector": "[data-testid='sort-by-Name']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [
+                             {"outcome_type": "attribute_change", "element_selector": "th:has([data-testid='sort-by-Name'])", "attribute_name": "aria-sort", "expected_value": "descending"},
+                             {"outcome_type": "custom_script_evaluates_true", "script": "const names = Array.from(document.querySelectorAll(\"tbody[data-testid='table-body'] tr td:nth-child(1)\")).map(td => td.textContent.trim()); const sortedNames = [...names].sort((a,b) => b.localeCompare(a)); return JSON.stringify(names) === JSON.stringify(sortedNames);"}
+                         ]}
+                    ]
+                },
+                {
+                    "type": "interaction", "name": "Filter by Name (e.g., 'Alice')", "points": 7,
+                    "initial_setup": [{"action_type":"execute_script", "script": "const nameSortBtn = document.querySelector(\"[data-testid='sort-by-Name']\"); if(nameSortBtn && nameSortBtn.closest('th').getAttribute('aria-sort')) { nameSortBtn.click(); if(nameSortBtn.closest('th').getAttribute('aria-sort') === 'descending') {nameSortBtn.click();} }"}], 
+                    "trigger_element": {"selector": "input[data-testid='user-table-filter']"},
+                    "action": {"type": "type_text", "text_to_type": "Alice"}, "wait_for_outcome_ms": 700,
+                    "expected_outcomes": [
+                        {"outcome_type": "custom_script_evaluates_true", "script": "const rows = Array.from(document.querySelectorAll(\"tbody[data-testid='table-body'] tr\")); return rows.every(row => row.style.display === 'none' || (row.cells[0].textContent.toLowerCase().includes('alice') || row.cells[1].textContent.toLowerCase().includes('alice')));"},
+                        {"outcome_type": "new_element_count", "parent_element_selector": "tbody[data-testid='table-body']", "child_element_selector": "tr:not([style*='display: none'])", "expected_count": 1, "comparison":"less_than_or_equals", "note": "Assuming 'Alice' is unique or one of few."}
+                    ]
+                },
+                {
+                    "type": "interaction", "name": "Clear Filter", "points": 3,
+                     "trigger_element": {"selector": "input[data-testid='user-table-filter']"},
+                     "action": {"type": "type_text", "text_to_type": ""}, "wait_for_outcome_ms": 700,
+                     "expected_outcomes": [
+                         {"outcome_type": "new_element_count", "parent_element_selector": "tbody[data-testid='table-body']", "child_element_selector": "tr:not([style*='display: none'])", "min_count": 4, "comparison":"greater_than_or_equals", "note":"All original rows should be visible again"}
+                     ]
+                },
+                {"type": "custom_script_evaluates_true", "name": "Table Headers are Buttons or Links for Sorting", "script": "return Array.from(document.querySelectorAll(\"thead th\")).filter(th => th.querySelector('[data-testid^=sort-by]')).every(th => th.querySelector('button, a[role=button]'));", "points": 2, "note":"Ensures sortable headers are interactive elements."}
+            ]
+        }
+    ]
+}

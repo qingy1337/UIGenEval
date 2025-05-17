@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for drag and drop visuals */
+        .dragging {
+            opacity: 0.5;
+        }
+        .drop-zone-highlight {
+            border: 2px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4 pt-6 mt-10">
+        <h1 class="text-3xl font-bold mb-4">Kanban Board</h1>
+        <div class="flex flex-wrap justify-center">
+            <div class="w-full md:w-1/3 xl:w-1/3 p-6" data-testid="kanban-column-todo">
+                <h2 class="text-xl font-bold mb-4">To Do</h2>
+                <ul id="todo-column" class="list-none p-0 m-0">
+                    <!-- Cards will be generated here -->
+                </ul>
+                <button id="add-card-button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" data-testid="add-card-button">Add Card</button>
+            </div>
+            <div class="w-full md:w-1/3 xl:w-1/3 p-6" data-testid="kanban-column-inprogress">
+                <h2 class="text-xl font-bold mb-4">In Progress</h2>
+                <ul id="inprogress-column" class="list-none p-0 m-0">
+                    <!-- Cards will be generated here -->
+                </ul>
+            </div>
+            <div class="w-full md:w-1/3 xl:w-1/3 p-6" data-testid="kanban-column-done">
+                <h2 class="text-xl font-bold mb-4">Done</h2>
+                <ul id="done-column" class="list-none p-0 m-0">
+                    <!-- Cards will be generated here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Card Form -->
+    <div id="add-card-form" class="hidden fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-75 flex justify-center items-center" data-testid="add-card-form">
+        <div class="bg-white p-6 rounded shadow-md">
+            <h2 class="text-xl font-bold mb-4">Add Card</h2>
+            <form id="add-card-form-fields">
+                <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
+                <input type="text" id="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2 mt-4">Description:</label>
+                <textarea id="description" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                <button id="add-card-submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">Add Card</button>
+            </form>
+            <button id="add-card-cancel" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 ml-4">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize cards data
+        let cards = [
+            { id: 1, title: 'Card 1', description: 'Description 1', column: 'todo' },
+            { id: 2, title: 'Card 2', description: 'Description 2', column: 'inprogress' },
+            { id: 3, title: 'Card 3', description: 'Description 3', column: 'done' },
+        ];
+
+        // Render cards
+        function renderCards() {
+            const todoColumn = document.getElementById('todo-column');
+            const inprogressColumn = document.getElementById('inprogress-column');
+            const doneColumn = document.getElementById('done-column');
+
+            todoColumn.innerHTML = '';
+            inprogressColumn.innerHTML = '';
+            doneColumn.innerHTML = '';
+
+            cards.forEach((card) => {
+                const cardHtml = `
+                    <li class="bg-white p-4 mb-4 shadow-md" id="card-${card.id}" data-testid="kanban-card-${card.id}" draggable="true">
+                        <h3 class="text-lg font-bold mb-2">${card.title}</h3>
+                        <p class="text-gray-700 text-sm">${card.description}</p>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 edit-card-button" data-card-id="${card.id}">Edit</button>
+                    </li>
+                `;
+
+                if (card.column === 'todo') {
+                    todoColumn.insertAdjacentHTML('beforeend', cardHtml);
+                } else if (card.column === 'inprogress') {
+                    inprogressColumn.insertAdjacentHTML('beforeend', cardHtml);
+                } else if (card.column === 'done') {
+                    doneColumn.insertAdjacentHTML('beforeend', cardHtml);
+                }
+            });
+        }
+
+        // Add event listeners for drag and drop
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.hasAttribute('draggable')) {
+                e.dataTransfer.setData('text', e.target.id);
+                e.target.classList.add('dragging');
+            }
+        });
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (e.target.tagName === 'UL') {
+                e.target.classList.add('drop-zone-highlight');
+            }
+        });
+
+        document.addEventListener('dragleave', (e) => {
+            if (e.target.tagName === 'UL') {
+                e.target.classList.remove('drop-zone-highlight');
+            }
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const cardId = e.dataTransfer.getData('text');
+            const card = document.getElementById(cardId);
+            const column = e.target;
+
+            if (column.tagName === 'UL') {
+                const cardData = cards.find((c) => c.id === parseInt(cardId.replace('card-', '')));
+                cardData.column = column.id.replace('-column', '');
+                renderCards();
+                column.classList.remove('drop-zone-highlight');
+                card.classList.remove('dragging');
+            }
+        });
+
+        // Add event listener for add card button
+        document.getElementById('add-card-button').addEventListener('click', () => {
+            document.getElementById('add-card-form').classList.remove('hidden');
+        });
+
+        // Add event listener for add card form submit
+        document.getElementById('add-card-form-fields').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const newCard = {
+                id: cards.length + 1,
+                title,
+                description,
+                column: 'todo',
+            };
+            cards.push(newCard);
+            renderCards();
+            document.getElementById('add-card-form').classList.add('hidden');
+            document.getElementById('title').value = '';
+            document.getElementById('description').value = '';
+        });
+
+        // Add event listener for add card form cancel
+        document.getElementById('add-card-cancel').addEventListener('click', () => {
+            document.getElementById('add-card-form').classList.add('hidden');
+        });
+
+        // Add event listener for edit card button
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-card-button')) {
+                const cardId = e.target.getAttribute('data-card-id');
+                const card = cards.find((c) => c.id === parseInt(cardId));
+                const cardElement = document.getElementById(`card-${cardId}`);
+
+                // Make title editable
+                const titleInput = document.createElement('input');
+                titleInput.type = 'text';
+                titleInput.value = card.title;
+                titleInput.classList.add('shadow', 'appearance-none', 'border', 'rounded', 'w-full', 'py-2', 'px-3', 'text-gray-700', 'leading-tight', 'focus:outline-none', 'focus:shadow-outline');
+                cardElement.innerHTML = '';
+                cardElement.appendChild(titleInput);
+
+                // Add event listener for title input blur
+                titleInput.addEventListener('blur', () => {
+                    card.title = titleInput.value;
+                    renderCards();
+                });
+
+                // Add event listener for title input keydown
+                titleInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        card.title = titleInput.value;
+                        renderCards();
+                    }
+                });
+            }
+        });
+
+        renderCards();
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Alex Doe - Creative Web Developer</title>
+    <style>
+        /* Custom CSS for smooth scrolling and subtle hover effects */
+        html {
+            scroll-behavior: smooth;
+        }
+        .project-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto p-4 flex justify-between items-center" data-testid="main-navigation">
+            <h1 class="text-lg font-bold"><a href="#">Alex Doe</a></h1>
+            <!-- Simple nav links for demonstration; could be enhanced with dropdowns or more complex structure -->
+            <ul class="hidden md:flex items-center space-x-4">
+                <li><a href="#about" class="hover:text-blue-600">About</a></li>
+                <li><a href="#projects-section" class="hover:text-blue-600">Projects</a></li>
+                <li><a href="#contact" class="hover:text-blue-600">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Hero Section -->
+        <section class="container mx-auto p-4 md:p-8 mt-8 md:mt-16 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2">
+                <h1 class="text-3xl md:text-5xl font-bold">Alex Doe - Creative Web Developer</h1>
+                <p class="mt-4 text-lg">Crafting digital experiences that are both beautiful and functional. Let's build something amazing together.</p>
+                <button data-testid="cta-view-work" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="document.getElementById('projects-section').scrollIntoView({ behavior: 'smooth' });">View My Work</button>
+            </div>
+            <div class="md:w-1/2 mt-8 md:mt-0">
+                <!-- Placeholder image; replace with actual image -->
+                <img src="https://via.placeholder.com/400x300" alt="Alex Doe, Creative Web Developer" class="rounded-lg shadow-md">
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="container mx-auto p-4 md:p-8 mt-16">
+            <h2 class="text-2xl font-bold">About Me</h2>
+            <div class="mt-4 flex flex-col md:flex-row">
+                <div class="md:w-2/3">
+                    <p>As a passionate web developer, I bring a blend of creativity and technical expertise to every project. With a focus on user experience and a commitment to staying up-to-date with the latest technologies, I strive to deliver high-quality solutions that meet and exceed client expectations.</p>
+                    <p class="mt-4">My skillset includes a range of front-end and back-end technologies, allowing me to tackle projects from concept to launch. I'm dedicated to continuous learning and professional growth, ensuring that my work is always innovative and effective.</p>
+                </div>
+                <div class="md:w-1/3 mt-8 md:mt-0 flex justify-center">
+                    <!-- Placeholder for skill icons or a smaller image; replace with actual content -->
+                    <img src="https://via.placeholder.com/150x150" alt="Skills & Expertise" class="rounded-full">
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects-section" class="container mx-auto p-4 md:p-8 mt-16">
+            <h2 class="text-2xl font-bold">Projects</h2>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Project Card 1 -->
+                <div data-testid="project-card-1" class="project-card bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-bold">E-commerce Platform Redesign</h3>
+                    <p class="mt-2 text-sm">Redesigned the UI/UX for a major e-commerce platform, improving user engagement and conversion rates.</p>
+                    <p class="mt-2 text-sm text-gray-600">Technologies: React, Node.js, Figma</p>
+                    <a href="#" class="mt-4 inline-block text-blue-600 hover:text-blue-700">View Project</a>
+                </div>
+                <!-- Project Card 2 -->
+                <div data-testid="project-card-2" class="project-card bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-bold">Personal Finance App</h3>
+                    <p class="mt-2 text-sm">Developed a personal finance application with a focus on intuitive design and robust functionality.</p>
+                    <p class="mt-2 text-sm text-gray-600">Technologies: Vue.js, MongoDB, Tailwind CSS</p>
+                    <a href="#" class="mt-4 inline-block text-blue-600 hover:text-blue-700">View Project</a>
+                </div>
+                <!-- Project Card 3 -->
+                <div data-testid="project-card-3" class="project-card bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-bold">Blog Platform</h3>
+                    <p class="mt-2 text-sm">Created a dynamic blog platform with features for content management and user engagement.</p>
+                    <p class="mt-2 text-sm text-gray-600">Technologies: WordPress, PHP, MySQL</p>
+                    <a href="#" class="mt-4 inline-block text-blue-600 hover:text-blue-700">View Project</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="container mx-auto p-4 md:p-8 mt-16">
+            <h2 class="text-2xl font-bold">Get in Touch</h2>
+            <form data-testid="contact-form" class="mt-4">
+                <div class="flex flex-col mb-4">
+                    <label for="name" class="text-sm font-bold mb-2">Name</label>
+                    <input type="text" id="name" name="name" required class="p-2 border border-gray-300 rounded">
+                </div>
+                <div class="flex flex-col mb-4">
+                    <label for="email" class="text-sm font-bold mb-2">Email</label>
+                    <input type="email" id="email" name="email" required class="p-2 border border-gray-300 rounded">
+                </div>
+                <div class="flex flex-col mb-4">
+                    <label for="message" class="text-sm font-bold mb-2">Message</label>
+                    <textarea id="message" name="message" required class="p-2 border border-gray-300 rounded h-32"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send Message</button>
+            </form>
+        </section>
+    </main>
+    <footer class="bg-gray-100 mt-16 py-4">
+        <div class="container mx-auto p-4 text-center">
+            <p>&copy; <span id="currentYear"></span> Alex Doe. All Rights Reserved.</p>
+            <div class="mt-2">
+                <a href="#" class="mx-2"><img src="https://via.placeholder.com/24x24" alt="GitHub"></a>
+                <a href="#" class="mx-2"><img src="https://via.placeholder.com/24x24" alt="LinkedIn"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update the current year in the footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

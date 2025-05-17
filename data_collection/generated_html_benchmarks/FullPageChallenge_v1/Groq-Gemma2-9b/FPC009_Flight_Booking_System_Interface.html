@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Find Your Flight</h1>
+
+        <form data-testid="flight-search-form" class="flex flex-col space-y-4">
+            <div class="flex space-x-4">
+                <input 
+                    type="text" 
+                    data-testid="input-origin" 
+                    class="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="From" 
+                    id="origin"
+                >
+                <input 
+                    type="text" 
+                    data-testid="input-destination" 
+                    class="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="To" 
+                    id="destination"
+                >
+            </div>
+            <div class="flex space-x-4">
+                <input 
+                    type="date" 
+                    data-testid="input-departure-date" 
+                    class="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    id="departure-date"
+                >
+                <input 
+                    type="date" 
+                    data-testid="input-return-date" 
+                    class="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    id="return-date"
+                    disabled
+                >
+            </div>
+            <div class="flex space-x-2">
+                <label class="block text-gray-700" for="passengers">Passengers:</label>
+                <input 
+                    type="number" 
+                    data-testid="input-passengers" 
+                    class="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    min="1" 
+                    id="passengers"
+                    value="1"
+                >
+            </div>
+            <div class="flex items-center">
+                <input 
+                    type="radio" 
+                    id="one-way" 
+                    name="trip-type" 
+                    value="one-way" 
+                    class="mr-2"
+                >
+                <label class="text-gray-700" for="one-way">One-way</label>
+                <input 
+                    type="radio" 
+                    id="round-trip" 
+                    name="trip-type" 
+                    value="round-trip" 
+                    class="mr-2"
+                >
+                <label class="text-gray-700" for="round-trip">Round-trip</label>
+            </div>
+            <button 
+                data-testid="search-flights-btn" 
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                type="submit"
+            >
+                Search Flights
+            </button>
+        </form>
+
+        <div data-testid="flight-results-area" class="mt-8">
+            <h2 class="text-lg font-bold mb-4">Search Results</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Flight Results will be dynamically rendered here -->
+            </div>
+        </div>
+
+        <div data-testid="results-filters" class="mt-8">
+            <!-- Filters will be dynamically rendered here -->
+        </div>
+
+        <div data-testid="results-sort-controls" class="mt-4">
+            <!-- Sort controls will be dynamically rendered here -->
+        </div>
+    </div>
+
+</body>
+</html>

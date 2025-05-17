@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Doe - Web Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Project card hover effect */
+        .project-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        /* Social icon hover effect */
+        .social-icon:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-6xl mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Alex Doe</h1>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#about" class="text-gray-600 hover:text-gray-900">About</a>
+                    <a href="#projects" class="text-gray-600 hover:text-gray-900">Projects</a>
+                    <a href="#contact" class="text-gray-600 hover:text-gray-900">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4">
+        <!-- Hero Section -->
+        <section class="py-20">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                        Alex Doe - Creative Web Developer
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Building accessible and beautiful web experiences with modern technologies.
+                    </p>
+                    <button 
+                        data-testid="cta-view-work"
+                        class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                        onclick="document.getElementById('projects-section').scrollIntoView({ behavior: 'smooth' })"
+                    >
+                        View My Work
+                    </button>
+                </div>
+                <div class="md:w-1/2">
+                    <img 
+                        src="https://via.placeholder.com/500x300" 
+                        alt="Alex Doe working on a laptop" 
+                        class="rounded-lg shadow-lg"
+                    >
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-gray-50">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">About Me</h2>
+                    <p class="text-gray-600 mb-4">
+                        With over 5 years of experience in web development, I specialize in creating 
+                        accessible and responsive web applications. I'm passionate about using technology 
+                        to solve real-world problems and improve user experiences.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                            HTML5
+                        </span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                            CSS3
+                        </span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                            JavaScript
+                        </span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                            React
+                        </span>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img 
+                        src="https://via.placeholder.com/300x300" 
+                        alt="Web development icons" 
+                        class="rounded-lg"
+                    >
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects-section" class="py-20">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Featured Projects</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1 -->
+                <article 
+                    data-testid="project-card-1"
+                    class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow project-card"
+                >
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">E-commerce Platform</h3>
+                    <p class="text-gray-600 mb-4">A full-stack e-commerce solution with React and Node.js.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            React
+                        </span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            Node.js
+                        </span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            MongoDB
+                        </span>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700">View Project</a>
+                </article>
+
+                <!-- Project Card 2 -->
+                <article 
+                    data-testid="project-card-2"
+                    class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow project-card"
+                >
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Social Media Dashboard</h3>
+                    <p class="text-gray-600 mb-4">Analytics dashboard for social media management.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            React
+                        </span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            TypeScript
+                        </span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            Chart.js
+                        </span>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700">View Project</a>
+                </article>
+
+                <!-- Project Card 3 -->
+                <article 
+                    data-testid="project-card-3"
+                    class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow project-card"
+                >
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Portfolio Website</h3>
+                    <p class="text-gray-600 mb-4">Responsive portfolio site with smooth animations.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            HTML5
+                        </span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            CSS3
+                        </span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                            Tailwind CSS
+                        </span>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:text-blue-700">View Project</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-gray-50">
+            <div class="max-w-xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Get in Touch</h2>
+                <form data-testid="contact-form" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-gray-700 mb-2">Name</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            required 
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <div>
+                        <label for="email" class="block text-gray-700 mb-2">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <div>
+                        <label for="message" class="block text-gray-700 mb-2">Message</label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            required 
+                            rows="4" 
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        ></textarea>
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-400">
+                        © 2023 Alex Doe. All rights reserved.
+                    </p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white social-icon">
+                        <span class="sr-only">GitHub Profile</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white social-icon">
+                        <span class="sr-only">LinkedIn Profile</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
