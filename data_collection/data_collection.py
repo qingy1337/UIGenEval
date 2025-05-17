@@ -22,7 +22,6 @@ RETRY_BACKOFF_FACTOR = 2
 
 # Define your models here
 MODELS_CONFIG = [
-    
     # {
     #     "name": "GPT4_O_OpenAI",
     #     "api_key": os.environ.get("OPENAI_API_KEY_GPT4O"),

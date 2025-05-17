@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UIGEN Eval Benchmark Report{% endblock %} - Tesslate AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ relative_path_to_root }}style.css">
+    <link rel="icon" href="https://tesslate.com/favicon.ico" type="image/x-icon"> {# Tesslate Favicon #}
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // or 'media' or 'class'
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-orange': '#ff4d00',
+                        'primary-orange-dark': '#cc3d00',
+                        'bg-dark': '#171717',
+                        'bg-card': '#1c1c1c',
+                        'bg-element-hover': '#2a2a2a',
+                        'text-light': '#dedede',
+                        'text-muted': 'rgba(222, 222, 222, 0.65)',
+                        'text-dark-on-light': '#111111',
+                        'border-color': 'rgba(255, 255, 255, 0.15)',
+                        'border-strong': 'rgba(255, 255, 255, 0.25)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-bg-dark text-text-light font-sans antialiased">
+    <div id="page-container" class="flex flex-col min-h-screen">
+
+        <!-- Navbar -->
+        <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl">
+                <div class="flex items-center justify-between h-20">
+                    <div class="flex items-center">
+                        <a href="{{ relative_path_to_root }}index.html" class="text-2xl font-bold text-text-light hover:text-primary-orange transition-colors">
+                           UIGENEval
+                        </a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="{{ relative_path_to_root }}index.html" class="text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-sm font-medium transition-colors">Latest Benchmark</a>
+                        <a href="{{ relative_path_to_root }}all_runs_archive.html" class="text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-sm font-medium transition-colors">Benchmark Archive</a>
+                        <a href="https://tesslate.com" target="_blank" class="text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-sm font-medium transition-colors">Tesslate AI</a>
+                    </div>
+                    <div class="md:hidden flex items-center">
+                        <button id="mobile-menu-button" class="text-text-muted hover:text-text-light focus:outline-none p-2">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed top-0 left-0 h-full w-3/4 max-w-xs shadow-xl p-5 space-y-3 transform -translate-x-full transition-transform duration-300 ease-in-out z-[60] border-r border-border-color" style="background-color: var(--color-bg-card);">
+            <div class="flex justify-between items-center mb-6">
+                <a href="{{ relative_path_to_root }}index.html" class="text-xl font-bold text-text-light">UIGENEval Benchmark</a>
+                <button id="mobile-close-button" class="text-text-muted hover:text-text-light p-2">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <a href="{{ relative_path_to_root }}index.html" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">Latest Benchmark</a>
+            <a href="{{ relative_path_to_root }}all_runs_archive.html" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">Benchmark Archive</a>
+            <a href="https://tesslate.com" target="_blank" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">Tesslate AI</a>
+             <div class="pt-4 border-t border-border-color">
+                <p class="px-3 text-sm font-semibold text-text-muted uppercase tracking-wider mb-2">Community</p>
+                <a href="https://huggingface.co/Tesslate" target="_blank" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">Hugging Face</a>
+                <a href="https://discord.gg/DkzMzwBTaw" target="_blank" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">Discord</a>
+             </div>
+             <div class="pt-4 border-t border-border-color">
+                <p class="px-3 text-sm font-semibold text-text-muted uppercase tracking-wider mb-2">TFrame<span class="text-primary-orange">X</span></p>
+                <a href="https://tframex.tesslate.com/" target="_blank" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">Docs</a>
+                <a href="https://github.com/TesslateAI/TFrameX" target="_blank" class="block text-text-muted hover:text-primary-orange px-3 py-2 rounded-md text-base font-medium">GitHub</a>
+             </div>
+        </div>
+
+
+        <main class="flex-grow pt-24"> {# pt-20 for navbar height + 4 for breathing room #}
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-screen-xl">
+                <header class="mb-8 md:mb-12 animate-on-scroll fade-in-up">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 text-text-light">{% block header_title %}UIGENEval Benchmark Report{% endblock %}</h1>
+                    <p class="text-lg text-text-muted">{% block header_subtitle %}Detailed Analysis and Comparison{% endblock %}</p>
+                    <div class="mt-4 text-sm text-text-muted">
+                    {# Dynamic breadcrumbs will appear here if populated #}
+                    {% if breadcrumbs or (current_page_title and not is_main_index) %}
+                        <nav aria-label="breadcrumb">
+                            <ol class="flex items-center space-x-2">
+                                <li><a href="{{ relative_path_to_root }}index.html" class="hover:text-primary-orange">Home</a></li>
+                                {% if breadcrumbs %}
+                                    {% for crumb in breadcrumbs %}
+                                        <li><span class="breadcrumb-separator">/</span></li>
+                                        <li><a href="{{ crumb.url }}" class="hover:text-primary-orange">{{ crumb.text }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if current_page_title and not is_main_index %}
+                                    <li><span class="breadcrumb-separator">/</span></li>
+                                    <li class="current-page-breadcrumb" aria-current="page">{{ current_page_title }}</li>
+                                {% endif %}
+                            </ol>
+                        </nav>
+                    {% endif %}
+                    </div>
+                </header>
+                
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <footer class="border-t border-border-color py-10 md:py-16 mt-12 bg-bg-dark">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-sm">
+                    <div class="md:col-span-2 lg:col-span-1 mb-6 md:mb-0 animate-on-scroll fade-in-up" data-delay="0">
+                        <a href="https://tesslate.com" target="_blank" class="text-2xl font-bold text-text-light hover:text-primary-orange transition-colors">Tesslate AI</a>
+                        <p class="text-text-muted mt-2">Empowering innovation with intelligent automation.</p>
+                        <p class="text-text-muted mt-1">UIGENEval Benchark Report. Generated: {{ generation_time_str }}</p>
+                    </div>
+                    <div class="animate-on-scroll fade-in-up" data-delay="0.1">
+                        <h5 class="font-semibold text-text-light mb-3">Benchmark</h5>
+                        <ul class="space-y-2">
+                            <li><a href="{{ relative_path_to_root }}index.html" class="text-text-muted hover:text-primary-orange">Latest Results</a></li>
+                            <li><a href="{{ relative_path_to_root }}all_runs_archive.html" class="text-text-muted hover:text-primary-orange">Archive</a></li>
+                        </ul>
+                    </div>
+                    <div class="animate-on-scroll fade-in-up" data-delay="0.2">
+                        <h5 class="font-semibold text-text-light mb-3">Community</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://huggingface.co/Tesslate" target="_blank" class="text-text-muted hover:text-primary-orange">Hugging Face</a></li>
+                            <li><a href="https://discord.gg/DkzMzwBTaw" target="_blank" class="text-text-muted hover:text-primary-orange">Discord Server</a></li>
+                            <li><a href="https://tesslate.com/blog" target="_blank" class="text-text-muted hover:text-primary-orange">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="animate-on-scroll fade-in-up" data-delay="0.3">
+                        <h5 class="font-semibold text-text-light mb-3">TFrame<span class="text-primary-orange">X</span></h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://tframex.tesslate.com/" target="_blank" class="text-text-muted hover:text-primary-orange">Documentation</a></li>
+                            <li><a href="https://github.com/TesslateAI/TFrameX" target="_blank" class="text-text-muted hover:text-primary-orange">GitHub Repository</a></li>
+                             <li><a href="https://pypi.org/project/tframex/" target="_blank" class="text-text-muted hover:text-primary-orange">PyPI Package</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-border-color pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-text-muted animate-on-scroll fade-in-up" data-delay="0.4">
+                    <p>&copy; <script>document.write(new Date().getFullYear())</script> Tesslate AI. All rights reserved.</p>
+                    <div class="flex space-x-4 mt-4 sm:mt-0">
+                        <a href="https://x.com/tesslateai" target="_blank" aria-label="Tesslate AI on X" class="social-icon hover:text-primary-orange">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/tesslate-ai/" target="_blank" aria-label="Tesslate AI on LinkedIn" class="social-icon hover:text-primary-orange">
+                             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                         <a href="https://github.com/TesslateAI" target="_blank" aria-label="Tesslate AI on GitHub" class="social-icon hover:text-primary-orange">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navbar scroll behavior
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 20) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+            }
+
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileCloseButton = document.getElementById('mobile-close-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu && mobileCloseButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.remove('-translate-x-full');
+                    mobileMenu.classList.add('translate-x-0');
+                });
+                mobileCloseButton.addEventListener('click', () => {
+                    mobileMenu.classList.add('-translate-x-full');
+                    mobileMenu.classList.remove('translate-x-0');
+                });
+                // Close mobile menu when a link is clicked
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('-translate-x-full');
+                        mobileMenu.classList.remove('translate-x-0');
+                    });
+                });
+            }
+            
+            // Intersection Observer for animations
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = parseFloat(entry.target.dataset.delay) || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add('is-visible');
+                        }, delay * 100); // Snappier delay, in ms
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 }); // Element needs to be 10% visible
+
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    {% block scripts_extra %}{% endblock %}
+</body>
+</html>

@@ -9,8 +9,8 @@ import pandas as pd
 # import numpy as np # Not strictly needed for this version of stacked bar
 
 # Define weights (MUST match the ones in your ui_benchmark_analyzer.py)
-WEIGHT_TECHNICAL_QUALITY = 0.4
-WEIGHT_PROMPT_ADHERENCE = 0.6
+WEIGHT_TECHNICAL_QUALITY = 0.3
+WEIGHT_PROMPT_ADHERENCE = 0.7
 
 def find_summary_files(master_output_dir: Path, challenge_name: str):
     """

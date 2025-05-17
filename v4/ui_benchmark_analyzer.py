@@ -57,8 +57,8 @@ TECHNICAL_QUALITY_MAX_POINTS_CONFIG = {
 # TOTAL_TECHNICAL_QUALITY_MAX_FOR_PROMPT will be dynamic
 
 # Scoring Weights
-WEIGHT_TECHNICAL_QUALITY = 0.2
-WEIGHT_PROMPT_ADHERENCE = 0.8
+WEIGHT_TECHNICAL_QUALITY = 0.3
+WEIGHT_PROMPT_ADHERENCE = 0.7
 
 # NEW: Configuration for parallel prompt processing within a single model run
 # Adjust default based on typical machine capabilities or make it a script argument

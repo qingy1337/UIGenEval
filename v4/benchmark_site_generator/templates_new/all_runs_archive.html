@@ -1,0 +1,74 @@
+
+{% extends "base_layout.html" %}
+{% block title %}UIGEN Benchmark - Archive{% endblock %}
+{% block header_title %}Benchmark Archive{% endblock %}
+{% block header_subtitle %}Historical Benchmark Data{% endblock %}
+
+{% block content %}
+    <section class="animate-on-scroll fade-in-up">
+        <h2 class="text-2xl font-semibold mb-6 text-text-light border-b-2 border-primary-orange pb-3">Archived Benchmark Test Dates</h2>
+        {% if all_benchmark_data.runs %}
+        <div class="table-responsive-wrapper shadow-lg">
+        <table class="min-w-full divide-y divide-border-color">
+            <thead class="bg-bg-element-hover">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Date Tested</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Prompt Set</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Models Tested</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Details</th>
+                </tr>
+            </thead>
+            <tbody class="bg-bg-card divide-y divide-border-color">
+            {% for run_id_iter, run_data_item in all_benchmark_data.runs.items()|sort(attribute='0', reverse=True) %}
+                <tr class="animate-on-scroll fade-in-up" data-delay="{{ loop.index0 * 0.05 }}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">{{ run_id_iter | format_date_tested }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">{{ run_data_item.prompt_set_name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">{{ run_data_item.models|length }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        {% if run_id_iter == all_benchmark_data.latest_run_id %}
+                            <a href="{{ relative_path_to_root }}index.html" class="button-link view inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-text-dark-on-light-bg bg-primary-orange hover:bg-primary-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-dark focus:ring-primary-orange">View Latest</a>
+                        {% else %}
+                            <a href="{{ relative_path_to_root }}runs/{{ run_id_iter }}/index.html" class="button-link secondary inline-flex items-center px-4 py-2 border border-primary-orange text-sm font-medium rounded-md text-primary-orange bg-transparent hover:bg-primary-orange/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-dark focus:ring-primary-orange">View Details</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        {% else %}
+        <div class="bg-bg-card p-6 rounded-lg shadow-md animate-on-scroll fade-in-up">
+            <p class="text-text-muted text-center">No archived benchmark data found.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="mt-12 animate-on-scroll fade-in-up" data-delay="0.2">
+        <div class="suggestion-form-container bg-bg-card p-6 sm:p-8 rounded-lg shadow-xl">
+            <h2 class="text-xl font-semibold mb-6 text-text-light">Suggest a New Prompt</h2>
+            <form id="suggestPromptForm" class="space-y-6">
+                <div>
+                    <label for="promptTitle" class="block text-sm font-medium text-text-muted mb-1">Prompt Title/Name</label>
+                    <input type="text" id="promptTitle" name="promptTitle" required class="w-full p-3">
+                </div>
+                <div>
+                    <label for="promptDescription" class="block text-sm font-medium text-text-muted mb-1">Prompt Description (be specific)</label>
+                    <textarea id="promptDescription" name="promptDescription" rows="4" required class="w-full p-3"></textarea>
+                </div>
+                <div>
+                    <label for="userEmail" class="block text-sm font-medium text-text-muted mb-1">Your Email (Optional)</label>
+                    <input type="email" id="userEmail" name="userEmail" class="w-full p-3">
+                </div>
+                <button type="submit" class="button-style primary w-full sm:w-auto flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-text-dark-on-light-bg bg-primary-orange hover:bg-primary-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-dark focus:ring-primary-orange">
+                    Submit Suggestion
+                </button>
+            </form>
+            <div id="suggestionStatus" class="mt-4 p-3 rounded-md text-sm" style="display: none;"></div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts_extra %}
+    <script src="{{ relative_path_to_root }}suggest_prompt.js"></script>
+{% endblock %}
+

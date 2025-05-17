@@ -1,0 +1,95 @@
+{% extends "base_layout.html" %}
+{% block title %}Model: {{ model_data.summary_data.benchmark_run_name }}{% endblock %}
+{% block header_title %}Model: {{ model_data.summary_data.benchmark_run_name }}{% endblock %}
+{% block header_subtitle %}
+    Date Tested: {{ run_id | format_date_tested }} | 
+    Config: {{ model_data.summary_data.benchmark_config_file | format_config_name }}
+{% endblock %}
+
+{% block content %}
+    <section class="mb-10 animate-on-scroll fade-in-up">
+        <h2 class="text-xl font-semibold mb-6 text-text-light border-b-2 border-primary-orange pb-3">Aggregate Scores</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div class="card p-6 rounded-lg shadow-lg animate-on-scroll fade-in-up" data-delay="0.1">
+                <h3 class="text-sm font-medium text-primary-orange uppercase tracking-wider">Overall Weighted Score</h3>
+                <p class="metric-value mt-1 text-3xl font-semibold text-text-light">{{ "%.2f"|format(model_data.summary_data.aggregate_scores.overall_weighted_score_from_totals) }} %</p>
+            </div>
+            <div class="card p-6 rounded-lg shadow-lg animate-on-scroll fade-in-up" data-delay="0.15">
+                <h3 class="text-sm font-medium text-primary-orange uppercase tracking-wider">Avg. Prompt Score</h3>
+                <p class="metric-value mt-1 text-3xl font-semibold text-text-light">{{ "%.2f"|format(model_data.summary_data.aggregate_scores.average_prompt_weighted_score) }} %</p>
+            </div>
+            <div class="card p-6 rounded-lg shadow-lg animate-on-scroll fade-in-up" data-delay="0.2">
+                <h3 class="text-sm font-medium text-primary-orange uppercase tracking-wider">Prompts Analyzed</h3>
+                <p class="metric-value mt-1 text-3xl font-semibold text-text-light">{{ model_data.summary_data.prompts_analyzed_successfully }} / {{ model_data.summary_data.total_prompts_configured }}</p>
+            </div>
+            <div class="card p-6 rounded-lg shadow-lg md:col-span-1 animate-on-scroll fade-in-up" data-delay="0.25">
+                <h3 class="text-sm font-medium text-primary-orange uppercase tracking-wider">Total Technical Quality</h3>
+                <p class="metric-value mt-1 text-2xl font-semibold text-text-light">{{ "%.1f"|format(model_data.summary_data.aggregate_scores.total_tq_earned) }} / {{ "%.1f"|format(model_data.summary_data.aggregate_scores.total_tq_max) }}</p>
+                {% set tq_total_perc = (model_data.summary_data.aggregate_scores.total_tq_earned / model_data.summary_data.aggregate_scores.total_tq_max * 100) if model_data.summary_data.aggregate_scores.total_tq_max else 0 %}
+                <div class="score-bar-container mt-2 h-2.5 rounded-full">
+                    <div class="score-bar h-2.5 rounded-full" style="width: {{ tq_total_perc }}%;"></div>
+                </div>
+            </div>
+            <div class="card p-6 rounded-lg shadow-lg md:col-span-1 animate-on-scroll fade-in-up" data-delay="0.3">
+                <h3 class="text-sm font-medium text-primary-orange uppercase tracking-wider">Total Prompt Adherence</h3>
+                <p class="metric-value mt-1 text-2xl font-semibold text-text-light">{{ "%.1f"|format(model_data.summary_data.aggregate_scores.total_adh_earned) }} / {{ "%.1f"|format(model_data.summary_data.aggregate_scores.total_adh_max) }}</p>
+                {% set adh_total_perc = (model_data.summary_data.aggregate_scores.total_adh_earned / model_data.summary_data.aggregate_scores.total_adh_max * 100) if model_data.summary_data.aggregate_scores.total_adh_max else 0 %}
+                <div class="score-bar-container mt-2 h-2.5 rounded-full">
+                    <div class="score-bar adh h-2.5 rounded-full" style="width: {{ adh_total_perc }}%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="animate-on-scroll fade-in-up" data-delay="0.2">
+        <h2 class="text-xl font-semibold mb-6 text-text-light border-b-2 border-primary-orange pb-3">Individual Prompt Results ({{ model_data.summary_data.individual_prompt_results|length }})</h2>
+        <div class="table-responsive-wrapper shadow-lg">
+        <table class="min-w-full divide-y divide-border-color">
+            <thead class="bg-bg-element-hover">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Prompt</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">TQ (Earned/Max)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Adherence (Earned/Max)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Overall (%)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Details</th>
+                </tr>
+            </thead>
+            <tbody class="bg-bg-card divide-y divide-border-color">
+            {% for prompt_res in model_data.summary_data.individual_prompt_results|sort(attribute='prompt_id') %}
+                <tr class="animate-on-scroll fade-in-up" data-delay="{{ loop.index0 * 0.05 + 0.3 }}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">{{ prompt_res.prompt_id | format_prompt_id_display }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm status-{{ prompt_res.status|lower }}">
+                        {{ prompt_res.status }}
+                        {% if prompt_res.error_message %}<div class="error-message text-xs mt-1 cursor-help" title="{{ prompt_res.error_message }}">Error (hover)</div>{% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
+                        {{ "%.1f"|format(prompt_res.technical_quality_earned) }} / {{ "%.1f"|format(prompt_res.technical_quality_max) }}
+                        {% set tq_perc = (prompt_res.technical_quality_earned / prompt_res.technical_quality_max * 100) if prompt_res.technical_quality_max else 0 %}
+                        <div class="score-bar-container mt-1 h-2 rounded-full w-24"><div class="score-bar h-2 rounded-full" style="width: {{ "%.1f"|format(tq_perc) }}%;"><span class="sr-only">{{ "%.0f"|format(tq_perc) }}%</span></div></div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
+                        {{ "%.1f"|format(prompt_res.prompt_adherence_earned) }} / {{ "%.1f"|format(prompt_res.prompt_adherence_max) }}
+                        {% set adh_perc = (prompt_res.prompt_adherence_earned / prompt_res.prompt_adherence_max * 100) if prompt_res.prompt_adherence_max else 0 %}
+                        <div class="score-bar-container mt-1 h-2 rounded-full w-24"><div class="score-bar adh h-2 rounded-full" style="width: {{ "%.1f"|format(adh_perc) }}%;"><span class="sr-only">{{ "%.0f"|format(adh_perc) }}%</span></div></div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-orange font-semibold">{{ "%.2f"|format(prompt_res.overall_weighted_percentage) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        {# --- CORRECTED LINK PATHING --- #}
+                        {% if is_latest_run_page %}
+                            {# For latest run, model page is at /runs/model-slug.html, prompts at /runs/prompts/model-prompt.html #}
+                            {# So from /runs/model-slug.html, link to prompts/model-prompt.html #}
+                            <a href="prompts/{{ model_data.slug }}_{{ prompt_res.prompt_id|slugify }}.html" class="button-link secondary inline-flex items-center px-3 py-1.5 border border-primary-orange text-xs font-medium rounded-md text-primary-orange bg-transparent hover:bg-primary-orange/10">Full Report</a>
+                        {% else %}
+                            {# For archived run, model page is at /runs/run_id/model-slug.html, prompts at /runs/run_id/prompts/model-prompt.html #}
+                            {# So from /runs/run_id/model-slug.html, link to prompts/model-prompt.html #}
+                            <a href="prompts/{{ model_data.slug }}_{{ prompt_res.prompt_id|slugify }}.html" class="button-link secondary inline-flex items-center px-3 py-1.5 border border-primary-orange text-xs font-medium rounded-md text-primary-orange bg-transparent hover:bg-primary-orange/10">Full Report</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </section>
+{% endblock %}

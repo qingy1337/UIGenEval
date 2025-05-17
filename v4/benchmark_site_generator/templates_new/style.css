@@ -1,0 +1,309 @@
+/* Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+:root {
+    --color-primary-orange: #ff4d00; /* rgb(255, 77, 0) */
+    --color-primary-orange-dark: #cc3d00; /* Darker shade for hover */
+    
+    --color-bg-dark: #171717; /* rgb(23, 23, 23) */
+    --color-bg-card: #1c1c1c; /* rgb(28, 28, 28) */
+    --color-bg-element-hover: #2a2a2a;
+
+    --color-text-light: #dedede; /* rgb(222, 222, 222) */
+    --color-text-muted: rgba(222, 222, 222, 0.65);
+    --color-text-dark-on-light-bg: #111111; /* For text on orange buttons */
+
+    --color-border: rgba(255, 255, 255, 0.15);
+    --color-border-strong: rgba(255, 255, 255, 0.25);
+    --color-border-orange-focus: rgba(255, 77, 0, 0.5);
+
+    --color-success: #4ade80; /* Tailwind green-400 - good contrast on dark */
+    --color-danger: #f87171;  /* Tailwind red-400 - good contrast on dark */
+    --color-warning: #facc15; /* Tailwind yellow-400 - good contrast on dark */
+    --color-info: #60a5fa;   /* Tailwind blue-400 */
+
+    --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-light);
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1.1px); /* Subtle dot pattern */
+    background-size: 20px 20px;
+}
+
+/* Scrollbar Styling (Optional, for a more themed look) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary-orange);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-orange-dark);
+}
+
+/* Animation base classes */
+.animate-on-scroll {
+    opacity: 0;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.fade-in-up { transform: translateY(20px); }
+.fade-in { /* opacity only */ }
+
+.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Navbar styling (Tailwind will handle most, this is for specific overrides/additions) */
+#navbar {
+    background: linear-gradient(180deg, var(--color-bg-dark) 70%, rgba(23, 23, 23, 0) 100%);
+}
+#navbar.scrolled {
+    background-color: var(--color-bg-dark);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.16);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-light);
+}
+h2 { /* Page section titles */
+    border-bottom-color: var(--color-primary-orange);
+}
+
+/* Cards */
+.card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    /* No distinct left border unless specifically desired */
+}
+.card h3 { /* Card titles */
+    color: var(--color-primary-orange);
+}
+.card p.metric-value { /* Large text in summary cards */
+    color: var(--color-text-light);
+}
+.card .details {
+    color: var(--color-text-muted);
+}
+
+/* Tables */
+.table-responsive-wrapper {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem; /* Tailwind's rounded-lg */
+    overflow-x: auto; /* THIS IS KEY FOR MOBILE TABLES */
+    overflow-y: hidden; /* Prevent vertical scrollbar on the wrapper itself if content fits */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+table {
+    border-collapse: separate; 
+    border-spacing: 0;
+    min-width: 600px; /* Ensure table has a minimum width to trigger scroll on small screens if needed */
+}
+th {
+    background-color: var(--color-bg-element-hover); 
+    color: var(--color-text-light);
+    font-weight: 600;
+    white-space: nowrap; /* Prevent headers from wrapping too aggressively */
+}
+td {
+    border-top: 1px solid var(--color-border);
+    white-space: nowrap; /* Data cells can wrap if needed, but often good to keep them from breaking too much */
+}
+tbody tr:hover {
+    background-color: var(--color-bg-element-hover);
+}
+tbody tr:first-child td {
+    border-top: none; 
+}
+
+/* Clickable table cells with links */
+td a.table-cell-link {
+    display: block; /* Make the link fill the cell */
+    padding: inherit; /* Inherit padding from td for consistent spacing */
+    margin: -1rem; /* Counteract td padding to make link truly fill (adjust if td padding changes) */
+    padding: 1rem;  /* Re-apply padding to the link itself */
+    color: var(--color-text-light); /* Default text color */
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+td a.table-cell-link:hover {
+    color: var(--color-primary-orange); /* Hover color for model names */
+}
+
+
+/* Score Bars */
+.score-bar-container {
+    background-color: var(--color-bg-element-hover); /* Darker grey for container */
+}
+.score-bar {
+    background-color: var(--color-primary-orange);
+    color: var(--color-text-dark-on-light-bg); /* White or very light grey for text on orange */
+    font-weight: 600;
+}
+.score-bar.adh { /* If we want a different color for adherence, define here */
+    /* background-color: var(--color-info); */ /* Example if using a different color */
+}
+
+/* Buttons */
+a.button-link, button.button-style {
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.1s ease-out;
+    will-change: transform;
+}
+a.button-link:hover, button.button-style:hover {
+    transform: translateY(-2px);
+}
+
+a.button-link.view, button.button-style.primary { /* Orange filled */
+    background-color: var(--color-primary-orange);
+    color: var(--color-text-dark-on-light-bg); /* Darker text for contrast on orange */
+    border-color: var(--color-primary-orange);
+}
+a.button-link.view:hover, button.button-style.primary:hover {
+    background-color: var(--color-primary-orange-dark);
+    border-color: var(--color-primary-orange-dark);
+}
+
+a.button-link.secondary, button.button-style.secondary { /* Outline style */
+    background-color: transparent;
+    color: var(--color-primary-orange);
+    border: 1px solid var(--color-primary-orange);
+}
+a.button-link.secondary:hover, button.button-style.secondary:hover {
+    background-color: rgba(255, 77, 0, 0.1); /* Slight orange tint on hover */
+    color: var(--color-primary-orange);
+}
+
+a.button-link.neutral, button.button-style.neutral { /* Dark grey filled */
+    background-color: var(--color-bg-element-hover);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border-strong);
+}
+a.button-link.neutral:hover, button.button-style.neutral:hover {
+    background-color: #3a3a3a; /* Slightly lighter grey */
+    border-color: var(--color-border-strong);
+}
+
+
+/* Forms */
+.suggestion-form-container label {
+    color: var(--color-text-muted);
+}
+.suggestion-form-container input[type="text"],
+.suggestion-form-container input[type="email"],
+.suggestion-form-container textarea {
+    background-color: var(--color-bg-element-hover);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-light);
+    border-radius: 0.375rem; /* Tailwind's rounded-md */
+}
+.suggestion-form-container input[type="text"]:focus,
+.suggestion-form-container input[type="email"]:focus,
+.suggestion-form-container textarea:focus {
+    outline: none;
+    border-color: var(--color-primary-orange);
+    box-shadow: 0 0 0 2px var(--color-border-orange-focus);
+}
+.suggestion-form-container button[type="submit"] {
+    background-color: var(--color-primary-orange);
+    color: var(--color-text-dark-on-light-bg);
+}
+.suggestion-form-container button[type="submit"]:hover {
+    background-color: var(--color-primary-orange-dark);
+}
+
+/* Status messages from suggest_prompt.js */
+#suggestionStatus.success {
+    background-color: rgba(74, 222, 128, 0.1); /* success color with alpha */
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+}
+#suggestionStatus.error {
+    background-color: rgba(248, 113, 113, 0.1); /* danger color with alpha */
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+}
+#suggestionStatus.submitting {
+    background-color: rgba(96, 165, 250, 0.1); /* info color with alpha */
+    color: var(--color-info);
+    border: 1px solid var(--color-info);
+}
+
+/* Prompt Detail Page Specifics */
+pre.prompt-description-display {
+    background: var(--color-bg-element-hover);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    white-space: pre-wrap; /* Ensure long lines wrap */
+    word-break: break-word; /* Break long words if necessary */
+}
+.check-data {
+    background-color: var(--color-bg-element-hover);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    white-space: pre-wrap; /* Allow wrapping */
+    word-break: break-all; /* Break long unbroken strings */
+}
+code {
+    background-color: var(--color-bg-element-hover);
+    color: var(--color-info); /* Brighter color for code elements */
+    padding: 0.1em 0.3em;
+    border-radius: 0.25rem;
+    word-break: break-all; /* Break long code segments if needed */
+}
+.status-pass { color: var(--color-success); font-weight: 500; } /* For prompt detail checks */
+.status-fail { color: var(--color-danger); font-weight: 500; }
+.status-warn { color: var(--color-warning); font-weight: 500; }
+
+.status-row-fail td { background-color: rgba(220, 38, 38, 0.05) !important; }
+.status-row-warn td { background-color: rgba(245, 158, 11, 0.05) !important; }
+
+
+/* Footer specific styles */
+footer a:hover {
+    color: var(--color-primary-orange);
+}
+footer .social-icon svg {
+    transition: fill 0.2s ease-in-out;
+}
+footer .social-icon:hover svg {
+    fill: var(--color-primary-orange);
+}
+
+/* Breadcrumbs */
+.breadcrumb-separator, .current-page-breadcrumb {
+    color: var(--color-text-muted);
+}
+
+/* Mobile Menu Overlay */
+#mobile-menu {
+    background-color: var(--color-bg-card); /* Slightly different from page bg for depth */
+}
+
+/* Specific text colors for status in tables */
+.status-success { color: var(--color-success); }
+.status-failure, .status-error { color: var(--color-danger); } /* For model_detail status column */
+
+/* Ensure links in content are styled properly */
+main a:not(.button-link):not(.table-cell-link) { /* Exclude table cell links */
+    color: var(--color-primary-orange);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+main a:not(.button-link):not(.table-cell-link):hover {
+    color: var(--color-primary-orange-dark);
+}
+
+

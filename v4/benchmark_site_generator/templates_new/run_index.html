@@ -1,0 +1,150 @@
+
+{% extends "base_layout.html" %}
+
+{% if is_main_index %}
+    {# This block is effectively not used if run_index.html is only for archives. #}
+    {% set page_title_content = "UIGEN Benchmark - Latest Results (" ~ (run_id | format_date_tested) ~ ")" %}
+    {% set header_title_content = "UIGEN Benchmark - Latest Results" %}
+    {% set header_subtitle_content = "Date Tested: " ~ (run_id | format_date_tested) ~ " | Prompt Set: " ~ run_data.prompt_set_name %}
+{% else %} {# This is for an archived run's index page #}
+    {% set page_title_content = "Archived Results: " ~ (run_id | format_date_tested) %}
+    {% set header_title_content = "Benchmark Results" %}
+    {% set header_subtitle_content = "Date Tested: " ~ (run_id | format_date_tested) ~ " | Prompt Set: " ~ run_data.prompt_set_name %}
+{% endif %}
+
+{% block title %}{{ page_title_content }}{% endblock %}
+{% block header_title %}{{ header_title_content }}{% endblock %}
+{% block header_subtitle %}{{ header_subtitle_content }}{% endblock %}
+
+{% block content %}
+    <section class="animate-on-scroll fade-in-up">
+        <h2 class="text-2xl font-semibold mb-6 text-text-light border-b-2 border-primary-orange pb-3">Leaderboard: {{ run_id | format_date_tested }}</h2>
+        {% if models_chart_data %}
+        <div id="leaderboardChartContainer" class="bg-bg-card p-4 sm:p-6 rounded-lg shadow-xl mb-8 animate-on-scroll fade-in-up" data-delay="0.1" style="height: 400px;">
+            <canvas id="leaderboardChart"></canvas>
+        </div>
+        {% endif %}
+        <div class="table-responsive-wrapper shadow-lg animate-on-scroll fade-in-up" data-delay="0.2">
+        <table class="min-w-full divide-y divide-border-color">
+            <thead class="bg-bg-element-hover">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Rank</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Model Name</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Overall (%)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Avg. Prompt (%)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">TQ (Earned/Max)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">ADH (Earned/Max)</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Details Page</th>
+                </tr>
+            </thead>
+            <tbody class="bg-bg-card divide-y divide-border-color">
+            {% for model_key, model_details in models_sorted %}
+                <tr class="animate-on-scroll fade-in-up" data-delay="{{ loop.index0 * 0.05 + 0.2 }}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-light">{{ loop.index }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">
+                        {# Link to model detail page, path depends on whether this is the main site index or an archived run page #}
+                        {% if is_main_index %}
+                             <a href="runs/{{ model_details.slug }}.html" class="table-cell-link hover:text-primary-orange transition-colors duration-150">
+                                {{ model_details.summary_data.benchmark_run_name }}
+                            </a>
+                        {% else %}
+                            <a href="{{ model_details.slug }}.html" class="table-cell-link hover:text-primary-orange transition-colors duration-150">
+                                {{ model_details.summary_data.benchmark_run_name }}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-orange font-semibold">{{ "%.2f"|format(model_details.summary_data.aggregate_scores.overall_weighted_score_from_totals) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">{{ "%.2f"|format(model_details.summary_data.aggregate_scores.average_prompt_weighted_score) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">{{ "%.1f"|format(model_details.summary_data.aggregate_scores.total_tq_earned) }} / {{ "%.1f"|format(model_details.summary_data.aggregate_scores.total_tq_max) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">{{ "%.1f"|format(model_details.summary_data.aggregate_scores.total_adh_earned) }} / {{ "%.1f"|format(model_details.summary_data.aggregate_scores.total_adh_max) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        {% if is_main_index %}
+                            <a href="runs/{{ model_details.slug }}.html" class="button-link view inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-text-dark-on-light-bg bg-primary-orange hover:bg-primary-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-dark focus:ring-primary-orange">View Model</a>
+                        {% else %}
+                            <a href="{{ model_details.slug }}.html" class="button-link view inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-text-dark-on-light-bg bg-primary-orange hover:bg-primary-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-dark focus:ring-primary-orange">View Model</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </section>
+    
+    {# Suggestion form only shown on the main site index (handled by main_index.html directly) #}
+{% endblock %}
+
+{% block scripts_extra %}
+    {% if models_chart_data %}<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>{% endif %}
+    {% if models_chart_data %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modelsDataForChart = {{ models_chart_data|tojson }};
+            const modelNames = modelsDataForChart.map(m => m.name);
+            const overallScores = modelsDataForChart.map(m => m.overallScore);
+            const ctx = document.getElementById('leaderboardChart').getContext('2d');
+            
+            Chart.defaults.font.family = 'Inter, sans-serif';
+            Chart.defaults.color = '#dedede';
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: { 
+                    labels: modelNames, 
+                    datasets: [
+                        { 
+                            label: 'Overall Score (%)', 
+                            data: overallScores, 
+                            backgroundColor: 'rgba(255, 77, 0, 0.8)',
+                            borderColor: 'rgba(255, 77, 0, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', 
+                    scales: { 
+                        y: { 
+                            grid: { color: 'rgba(222, 222, 222, 0.1)'}, 
+                            ticks: { color: '#dedede' }
+                        },
+                        x: {
+                           beginAtZero: true, 
+                           max: 100, 
+                           title: { display: true, text: 'Score (%)', color: '#dedede' },
+                           grid: { color: 'rgba(222, 222, 222, 0.1)' }, 
+                           ticks: { color: '#dedede' }
+                        }
+                    }, 
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.85)',
+                            titleColor: '#dedede',
+                            bodyColor: '#dedede',
+                            borderColor: 'rgba(255, 77, 0, 0.7)',
+                            borderWidth: 1,
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x.toFixed(2) + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    } 
+                }
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock %}
+
