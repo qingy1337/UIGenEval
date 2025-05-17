@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - High-Performance Laptop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Image Zoom */
+        .zoom-container {
+            position: relative;
+            overflow: hidden; /* Hide background overflow */
+        }
+
+        .zoom-view {
+            position: absolute;
+            top: 0;
+            right: -100%; /* Initially off-screen to the right */
+            width: 100%; /* Same width as main image container */
+            height: 100%; /* Same height as main image container */
+            background-repeat: no-repeat;
+            pointer-events: none; /* Don't interfere with mouse events on the image */
+            transition: right 0.3s ease; /* Smooth transition for showing/hiding */
+            z-index: 10; /* Ensure it's above other content if overlayed */
+            border: 1px solid #ccc; /* Optional border */
+            background-color: white; /* Ensure white background if image is smaller */
+        }
+
+        .zoom-container:hover .zoom-view {
+             /* Adjust 'right' or use Flexbox/Grid positioning depending on layout */
+             /* For a side-by-side zoom view, position it adjacent */
+             /* Example: if main image is w-1/2, zoom view is w-1/2 next to it */
+             /* This needs careful layout implementation, or absolute positioning over adjacent area */
+             /* Let's use a simple adjacent layout approach with Flexbox for clarity */
+             /* The JS will position the background, CSS controls visibility/placement */
+        }
+
+        /* Adjust positioning based on layout - assuming a grid/flex split */
+        /* If zoom view is placed next to the main image container: */
+         @media (min-width: 768px) { /* md breakpoint */
+            .md\:show-zoom-on-hover .zoom-view {
+               right: 0; /* Position next to the main image */
+            }
+         }
+
+
+        /* Custom styles for Tabs */
+        .tab-panel {
+            display: none; /* Hidden by default */
+        }
+
+        .tab-panel[aria-hidden="false"] {
+            display: block; /* Show when active */
+        }
+
+        .tab-button[aria-selected="true"] {
+            border-bottom-color: #000; /* Active tab indicator */
+            font-weight: bold;
+        }
+
+        .star-rating {
+            display: inline-block;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            font-size: 1.5rem; /* Larger stars */
+            color: gold;
+        }
+
+        .star-rating > span {
+            display: inline-block;
+            position: relative;
+            width: 1.1em; /* Slightly wider for spacing */
+            cursor: pointer;
+        }
+         .star-rating > span:hover:before,
+         .star-rating > span:hover ~ span:before {
+             content: "\2605"; /* Filled star on hover */
+             position: absolute;
+         }
+         .star-rating > input[type="radio"] {
+             display: none; /* Hide radio buttons */
+         }
+
+         .star-rating label {
+             display: inline-block;
+             padding: 0 0.1em;
+             color: transparent; /* Hide label text initially */
+             position: absolute; /* Position labels over spans */
+             top: 0; left: 0; right: 0; bottom: 0;
+             cursor: pointer;
+             z-index: 1; /* Ensure label is clickable */
+         }
+
+        .star-rating > input[type="radio"]:checked ~ span:before,
+        .star-rating > input[type="radio"]:checked + label:before {
+             content: "\2605"; /* Filled star when checked */
+             color: gold;
+             position: absolute;
+         }
+
+        .star-rating > input[type="radio"]:checked + label {
+             color: transparent; /* Keep label text hidden */
+         }
+
+         /* Visually hidden for screen readers */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
+
+    <main class="container mx-auto p-4 md:p-8">
+        <div class="bg-white rounded-lg shadow-md p-6 md:flex md:space-x-8">
+
+            <!-- Product Gallery & Zoom -->
+            <section class="md:w-1/2 relative zoom-container md:show-zoom-on-hover">
+                <h2 class="sr-only">Product Images</h2>
+                <div class="relative w-full mb-4 border rounded overflow-hidden">
+                     <img src="https://via.placeholder.com/600x400?text=High-Perf+Laptop"
+                         alt="High-Performance Laptop - Front View"
+                         data-testid="main-product-image"
+                         id="main-product-image"
+                         class="w-full h-auto object-cover">
+                     <!-- Image Zoom View (positioned adjacent or overlaid by CSS/JS) -->
+                     <div data-testid="image-zoom-view" class="zoom-view"></div>
+                </div>
+
+                <!-- Thumbnails -->
+                <div class="flex space-x-2 overflow-x-auto pb-2">
+                    <h3 class="sr-only">More Views</h3>
+                    <button class="thumbnail-button border rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="View of High-Performance Laptop - Front" data-img-src="https://via.placeholder.com/600x400?text=High-Perf+Laptop" data-testid="thumbnail-1">
+                        <img src="https://via.placeholder.com/100x70?text=Thumb+1" alt="Thumbnail of front view" class="w-16 h-auto object-cover">
+                    </button>
+                     <button class="thumbnail-button border rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="View of High-Performance Laptop - Side" data-img-src="https://via.placeholder.com/600x400?text=Laptop+Side" data-testid="thumbnail-2">
+                        <img src="https://via.placeholder.com/100x70?text=Thumb+2" alt="Thumbnail of side view" class="w-16 h-auto object-cover">
+                    </button>
+                    <button class="thumbnail-button border rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="View of High-Performance Laptop - Keyboard" data-img-src="https://via.placeholder.com/600x400?text=Laptop+Keyboard" data-testid="thumbnail-3">
+                        <img src="https://via.placeholder.com/100x70?text=Thumb+3" alt="Thumbnail of keyboard view" class="w-16 h-auto object-cover">
+                    </button>
+                    <!-- Add more thumbnails as needed -->
+                </div>
+            </section>
+
+            <!-- Product Information -->
+            <section class="md:w-1/2 mt-6 md:mt-0">
+                <h1 class="text-3xl font-bold mb-2">High-Performance Laptop</h1>
+                <p class="text-gray-600 mb-4">A powerful and portable machine designed for professionals and enthusiasts.</p>
+
+                <div class="mb-6">
+                    <span class="text-2xl font-semibold text-gray-800" data-testid="product-price">$1299.99</span>
+                </div>
+
+                <!-- Variant Selection -->
+                <div class="mb-6">
+                    <fieldset>
+                        <legend class="block text-sm font-medium text-gray-700 mb-2">Color:</legend>
+                        <div class="flex items-center space-x-4">
+                            <div>
+                                <input type="radio" id="color-silver" name="color" value="silver" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300" checked>
+                                <label for="color-silver" class="ml-2 text-sm text-gray-600">Silver</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="color-spacegray" name="color" value="spacegray" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="color-spacegray" class="ml-2 text-sm text-gray-600">Space Gray</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="mb-6">
+                    <fieldset>
+                        <legend class="block text-sm font-medium text-gray-700 mb-2">Storage:</legend>
+                         <div class="flex items-center space-x-4">
+                            <div>
+                                <input type="radio" id="storage-256" name="storage" value="256" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300" checked>
+                                <label for="storage-256" class="ml-2 text-sm text-gray-600">256GB SSD</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="storage-512" name="storage" value="512" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="storage-512" class="ml-2 text-sm text-gray-600">512GB SSD</label>
+                            </div>
+                             <div>
+                                <input type="radio" id="storage-1tb" name="storage" value="1024" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                <label for="storage-1tb" class="ml-2 text-sm text-gray-600">1TB SSD</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div class="mb-6">
+                    <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" data-testid="quantity-input" class="mt-1 block w-20 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+
+                <!-- Add to Cart Button -->
+                <div>
+                    <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" data-testid="add-to-cart-button">
+                        Add to Cart
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <section class="mt-8 bg-white rounded-lg shadow-md p-6" data-testid="product-tabs">
+            <h2 class="sr-only">Product Details</h2>
+            <div role="tablist" class="flex border-b border-gray-200" aria-label="Product Information">
+                <button role="tab"
+                        id="tab-description"
+                        aria-controls="tab-panel-description"
+                        aria-selected="true"
+                        class="tab-button py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-800 border-b-2 border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-800">
+                    Full Description
+                </button>
+                <button role="tab"
+                        id="tab-specs"
+                        aria-controls="tab-panel-specs"
+                        aria-selected="false"
+                        class="tab-button py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-800 border-b-2 border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-800">
+                    Specifications
+                </button>
+                <button role="tab"
+                        id="tab-reviews"
+                        aria-controls="tab-panel-reviews"
+                        aria-selected="false"
+                        class="tab-button py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-800 border-b-2 border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-800">
+                    Customer Reviews
+                </button>
+            </div>
+
+            <div id="tab-panel-description"
+                 role="tabpanel"
+                 aria-labelledby="tab-description"
+                 aria-hidden="false"
+                 data-testid="tab-panel-description"
+                 class="tab-panel p-4">
+                <h3 class="text-lg font-semibold mb-2">Full Description</h3>
+                <p class="text-gray-700">
+                    Experience unparalleled performance with the High-Performance Laptop. Featuring the latest generation processor,
+                    ample RAM, and a blazing-fast SSD, this laptop is built to handle demanding tasks, from creative workflows to
+                    complex computations. The stunning high-resolution display provides vibrant colors and sharp details, perfect
+                    for both work and entertainment. Its sleek, lightweight design ensures portability without compromising on power.
+                    Equipped with a long-lasting battery and a comprehensive suite of ports, it's the ultimate tool for productivity
+                    on the go.
+                </p>
+            </div>
+
+            <div id="tab-panel-specs"
+                 role="tabpanel"
+                 aria-labelledby="tab-specs"
+                 aria-hidden="true"
+                 data-testid="tab-panel-specs"
+                 class="tab-panel p-4">
+                <h3 class="text-lg font-semibold mb-2">Specifications</h3>
+                <ul class="list-disc list-inside text-gray-700">
+                    <li>Processor: Intel Core i7 (Latest Gen)</li>
+                    <li>RAM: 16GB DDR4</li>
+                    <li>Storage: 512GB NVMe SSD (Configurable)</li>
+                    <li>Display: 14-inch IPS LED, 2560 x 1600 resolution</li>
+                    <li>Graphics: Integrated Intel Iris Xe</li>
+                    <li>Connectivity: Wi-Fi 6, Bluetooth 5.2</li>
+                    <li>Ports: 2x Thunderbolt 4 (USB-C), 1x USB-A 3.1, 1x HDMI, SD Card Reader, Headphone Jack</li>
+                    <li>Operating System: Windows 11 Pro</li>
+                    <li>Weight: 1.4 kg</li>
+                </ul>
+            </div>
+
+            <div id="tab-panel-reviews"
+                 role="tabpanel"
+                 aria-labelledby="tab-reviews"
+                 aria-hidden="true"
+                 data-testid="tab-panel-reviews"
+                 class="tab-panel p-4">
+                <h3 class="text-lg font-semibold mb-2">Customer Reviews</h3>
+
+                <!-- Existing Reviews -->
+                <div id="reviews-list" class="space-y-4 mb-6">
+                    <!-- Sample Review 1 -->
+                    <div class="border p-4 rounded-md">
+                        <p class="font-semibold">Jane Doe</p>
+                        <div class="star-rating mb-2" aria-label="5 out of 5 stars">
+                           <span aria-hidden="true">★★★★★</span>
+                        </div>
+                        <p class="text-gray-700">Absolutely love this laptop! It's incredibly fast and the display is gorgeous. Highly recommend!</p>
+                    </div>
+                    <!-- Sample Review 2 -->
+                    <div class="border p-4 rounded-md">
+                        <p class="font-semibold">John Smith</p>
+                         <div class="star-rating mb-2" aria-label="4 out of 5 stars">
+                           <span aria-hidden="true">★★★★☆</span>
+                        </div>
+                        <p class="text-gray-700">Great performance for the price. The battery life is decent, though could be better under heavy load.</p>
+                    </div>
+                     <!-- Add more sample reviews here -->
+                </div>
+
+                <!-- Review Submission Form -->
+                <div class="mt-6 border-t pt-6">
+                     <h4 class="text-lg font-semibold mb-4">Leave a Review</h4>
+                     <form id="review-form" class="space-y-4">
+                        <div>
+                            <label for="reviewer-name" class="block text-sm font-medium text-gray-700">Name:</label>
+                            <input type="text" id="reviewer-name" name="reviewerName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="review-rating" class="block text-sm font-medium text-gray-700 mb-1">Rating:</label>
+                            <!-- Star Rating Input -->
+                             <div class="star-rating" id="review-rating" aria-label="Rate this product">
+                                <input type="radio" id="rating-5" name="rating" value="5" required><label for="rating-5" title="5 stars">5 stars</label>
+                                <input type="radio" id="rating-4" name="rating" value="4"><label for="rating-4" title="4 stars">4 stars</label>
+                                <input type="radio" id="rating-3" name="rating" value="3"><label for="rating-3" title="3 stars">3 stars</label>
+                                <input type="radio" id="rating-2" name="rating" value="2"><label for="rating-2" title="2 stars">2 stars</label>
+                                <input type="radio" id="rating-1" name="rating" value="1"><label for="rating-1" title="1 star">1 star</label>
+                                <span aria-hidden="true">☆☆☆☆☆</span> <!-- Empty stars placeholder -->
+                             </div>
+                        </div>
+                        <div>
+                             <label for="review-text" class="block text-sm font-medium text-gray-700">Review:</label>
+                             <textarea id="review-text" name="reviewText" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+                        </div>
+                        <div>
+                             <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                 Submit Review
+                             </button>
+                        </div>
+                     </form>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Image Gallery & Zoom Functionality ---
+        const mainImage = document.getElementById('main-product-image');
+        const thumbnails = document.querySelectorAll('.thumbnail-button');
+        const zoomView = document.querySelector('[data-testid="image-zoom-view"]');
+        const mainImageContainer = mainImage.parentElement; // The div wrapping the main image
+
+        // Set initial background image for zoom view
+        zoomView.style.backgroundImage = `url('${mainImage.src}')`;
+
+        // Thumbnail click handler
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                const newSrc = thumbnail.getAttribute('data-img-src');
+                const altText = thumbnail.querySelector('img').alt.replace('Thumbnail of ', ''); // Extract base alt text
+
+                mainImage.src = newSrc;
+                mainImage.alt = altText;
+                zoomView.style.backgroundImage = `url('${newSrc}')`; // Update zoom background
+            });
+        });
+
+        // Image Zoom Hover functionality
+        // Only enable hover zoom on larger screens (matching Tailwind's md breakpoint)
+        if (window.matchMedia('(min-width: 768px)').matches) {
+            mainImageContainer.addEventListener('mouseenter', () => {
+                 zoomView.style.right = '0'; // Slide in the zoom view
+                 zoomView.style.border = '1px solid #ccc'; // Add border when active
+                 // Preload potentially higher-res image if available
+                 // let highResSrc = mainImage.src.replace('600x400', '1200x800'); // Example: simple src change
+                 // zoomView.style.backgroundImage = `url('${highResSrc}')`;
+            });
+
+             mainImageContainer.addEventListener('mouseleave', () => {
+                 zoomView.style.right = '-100%'; // Slide out the zoom view
+                 zoomView.style.border = 'none'; // Remove border
+             });
+
+            mainImageContainer.addEventListener('mousemove', (e) => {
+                const rect = mainImageContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const imgWidth = mainImage.offsetWidth;
+                const imgHeight = mainImage.offsetHeight;
+
+                // Calculate background position for the zoom view
+                // The zoom view's background image should be a larger version.
+                // Let's assume the background image is 2x the main image size for simplicity
+                const zoomFactor = 2; // How much bigger the zoom image is
+                const bgPosX = (x / imgWidth) * 100; // Percentage of mouse pos on image
+                const bgPosY = (y / imgHeight) * 100;
+
+                // Adjust background position to show the correct part
+                // Need to account for the zoom view displaying only a portion
+                // Formula: - (percentage * (zoomed_size - view_size) / view_size) * 100%
+                // Simplified: - (percentage * zoom_factor) %
+                const zoomViewWidth = zoomView.offsetWidth;
+                const zoomViewHeight = zoomView.offsetHeight;
+
+                // Background size needs to be set to the zoomed size
+                zoomView.style.backgroundSize = `${imgWidth * zoomFactor}px ${imgHeight * zoomFactor}px`;
+
+                // Calculate background position to center the magnified area around the cursor spot
+                 // Positional percentage calculation: (cursor_pos / image_size) * 100%
+                 // Background position calculation: - (cursor_pos / image_size) * (zoomed_image_size - zoom_view_size) / (zoom_view_size) * 100%
+                 // Let's use a simpler pixel-based calculation first
+                const backgroundX = - (x / imgWidth) * (imgWidth * zoomFactor - zoomViewWidth);
+                const backgroundY = - (y / imgHeight) * (imgHeight * zoomFactor - zoomViewHeight);
+
+
+                zoomView.style.backgroundPosition = `${backgroundX}px ${backgroundY}px`;
+            });
+        }
+
+
+        // --- Tab Interface Functionality ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        // Initial state: Set first tab as selected and first panel as visible
+        tabButtons[0].setAttribute('aria-selected', 'true');
+        tabPanels[0].setAttribute('aria-hidden', 'false');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', handleTabClick);
+            button.addEventListener('keydown', handleTabKeydown);
+        });
+
+        function handleTabClick(event) {
+            const clickedButton = event.target;
+            activateTab(clickedButton);
+        }
+
+        function handleTabKeydown(event) {
+            const currentTab = event.target;
+            let nextTab;
+
+            // Handle arrow key navigation
+            switch (event.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    event.preventDefault(); // Prevent default scroll behavior
+                    nextTab = currentTab.previousElementSibling;
+                    if (!nextTab) {
+                        // Wrap around to the last tab
+                        nextTab = tabButtons[tabButtons.length - 1];
+                    }
+                    activateTab(nextTab);
+                    nextTab.focus(); // Move focus to the new tab
+                    break;
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    event.preventDefault(); // Prevent default scroll behavior
+                    nextTab = currentTab.nextElementSibling;
+                    if (!nextTab) {
+                        // Wrap around to the first tab
+                        nextTab = tabButtons[0];
+                    }
+                    activateTab(nextTab);
+                    nextTab.focus(); // Move focus to the new tab
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    nextTab = tabButtons[0];
+                    activateTab(nextTab);
+                    nextTab.focus();
+                    break;
+                case 'End':
+                     event.preventDefault();
+                     nextTab = tabButtons[tabButtons.length - 1];
+                     activateTab(nextTab);
+                     nextTab.focus();
+                     break;
+            }
+        }
+
+        function activateTab(tabToActivate) {
+            // Deactivate all tabs and hide all panels
+            tabButtons.forEach(button => {
+                button.setAttribute('aria-selected', 'false');
+                button.setAttribute('tabindex', '-1'); // Make inactive tabs not focusable by Tab key
+            });
+
+            tabPanels.forEach(panel => {
+                panel.setAttribute('aria-hidden', 'true');
+            });
+
+            // Activate the clicked tab and show its panel
+            tabToActivate.setAttribute('aria-selected', 'true');
+            tabToActivate.setAttribute('tabindex', '0'); // Make active tab focusable by Tab key
+
+            const panelId = tabToActivate.getAttribute('aria-controls');
+            const panelToActivate = document.getElementById(panelId);
+            if (panelToActivate) {
+                panelToActivate.setAttribute('aria-hidden', 'false');
+                // Optionally, move focus to the panel content for seamless navigation
+                // panelToActivate.focus(); // Might be annoying, standard is just to show it
+            }
+        }
+
+         // Initialize tabindex for tabs (first one is 0, others are -1)
+        tabButtons.forEach((button, index) => {
+            button.setAttribute('tabindex', index === 0 ? '0' : '-1');
+        });
+
+
+        // --- Customer Review Form Simulation ---
+        const reviewForm = document.getElementById('review-form');
+        const reviewsList = document.getElementById('reviews-list');
+
+        reviewForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent actual form submission
+
+            const nameInput = document.getElementById('reviewer-name');
+            const ratingInputs = document.querySelectorAll('input[name="rating"]');
+            const reviewTextInput = document.getElementById('review-text');
+
+            const name = nameInput.value;
+            let rating = 0;
+            ratingInputs.forEach(input => {
+                if (input.checked) {
+                    rating = parseInt(input.value, 10);
+                }
+            });
+            const reviewText = reviewTextInput.value;
+
+            if (!name || rating === 0 || !reviewText) {
+                alert('Please fill out all fields.'); // Basic validation
+                return;
+            }
+
+            // Simulate adding the new review to the list
+            const newReviewElement = document.createElement('div');
+            newReviewElement.classList.add('border', 'p-4', 'rounded-md');
+            newReviewElement.innerHTML = `
+                <p class="font-semibold">${escapeHTML(name)}</p>
+                <div class="star-rating mb-2" aria-label="${rating} out of 5 stars">
+                    <span aria-hidden="true">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</span>
+                </div>
+                <p class="text-gray-700">${escapeHTML(reviewText)}</p>
+            `;
+
+            reviewsList.appendChild(newReviewElement);
+
+            // Clear the form
+            this.reset();
+
+            // Announce new review added (optional, for screen readers)
+            // Could use an ARIA live region, but appending directly is often announced
+            // Or announce the review count changed.
+            // For simplicity, just add to the DOM.
+        });
+
+         // Basic HTML escaping for user input
+         function escapeHTML(str) {
+             const div = document.createElement('div');
+             div.appendChild(document.createTextNode(str));
+             return div.innerHTML;
+         }
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for date picker and autocomplete */
+        .date-picker {
+            position: relative;
+        }
+        .date-picker .calendar {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .date-picker .calendar.show {
+            display: block;
+        }
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .autocomplete-suggestions.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-blue-500 text-white p-4">
+        <h1 class="text-3xl font-bold">Flight Booking System</h1>
+    </header>
+    <main class="container mx-auto p-4 pt-6 md:p-6 lg:p-12 xl:p-24">
+        <form data-testid="flight-search-form" class="flex flex-col md:flex-row">
+            <div class="flex flex-col md:w-1/2 md:mr-4">
+                <label for="input-origin" class="block text-sm font-medium text-gray-700">From</label>
+                <input type="text" id="input-origin" data-testid="input-origin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" aria-describedby="autocomplete-suggestions" aria-controls="autocomplete-suggestions">
+                <div id="autocomplete-suggestions" data-testid="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+            </div>
+            <div class="flex flex-col md:w-1/2 md:ml-4">
+                <label for="input-destination" class="block text-sm font-medium text-gray-700">To</label>
+                <input type="text" id="input-destination" data-testid="input-destination" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" aria-describedby="autocomplete-suggestions" aria-controls="autocomplete-suggestions">
+                <div id="autocomplete-suggestions-destination" data-testid="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+            </div>
+            <div class="flex flex-col md:w-1/2 md:mr-4 mt-4 md:mt-0">
+                <label for="input-departure-date" class="block text-sm font-medium text-gray-700">Departure Date</label>
+                <div class="date-picker">
+                    <input type="text" id="input-departure-date" data-testid="input-departure-date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <div class="calendar">
+                        <!-- Calendar will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                <label for="input-return-date" class="block text-sm font-medium text-gray-700">Return Date</label>
+                <div class="date-picker">
+                    <input type="text" id="input-return-date" data-testid="input-return-date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" disabled>
+                    <div class="calendar">
+                        <!-- Calendar will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col md:w-1/2 md:mr-4 mt-4 md:mt-0">
+                <label for="input-passengers" class="block text-sm font-medium text-gray-700">Passengers</label>
+                <input type="number" id="input-passengers" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div class="flex flex-col md:w-1/2 md:ml-4 mt-4 md:mt-0">
+                <div class="flex items-center">
+                    <input type="radio" id="one-way" name="trip-type" value="one-way" class="mr-2">
+                    <label for="one-way" class="block text-sm font-medium text-gray-700">One-way</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="radio" id="round-trip" name="trip-type" value="round-trip" class="mr-2">
+                    <label for="round-trip" class="block text-sm font-medium text-gray-700">Round-trip</label>
+                </div>
+            </div>
+            <button type="submit" data-testid="search-flights-btn" class="mt-4 py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Search Flights</button>
+        </form>
+        <div data-testid="flight-results-area" class="mt-8">
+            <!-- Flight results will be generated dynamically -->
+        </div>
+        <div data-testid="results-filters" class="mt-8">
+            <h2 class="text-2xl font-bold">Filters</h2>
+            <div class="flex flex-col">
+                <label for="filter-price-min" class="block text-sm font-medium text-gray-700">Price Range</label>
+                <input type="number" id="filter-price-min" data-testid="filter-price-min" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <input type="number" id="filter-price-max" data-testid="filter-price-max" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div class="flex flex-col">
+                <label for="filter-stops" class="block text-sm font-medium text-gray-700">Number of Stops</label>
+                <div class="flex items-center">
+                    <input type="checkbox" id="filter-stops-non-stop" class="mr-2">
+                    <label for="filter-stops-non-stop" class="block text-sm font-medium text-gray-700">Non-stop</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="filter-stops-1-stop" class="mr-2">
+                    <label for="filter-stops-1-stop" class="block text-sm font-medium text-gray-700">1 stop</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="filter-stops-2-stops" class="mr-2">
+                    <label for="filter-stops-2-stops" class="block text-sm font-medium text-gray-700">2+ stops</label>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <label for="filter-airlines" class="block text-sm font-medium text-gray-700">Airlines</label>
+                <div class="flex items-center">
+                    <input type="checkbox" id="filter-airline-1" class="mr-2">
+                    <label for="filter-airline-1" class="block text-sm font-medium text-gray-700">Airline 1</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="filter-airline-2" class="mr-2">
+                    <label for="filter-airline-2" class="block text-sm font-medium text-gray-700">Airline 2</label>
+                </div>
+            </div>
+        </div>
+        <div data-testid="results-sort-controls" class="mt-8">
+            <h2 class="text-2xl font-bold">Sort By</h2>
+            <div class="flex items-center">
+                <button type="button" data-testid="sort-by-price" class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Price</button>
+                <button type="button" class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Duration</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Get all elements
+        const searchForm = document.querySelector('[data-testid="flight-search-form"]');
+        const originInput = document.querySelector('[data-testid="input-origin"]');
+        const destinationInput = document.querySelector('[data-testid="input-destination"]');
+        const departureDateInput = document.querySelector('[data-testid="input-departure-date"]');
+        const returnDateInput = document.querySelector('[data-testid="input-return-date"]');
+        const passengersInput = document.querySelector('input[type="number"]');
+        const oneWayRadio = document.querySelector('input[value="one-way"]');
+        const roundTripRadio = document.querySelector('input[value="round-trip"]');
+        const searchFlightsBtn = document.querySelector('[data-testid="search-flights-btn"]');
+        const flightResultsArea = document.querySelector('[data-testid="flight-results-area"]');
+        const resultsFilters = document.querySelector('[data-testid="results-filters"]');
+        const resultsSortControls = document.querySelector('[data-testid="results-sort-controls"]');
+        const sortByPriceBtn = document.querySelector('[data-testid="sort-by-price"]');
+
+        // Add event listeners
+        searchFlightsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Simulate search results
+            const results = [
+                {
+                    airline: 'Airline 1',
+                    departureTime: '08:00',
+                    arrivalTime: '10:00',
+                    duration: '2 hours',
+                    price: 200,
+                },
+                {
+                    airline: 'Airline 2',
+                    departureTime: '09:00',
+                    arrivalTime: '11:00',
+                    duration: '2 hours',
+                    price: 250,
+                },
+                {
+                    airline: 'Airline 3',
+                    departureTime: '10:00',
+                    arrivalTime: '12:00',
+                    duration: '2 hours',
+                    price: 300,
+                },
+            ];
+            // Render results
+            renderResults(results);
+        });
+
+        // Render results
+        function renderResults(results) {
+            flightResultsArea.innerHTML = '';
+            results.forEach((result, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.innerHTML = `
+                    <h2>${result.airline}</h2>
+                    <p>Departure Time: ${result.departureTime}</p>
+                    <p>Arrival Time: ${result.arrivalTime}</p>
+                    <p>Duration: ${result.duration}</p>
+                    <p>Price: $${result.price}</p>
+                    <button class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Select Flight</button>
+                `;
+                resultItem.setAttribute('data-testid', `flight-result-item-${index + 1}`);
+                flightResultsArea.appendChild(resultItem);
+            });
+        }
+
+        // Autocomplete functionality
+        const airports = [
+            'New York (JFK)',
+            'Los Angeles (LAX)',
+            'Chicago (ORD)',
+            'Houston (IAH)',
+            'Phoenix (PHX)',
+        ];
+        originInput.addEventListener('input', () => {
+            const suggestions = airports.filter((airport) => airport.toLowerCase().includes(originInput.value.toLowerCase()));
+            const autocompleteSuggestions = document.querySelector('[data-testid="autocomplete-suggestions"]');
+            autocompleteSuggestions.innerHTML = '';
+            suggestions.forEach((suggestion) => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.textContent = suggestion;
+                suggestionItem.addEventListener('click', () => {
+                    originInput.value = suggestion;
+                    autocompleteSuggestions.innerHTML = '';
+                });
+                autocompleteSuggestions.appendChild(suggestionItem);
+            });
+            if (suggestions.length > 0) {
+                autocompleteSuggestions.classList.add('show');
+            } else {
+                autocompleteSuggestions.classList.remove('show');
+            }
+        });
+
+        // Date picker functionality
+        const calendars = [];
+        departureDateInput.addEventListener('click', () => {
+            const calendar = document.createElement('div');
+            calendar.className = 'calendar';
+            calendar.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td>11</td>
+                            <td>12</td>
+                            <td>13</td>
+                            <td>14</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                            <td>19</td>
+                            <td>20</td>
+                            <td>21</td>
+                        </tr>
+                        <tr>
+                            <td>22</td>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td>29</td>
+                            <td>30</td>
+                            <td>31</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            calendars.push(calendar);
+            departureDateInput.parentNode.appendChild(calendar);
+            calendar.classList.add('show');
+        });
+
+        // Filter and sort functionality
+        resultsFilters.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                const results = Array.from(flightResultsArea.children);
+                results.forEach((result) => {
+                    const price = parseInt(result.querySelector('p:nth-child(5)').textContent.split('$')[1]);
+                    const stops = result.querySelector('p:nth-child(3)').textContent;
+                    if (e.target.id === 'filter-stops-non-stop' && stops !== 'Non-stop') {
+                        result.style.display = 'none';
+                    } else if (e.target.id === 'filter-stops-1-stop' && stops !== '1 stop') {
+                        result.style.display = 'none';
+                    } else if (e.target.id === 'filter-stops-2-stops' && stops !== '2+ stops') {
+                        result.style.display = 'none';
+                    } else {
+                        result.style.display = 'block';
+                    }
+                });
+            }
+        });
+
+        sortByPriceBtn.addEventListener('click', () => {
+            const results = Array.from(flightResultsArea.children);
+            results.sort((a, b) => {
+                const priceA = parseInt(a.querySelector('p:nth-child(5)').textContent.split('$')[1]);
+                const priceB = parseInt(b.querySelector('p:nth-child(5)').textContent.split('$')[1]);
+                return priceA - priceB;
+            });
+            flightResultsArea.innerHTML = '';
+            results.forEach((result) => {
+                flightResultsArea.appendChild(result);
+            });
+        });
+    </script>
+</body>
+</html>

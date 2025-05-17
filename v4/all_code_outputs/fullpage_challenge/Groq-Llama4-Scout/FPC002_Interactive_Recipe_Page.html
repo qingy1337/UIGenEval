@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocolate Lava Cakes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for better UX and A11y */
+        .strikethrough {
+            text-decoration: line-through;
+        }
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            cursor: pointer;
+            font-size: 24px;
+            color: #ccc;
+        }
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-gray-200 p-4 text-center">
+        <h1 data-testid="recipe-title" class="text-3xl font-bold">Chocolate Lava Cakes</h1>
+    </header>
+    <main class="container mx-auto p-4 mt-4">
+        <article class="flex flex-col lg:flex-row">
+            <img src="chocolate-lava-cakes.jpg" alt="Chocolate Lava Cakes on a plate" class="w-full lg:w-1/2 h-64 object-cover mb-4 lg:mb-0">
+            <div class="lg:ml-4">
+                <p class="text-lg font-bold mb-2">Description: Rich, gooey chocolate cakes perfect for any occasion.</p>
+                <p class="text-sm">Prep Time: 20 minutes | Cook Time: 12-15 minutes | Servings: 4</p>
+            </div>
+        </article>
+        <section class="mt-8">
+            <h2 class="text-xl font-bold mb-2">Ingredients:</h2>
+            <ul data-testid="ingredients-list" class="list-none">
+                <li class="mb-2">
+                    <input type="checkbox" id="ingredient-1" class="mr-2">
+                    <span>2 large eggs</span>
+                </li>
+                <li class="mb-2">
+                    <input type="checkbox" id="ingredient-2" class="mr-2">
+                    <span>1 1/2 cups all-purpose flour</span>
+                </li>
+                <li class="mb-2">
+                    <input type="checkbox" id="ingredient-3" class="mr-2">
+                    <span>1 cup granulated sugar</span>
+                </li>
+                <li class="mb-2">
+                    <input type="checkbox" id="ingredient-4" class="mr-2">
+                    <span>6 ounces best-quality bittersweet or dark chocolate, broken into small pieces</span>
+                </li>
+            </ul>
+        </section>
+        <section class="mt-8">
+            <h2 class="text-xl font-bold mb-2">Instructions:</h2>
+            <ol class="list-decimal">
+                <li>
+                    Preheat oven to 425°F. Butter four 6-ounce ramekins and dust with sugar.
+                    <button data-testid="timer-btn-step1" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Start Timer</button>
+                </li>
+                <li>
+                    Melt chocolate and butter in a medium bowl set over a pot of simmering water.
+                    <button data-testid="timer-btn-step2" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Start Timer</button>
+                </li>
+                <li>
+                    Whisk together eggs and sugar, then add flour.
+                    <button data-testid="timer-btn-step3" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Start Timer</button>
+                </li>
+                <li>
+                    Pour batter into prepared ramekins and bake for 12-15 minutes.
+                    <button data-testid="timer-btn-step4" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Start Timer</button>
+                </li>
+            </ol>
+            <p data-testid="recipe-timer-display" class="mt-2 text-lg font-bold"></p>
+        </section>
+        <aside class="mt-8 bg-gray-100 p-4">
+            <h2 class="text-xl font-bold mb-2">Nutrition Information:</h2>
+            <table class="table-auto w-full">
+                <tr>
+                    <th class="px-4 py-2">Calories</th>
+                    <th class="px-4 py-2">Protein</th>
+                    <th class="px-4 py-2">Fat</th>
+                    <th class="px-4 py-2">Carbs</th>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">420</td>
+                    <td class="border px-4 py-2">5g</td>
+                    <td class="border px-4 py-2">28g</td>
+                    <td class="border px-4 py-2">30g</td>
+                </tr>
+            </table>
+        </aside>
+        <section class="mt-8">
+            <h2 class="text-xl font-bold mb-2">User Reviews:</h2>
+            <form data-testid="review-form">
+                <label for="name" class="block mb-2">Name:</label>
+                <input type="text" id="name" class="block w-full p-2 mb-4">
+                <label for="rating" class="block mb-2">Rating:</label>
+                <div class="star-rating">
+                    <input type="radio" id="star-1" name="rating" value="1">
+                    <label for="star-1">&#9733;</label>
+                    <input type="radio" id="star-2" name="rating" value="2">
+                    <label for="star-2">&#9733;</label>
+                    <input type="radio" id="star-3" name="rating" value="3">
+                    <label for="star-3">&#9733;</label>
+                    <input type="radio" id="star-4" name="rating" value="4">
+                    <label for="star-4">&#9733;</label>
+                    <input type="radio" id="star-5" name="rating" value="5">
+                    <label for="star-5">&#9733;</label>
+                </div>
+                <label for="comment" class="block mb-2">Comment:</label>
+                <textarea id="comment" class="block w-full p-2 mb-4"></textarea>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Submit Review</button>
+            </form>
+        </section>
+    </main>
+    <footer class="bg-gray-200 p-4 text-center mt-8">
+        &copy; 2024 Chocolate Lava Cakes Recipe
+    </footer>
+
+    <script>
+        // JavaScript for timer functionality
+        const timerButtons = document.querySelectorAll('[data-testid^="timer-btn-step"]');
+        const timerDisplay = document.querySelector('[data-testid="recipe-timer-display"]');
+
+        timerButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                let time = 0;
+                if (button.dataset.testid === 'timer-btn-step1') time = 20 * 60; // 20 minutes
+                if (button.dataset.testid === 'timer-btn-step2') time = 0; // No timer
+                if (button.dataset.testid === 'timer-btn-step3') time = 0; // No timer
+                if (button.dataset.testid === 'timer-btn-step4') time = 12 * 60; // 12 minutes
+
+                let intervalId = setInterval(() => {
+                    time--;
+                    timerDisplay.textContent = `Time remaining: ${Math.floor(time / 60)}:${time % 60.toString().padStart(2, '0')}`;
+                    if (time <= 0) {
+                        clearInterval(intervalId);
+                        timerDisplay.textContent = 'Timer finished!';
+                        alert('Timer finished!');
+                    }
+                }, 1000);
+            });
+        });
+
+        // JavaScript for ingredient checklist
+        const ingredientsList = document.querySelector('[data-testid="ingredients-list"]');
+        ingredientsList.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                e.target.nextElementSibling.classList.toggle('strikethrough', e.target.checked);
+            }
+        });
+
+        // JavaScript for star rating
+        const starRatingInputs = document.querySelectorAll('.star-rating input[type="radio"]');
+        starRatingInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const labels = document.querySelectorAll('.star-rating label');
+                labels.forEach((label, index) => {
+                    label.style.color = index < input.value ? '#ffd700' : '#ccc';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

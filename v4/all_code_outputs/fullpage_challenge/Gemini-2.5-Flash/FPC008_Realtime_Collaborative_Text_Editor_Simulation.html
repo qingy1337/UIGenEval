@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Editor Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .editor-container {
+            position: relative; /* Needed for absolute positioning of cursors */
+            min-height: 300px; /* Give it some initial height */
+            border: 1px solid #ccc;
+            padding: 1rem;
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+        .simulated-cursor {
+            position: absolute;
+            width: 2px;
+            height: 1.2em; /* Approx line height */
+            background-color: blue; /* Example color */
+            pointer-events: none; /* Don't interfere with mouse events in editor */
+            z-index: 1; /* Ensure it's above text */
+            top: 0; /* Will be set by JS */
+            left: 0; /* Will be set by JS */
+            will-change: transform; /* Optimize animation/position changes */
+        }
+        .simulated-cursor::after {
+            content: attr(data-user-name);
+            position: absolute;
+            top: -1.5em;
+            left: -0.5em;
+            background-color: blue;
+            color: white;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        /* Style for buttons when pressed */
+        [aria-pressed="true"] {
+            background-color: #ccc; /* Example pressed state */
+        }
+         /* Hide the live region visually but keep it accessible */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body class="p-4 bg-gray-100">
+
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-4">
+        <div data-testid='editor-toolbar' class="flex space-x-2 mb-4 pb-2 border-b border-gray-200">
+            <button data-testid='toolbar-bold-btn' class="p-1 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Bold" aria-pressed="false">
+                <strong>B</strong>
+            </button>
+            <button class="p-1 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Italic" aria-pressed="false">
+                <em>I</em>
+            </button>
+            <button class="p-1 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Underline" aria-pressed="false">
+                <u>U</u>
+            </button>
+        </div>
+
+        <div
+            data-testid='editor-content-area'
+            class="editor-container border-none min-h-[300px] focus:outline-none"
+            contenteditable="true"
+            role="textbox"
+            aria-multiline="true"
+            aria-label="Text editor content"
+        >
+            <p>This is some initial editable content.</p>
+            <p>You can try typing here.</p>
+            <p>Collaborators will appear soon.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+
+        <!-- ARIA Live Region for announcements -->
+        <div data-testid='collaboration-updates' role="status" aria-live="polite" aria-atomic="true" class="visually-hidden">
+            <!-- Announcements will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const editor = document.querySelector('[data-testid="editor-content-area"]');
+        const toolbar = document.querySelector('[data-testid="editor-toolbar"]');
+        const liveRegion = document.querySelector('[data-testid="collaboration-updates"]');
+        const boldBtn = document.querySelector('[data-testid="toolbar-bold-btn"]');
+
+        // --- Toolbar Functionality ---
+        toolbar.addEventListener('click', (event) => {
+            const button = event.target.closest('button');
+            if (!button) return;
+
+            let command = null;
+            if (button.ariaLabel === 'Bold') command = 'bold';
+            else if (button.ariaLabel === 'Italic') command = 'italic';
+            else if (button.ariaLabel === 'Underline') command = 'underline';
+
+            if (command) {
+                // Use execCommand for simplicity in simulation
+                document.execCommand(command, false, null);
+                // Update button state based on selection
+                updateToolbarButtonStates();
+                // Return focus to the editor after command
+                editor.focus();
+            }
+        });
+
+        // Update toolbar button states (aria-pressed) based on current selection formatting
+        function updateToolbarButtonStates() {
+            const isBold = document.queryCommandState('bold');
+            const isItalic = document.queryCommandState('italic');
+            const isUnderline = document.queryCommandState('underline');
+
+            // Find buttons by aria-label or other identifier if needed
+            toolbar.querySelector('[aria-label="Bold"]').setAttribute('aria-pressed', isBold);
+            toolbar.querySelector('[aria-label="Italic"]').setAttribute('aria-pressed', isItalic);
+            toolbar.querySelector('[aria-label="Underline"]').setAttribute('aria-pressed', isUnderline);
+        }
+
+        // Listen for selection changes to update toolbar state
+        document.addEventListener('selectionchange', updateToolbarButtonStates);
+
+        // Initial update of toolbar states on load
+        updateToolbarButtonStates();
+
+
+        // --- Simulated Cursors ---
+        const collaborators = [
+            { name: 'Alice', color: 'red' },
+            { name: 'Bob', color: 'green' }
+        ];
+
+        function createSimulatedCursor(user) {
+            const cursorEl = document.createElement('div');
+            cursorEl.classList.add('simulated-cursor');
+            cursorEl.style.backgroundColor = user.color;
+            cursorEl.setAttribute('data-user-name', user.name);
+            cursorEl.setAttribute('data-testid', `cursor-user-${user.name}`);
+            cursorEl.setAttribute('aria-hidden', 'true'); // Hide from AT as it's visual simulation
+            cursorEl.setAttribute('tabindex', '-1'); // Prevent focus
+            return cursorEl;
+        }
+
+        function positionCursorRandomly(cursorEl) {
+            const editorRect = editor.getBoundingClientRect();
+            const scrollOffset = editor.scrollTop; // Account for vertical scrolling
+            const contentHeight = editor.scrollHeight; // Total scrollable height
+
+            // Simple random positioning within the editor's scrollable area
+            // This does NOT map precisely to a text character position
+            const randomTop = Math.random() * (contentHeight - cursorEl.offsetHeight);
+            const randomLeft = Math.random() * (editorRect.width - cursorEl.offsetWidth); // Position within visible width
+
+            cursorEl.style.top = `${randomTop}px`;
+            cursorEl.style.left = `${randomLeft}px`;
+        }
+
+        function addSimulatedCursors() {
+            collaborators.forEach(user => {
+                const cursor = createSimulatedCursor(user);
+                editor.parentElement.appendChild(cursor); // Append to the container div, not the contenteditable div
+                positionCursorRandomly(cursor);
+
+                // Periodically move cursors to simulate activity (visual only)
+                setInterval(() => {
+                    positionCursorRandomly(cursor);
+                }, Math.random() * 5000 + 2000); // Move every 2-7 seconds
+            });
+        }
+
+        // Add cursors after the page loads
+        addSimulatedCursors();
+
+
+        // --- Live Changes Simulation ---
+
+        function simulateCollaboratorTyping(userName, textToInsert) {
+            // Announce the change first
+            announceChange(`${userName} made an edit.`);
+
+            // Find the editor content
+            const editorContent = editor.innerHTML;
+
+            // Simple simulation: insert text at the end
+            // A real editor would handle complex merging at specific points
+            editor.innerHTML = editorContent + ` <span style="color: gray; font-size: 0.9em;">(${textToInsert})</span>`;
+
+            // Optional: Move caret to the end after insertion
+            const range = document.createRange();
+            const selection = window.getSelection();
+            range.selectNodeContents(editor);
+            range.collapse(false); // Collapse to the end
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            // Scroll editor to show the new content if necessary
+            editor.scrollTop = editor.scrollHeight;
+
+             // Announce that the change has been applied (optional, depends on desired verbosity)
+             // announceChange(`${userName}'s edit applied.`); // Might be too noisy
+        }
+
+        function announceChange(message) {
+            // Clear previous message and add the new one
+            liveRegion.textContent = '';
+            liveRegion.textContent = message;
+        }
+
+        // Simulate Bob typing after a few seconds
+        setTimeout(() => {
+            simulateCollaboratorTyping('Bob', '... added by Bob ...');
+        }, 5000); // Simulate after 5 seconds
+
+         // Simulate Alice typing after a bit longer
+         setTimeout(() => {
+            simulateCollaboratorTyping('Alice', '... Alice added this too ...');
+        }, 10000); // Simulate after 10 seconds
+
+
+    </script>
+
+</body>
+</html>

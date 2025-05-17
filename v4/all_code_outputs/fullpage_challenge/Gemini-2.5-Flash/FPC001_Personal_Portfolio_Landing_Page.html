@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Doe - Creative Web Developer</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom focus outline for better visibility */
+        *:focus {
+            outline: 3px solid theme('colors.blue.500'); /* Example focus color */
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 leading-relaxed">
+
+    <header class="bg-white shadow-md py-4" data-testid="main-navigation">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-bold text-blue-600">Alex Doe</div>
+            <!-- Minimal Navigation - can be expanded later -->
+            <nav aria-label="Main Navigation">
+                <ul class="flex space-x-4">
+                    <!-- Example links - can be uncommented/expanded -->
+                    <!-- <li><a href="#about" class="text-gray-600 hover:text-blue-600">About</a></li> -->
+                    <!-- <li><a href="#projects-section" class="text-gray-600 hover:text-blue-600">Projects</a></li> -->
+                    <!-- <li><a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a></li> -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20 md:py-32">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                        Alex Doe - Creative Web Developer
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8">
+                        Crafting beautiful and functional web experiences. Specializing in modern front-end technologies.
+                    </p>
+                    <a href="#projects-section" class="inline-block bg-white text-blue-600 font-semibold py-3 px-8 rounded-full text-lg hover:bg-gray-200 transition duration-300 ease-in-out" data-testid="cta-view-work">
+                        View My Work
+                    </a>
+                </div>
+                <div class="md:w-1/2 flex justify-center md:justify-end">
+                    <img src="https://via.placeholder.com/500x400?text=Developer+Illustration" alt="Illustration of a developer coding" class="rounded-lg shadow-lg max-w-full h-auto">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row items-center md:space-x-12">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">About Me</h2>
+                    <p class="text-gray-700 text-lg mb-4">
+                        Hello! I'm Alex Doe, a passionate web developer with a knack for building intuitive and engaging user interfaces. My journey in web development started with a curiosity for how websites work and has evolved into a deep love for creating meaningful digital experiences.
+                    </p>
+                    <p class="text-gray-700 text-lg mb-4">
+                        I specialize in modern JavaScript frameworks like React and Vue.js, and I'm always exploring new technologies to stay at the forefront of web development. Accessibility, performance, and clean code are pillars of my development philosophy.
+                    </p>
+                    <p class="text-gray-700 text-lg">
+                        When I'm not coding, you can find me experimenting with new design patterns, contributing to open source projects, or enjoying a good book.
+                    </p>
+                </div>
+                <div class="md:w-1/2 grid grid-cols-2 gap-6">
+                    <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                        <img src="https://via.placeholder.com/50?text=JS" alt="JavaScript icon" class="w-12 h-12 mb-2">
+                        <span class="text-gray-700 font-semibold">JavaScript (ES6+)</span>
+                    </div>
+                     <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                        <img src="https://via.placeholder.com/50?text=R" alt="React icon" class="w-12 h-12 mb-2">
+                        <span class="text-gray-700 font-semibold">React</span>
+                    </div>
+                     <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                        <img src="https://via.placeholder.com/50?text=T" alt="Tailwind CSS icon" class="w-12 h-12 mb-2">
+                        <span class="text-gray-700 font-semibold">Tailwind CSS</span>
+                    </div>
+                     <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                        <img src="https://via.placeholder.com/50?text=A11y" alt="Accessibility icon" class="w-12 h-12 mb-2">
+                        <span class="text-gray-700 font-semibold">Accessibility (A11y)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects-section" class="py-16 md:py-24 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">My Recent Work</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+                    <!-- Project Card 1 -->
+                    <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 ease-in-out" data-testid="project-card-1">
+                        <img src="https://via.placeholder.com/600x400?text=Project+1" alt="Placeholder image for E-commerce Platform Redesign project" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">E-commerce Platform Redesign</h3>
+                            <p class="text-gray-700 text-sm mb-4">
+                                A complete overhaul of an existing e-commerce site focusing on user experience and performance optimization.
+                            </p>
+                            <p class="text-gray-600 text-xs font-semibold mb-4">
+                                Technologies: React, Node.js, PostgreSQL, Tailwind CSS
+                            </p>
+                            <a href="#" class="text-blue-600 hover:underline font-medium" aria-label="View Project E-commerce Platform Redesign">View Project</a>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 2 -->
+                    <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 ease-in-out" data-testid="project-card-2">
+                        <img src="https://via.placeholder.com/600x400?text=Project+2" alt="Placeholder image for SaaS Dashboard project" class="w-full h-48 object-cover">
+                         <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">SaaS Dashboard</h3>
+                            <p class="text-gray-700 text-sm mb-4">
+                                Built a responsive and data-rich dashboard application for managing user analytics and subscriptions.
+                            </p>
+                             <p class="text-gray-600 text-xs font-semibold mb-4">
+                                Technologies: Vue.js, Express, MongoDB, Chart.js
+                            </p>
+                            <a href="#" class="text-blue-600 hover:underline font-medium" aria-label="View Project SaaS Dashboard">View Project</a>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 3 -->
+                    <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 ease-in-out" data-testid="project-card-3">
+                        <img src="https://via.placeholder.com/600x400?text=Project+3" alt="Placeholder image for Mobile First Blog project" class="w-full h-48 object-cover">
+                         <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Mobile-First Blog</h3>
+                            <p class="text-gray-700 text-sm mb-4">
+                                Developed a fast, accessible, and mobile-first blog platform with a focus on content delivery and readability.
+                            </p>
+                             <p class="text-gray-600 text-xs font-semibold mb-4">
+                                Technologies: HTML5, CSS3 (Grid/Flexbox), Vanilla JS, Jekyll
+                            </p>
+                            <a href="#" class="text-blue-600 hover:underline font-medium" aria-label="View Project Mobile-First Blog">View Project</a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 max-w-lg">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">Get In Touch</h2>
+
+                <form action="#" method="POST" data-testid="contact-form" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="name" name="name" autocomplete="name" required
+                               class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" name="email" autocomplete="email" required
+                               class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                        <textarea id="message" name="message" rows="4" required
+                                  class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ease-in-out">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+            <div class="mb-4 md:mb-0 text-center md:text-left">
+                © 2023 Alex Doe. All rights reserved.
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-300 hover:text-blue-500 transition duration-300 ease-in-out" aria-label="GitHub Profile">
+                    <!-- Placeholder SVG for GitHub -->
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.092.679-.217.679-.481 0-.237-.008-.867-.016-1.692-2.77.602-3.359-1.349-3.359-1.349-.454-1.158-1.11-1.466-1.11-1.466-.909-.621.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.681-.103-.253-.446-1.272.098-2.65 0 0 .84-.268 2.75 1.022A9.607 9.607 0 0112 6.879c.85.004 1.705.115 2.504.337 1.909-1.29 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.651.64.693 1.029 1.598 1.029 2.681 0 3.84-2.339 4.69-4.566 4.942.357.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+                </a>
+                 <a href="#" class="text-gray-300 hover:text-blue-500 transition duration-300 ease-in-out" aria-label="LinkedIn Profile">
+                    <!-- Placeholder SVG for LinkedIn -->
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.286-4 0v5.604h-3v-11h3v1.765c1.397-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                </a>
+                <!-- Add more social links as needed -->
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctaButton = document.querySelector('[data-testid="cta-view-work"]');
+
+            if (ctaButton) {
+                ctaButton.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const targetId = ctaButton.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
+
+            // Optional: Add active class to nav links on scroll - more complex JS omitted for brevity
+            // Can be added based on user's scrolling position
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Wizard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Minimal custom styles to control step visibility */
+        .step-content.hidden {
+            display: none;
+        }
+        .error-message {
+             /* Tailwind text-red-500 is used via class */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div id="wizard-container" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div data-testid='event-wizard-form' class="wizard-form">
+            <h1 class="text-2xl font-bold mb-6 text-center">Event Registration</h1>
+
+            <!-- Progress Indicator -->
+            <div data-testid='wizard-progress-indicator' class="text-center text-gray-600 mb-6" aria-live="polite">
+                Step <span id="current-step" aria-current="step">1</span> of <span id="total-steps"></span>
+            </div>
+
+            <!-- Step 1: Personal Information -->
+            <div data-testid='wizard-step-1' class="step-content" role="group" aria-labelledby="step1-heading">
+                <h2 id="step1-heading" class="text-xl font-semibold mb-4">Personal Information</h2>
+                <div class="mb-4">
+                    <label for="fullName" class="block text-gray-700 text-sm font-bold mb-2">Full Name:</label>
+                    <input type="text" id="fullName" data-testid='input-fullName' name="fullName" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <div data-testid='error-fullName' id="error-fullName" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+                    <input type="email" id="email" data-testid='input-email' name="email" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <div data-testid='error-email' id="error-email" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                <div class="mb-6">
+                    <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <div data-testid='error-phone' id="error-phone" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="next-step bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Event Preferences -->
+            <div data-testid='wizard-step-2' class="step-content hidden" role="group" aria-labelledby="step2-heading">
+                <h2 id="step2-heading" class="text-xl font-semibold mb-4">Event Preferences</h2>
+                 <div class="mb-4">
+                    <label for="ticketType" class="block text-gray-700 text-sm font-bold mb-2">Ticket Type:</label>
+                    <select id="ticketType" name="ticketType" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">-- Select Ticket Type --</option>
+                        <option value="standard">Standard</option>
+                        <option value="vip">VIP</option>
+                    </select>
+                     <div data-testid='error-ticketType' id="error-ticketType" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="numberOfTickets" class="block text-gray-700 text-sm font-bold mb-2">Number of Tickets:</label>
+                    <input type="number" id="numberOfTickets" name="numberOfTickets" min="1" value="1" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                     <div data-testid='error-numberOfTickets' id="error-numberOfTickets" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                 <div class="mb-6">
+                    <label for="dietaryRestrictions" class="block text-gray-700 text-sm font-bold mb-2">Dietary Restrictions:</label>
+                    <textarea id="dietaryRestrictions" name="dietaryRestrictions" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                     <div data-testid='error-dietaryRestrictions' id="error-dietaryRestrictions" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                <div class="flex justify-between">
+                    <button type="button" class="prev-step bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Previous</button>
+                    <button type="button" class="next-step bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment Details (Placeholder) -->
+            <div data-testid='wizard-step-3' class="step-content hidden" role="group" aria-labelledby="step3-heading">
+                <h2 id="step3-heading" class="text-xl font-semibold mb-4">Payment Details</h2>
+                <p class="text-gray-600 mb-6">Payment processing is simulated. Please provide details below.</p>
+                 <div class="mb-4">
+                    <label for="cardNumber" class="block text-gray-700 text-sm font-bold mb-2">Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                     <div data-testid='error-cardNumber' id="error-cardNumber" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                </div>
+                <div class="mb-4 flex gap-4">
+                    <div class="w-1/2">
+                         <label for="expiryDate" class="block text-gray-700 text-sm font-bold mb-2">Expiry Date (MM/YY):</label>
+                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                         <div data-testid='error-expiryDate' id="error-expiryDate" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                    </div>
+                    <div class="w-1/2">
+                         <label for="cvv" class="block text-gray-700 text-sm font-bold mb-2">CVV:</label>
+                        <input type="text" id="cvv" name="cvv" required aria-required="true" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                         <div data-testid='error-cvv' id="error-cvv" class="error-message text-red-500 text-xs mt-1" aria-live="polite"></div>
+                    </div>
+                </div>
+                 <div class="mb-6">
+                    <!-- Placeholder for payment method type -->
+                 </div>
+                <div class="flex justify-between">
+                    <button type="button" class="prev-step bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Previous</button>
+                    <button type="button" class="next-step bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Review & Confirm -->
+            <div data-testid='wizard-step-4' class="step-content hidden" role="group" aria-labelledby="step4-heading">
+                <h2 id="step4-heading" class="text-xl font-semibold mb-4">Review Your Information</h2>
+                <div id="review-summary" class="mb-6 text-gray-700">
+                    <!-- Summary will be populated here by JS -->
+                    <div class="mb-2"><strong class="block text-sm text-gray-600">Full Name:</strong> <span id="review-fullName"></span></div>
+                    <div class="mb-2"><strong class="block text-sm text-gray-600">Email:</strong> <span id="review-email"></span></div>
+                    <div class="mb-2"><strong class="block text-sm text-gray-600">Phone Number:</strong> <span id="review-phone"></span></div>
+                    <div class="mb-2"><strong class="block text-sm text-gray-600">Ticket Type:</strong> <span id="review-ticketType"></span></div>
+                    <div class="mb-2"><strong class="block text-sm text-gray-600">Number of Tickets:</strong> <span id="review-numberOfTickets"></span></div>
+                    <div class="mb-2"><strong class="block text-sm text-gray-600">Dietary Restrictions:</strong> <span id="review-dietaryRestrictions"></span></div>
+                    <!-- Payment details are structure only, won't display sensitive info -->
+                </div>
+                <div class="flex justify-between">
+                     <button type="button" class="prev-step bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Previous</button>
+                    <button type="button" data-testid='confirm-registration-btn' id="confirm-registration-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Confirm Registration</button>
+                </div>
+            </div>
+        </div>
+
+         <!-- Success Message -->
+        <div data-testid='registration-success-msg' id="registration-success-msg" class="hidden text-center p-8" role="status">
+            <svg class="mx-auto mb-4 text-green-500 w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 class="text-2xl font-bold mb-4 text-green-700">Registration Successful!</h2>
+            <p class="text-gray-600">Thank you for registering. A confirmation email has been sent.</p>
+        </div>
+    </div>
+
+    <script>
+        const wizardContainer = document.getElementById('wizard-container');
+        const formContainer = wizardContainer.querySelector('.wizard-form');
+        const successMessage = document.getElementById('registration-success-msg');
+        const steps = formContainer.querySelectorAll('.step-content');
+        const totalSteps = steps.length;
+        const currentStepSpan = document.getElementById('current-step');
+        const totalStepsSpan = document.getElementById('total-steps');
+
+        let currentStepIndex = 0;
+        const formData = {};
+
+        // Set total steps text
+        totalStepsSpan.textContent = totalSteps;
+
+        // --- Validation Functions ---
+        function showError(inputElement, message) {
+            const errorElement = document.getElementById(`error-${inputElement.id}`);
+            if (errorElement) {
+                errorElement.textContent = message;
+                inputElement.setAttribute('aria-invalid', 'true');
+                // Link input to error message
+                if (!inputElement.getAttribute('aria-describedby') || !inputElement.getAttribute('aria-describedby').includes(errorElement.id)) {
+                     inputElement.setAttribute('aria-describedby', (inputElement.getAttribute('aria-describedby') || '') + ' ' + errorElement.id);
+                }
+            }
+        }
+
+        function clearError(inputElement) {
+            const errorElement = document.getElementById(`error-${inputElement.id}`);
+             if (errorElement) {
+                errorElement.textContent = '';
+                inputElement.removeAttribute('aria-invalid');
+                 // Remove link to error message
+                 const describedBy = inputElement.getAttribute('aria-describedby');
+                 if (describedBy) {
+                     inputElement.setAttribute('aria-describedby', describedBy.replace(errorElement.id, '').trim());
+                 }
+            }
+        }
+
+        function validateStep(stepIndex) {
+            let isValid = true;
+            const currentStepElement = steps[stepIndex];
+            const inputs = currentStepElement.querySelectorAll('input, select, textarea');
+
+            inputs.forEach(input => {
+                clearError(input); // Clear previous errors
+
+                if (input.required && !input.value.trim()) {
+                    showError(input, `${input.previousElementSibling.textContent.replace(':', '')} is required.`);
+                    isValid = false;
+                } else if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+                     clearError(input); // Clear required error if any
+                     showError(input, `Please enter a valid email address.`);
+                     isValid = false;
+                } else if (input.type === 'number' && input.value.trim() && (isNaN(input.value) || parseFloat(input.value) < parseFloat(input.min))) {
+                     clearError(input); // Clear required error if any
+                     showError(input, `${input.previousElementSibling.textContent.replace(':', '')} must be at least ${input.min}.`);
+                     isValid = false;
+                 } else if (input.id === 'expiryDate' && input.value.trim() && !/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(input.value.trim())) {
+                     clearError(input);
+                     showError(input, `Please enter a valid expiry date (MM/YY).`);
+                     isValid = false;
+                 } else if (input.id === 'cvv' && input.value.trim() && !/^[0-9]{3,4}$/.test(input.value.trim())) {
+                     clearError(input);
+                     showError(input, `Please enter a valid CVV (3 or 4 digits).`);
+                     isValid = false;
+                 }
+                // Add more validation rules as needed (e.g., card number format)
+            });
+
+            // Special validation for Step 2 select
+            if (stepIndex === 1) { // Event Preferences step
+                 const ticketTypeInput = currentStepElement.querySelector('#ticketType');
+                 if (ticketTypeInput.required && !ticketTypeInput.value) {
+                     showError(ticketTypeInput, `${ticketTypeInput.previousElementSibling.textContent.replace(':', '')} is required.`);
+                     isValid = false;
+                 }
+            }
+
+
+            return isValid;
+        }
+
+        // --- State Management ---
+        function saveStepData(stepIndex) {
+            const currentStepElement = steps[stepIndex];
+            const inputs = currentStepElement.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                formData[input.name] = input.value;
+            });
+        }
+
+        function loadStepData(stepIndex) {
+             const currentStepElement = steps[stepIndex];
+            const inputs = currentStepElement.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (formData[input.name] !== undefined) {
+                    input.value = formData[input.name];
+                     // Clear any leftover validation errors when loading data
+                     clearError(input);
+                }
+            });
+        }
+
+        function populateReviewStep() {
+            document.getElementById('review-fullName').textContent = formData.fullName || 'N/A';
+            document.getElementById('review-email').textContent = formData.email || 'N/A';
+            document.getElementById('review-phone').textContent = formData.phone || 'N/A';
+            document.getElementById('review-ticketType').textContent = formData.ticketType || 'N/A';
+            document.getElementById('review-numberOfTickets').textContent = formData.numberOfTickets || 'N/A';
+            document.getElementById('review-dietaryRestrictions').textContent = formData.dietaryRestrictions || 'None';
+        }
+
+        // --- Navigation ---
+        function showStep(stepIndex) {
+            // Hide all steps
+            steps.forEach((step, index) => {
+                step.classList.add('hidden');
+                 step.setAttribute('aria-hidden', 'true');
+            });
+
+            // Show current step
+            steps[stepIndex].classList.remove('hidden');
+             steps[stepIndex].removeAttribute('aria-hidden');
+
+            // Update progress indicator
+            currentStepSpan.textContent = stepIndex + 1;
+            currentStepSpan.setAttribute('aria-current', 'step'); // ARIA for current step
+
+            // Manage buttons
+            const prevButtons = formContainer.querySelectorAll('.prev-step');
+            const nextButtons = formContainer.querySelectorAll('.next-step');
+            const confirmButton = document.getElementById('confirm-registration-btn');
+
+            prevButtons.forEach(btn => btn.classList.toggle('hidden', stepIndex === 0));
+            nextButtons.forEach(btn => btn.classList.toggle('hidden', stepIndex >= totalSteps - 2)); // Next button hidden on review/confirm step
+            if (confirmButton) {
+                 confirmButton.classList.toggle('hidden', stepIndex !== totalSteps - 1); // Confirm button only shown on review step
+            }
+
+
+            // Load data for the current step
+            loadStepData(stepIndex);
+
+            // Focus management: Focus the first focusable element in the new step
+            const firstFocusableElement = steps[stepIndex].querySelector('input, select, textarea, button');
+            if (firstFocusableElement) {
+                 // Delay focus slightly to ensure step is fully visible
+                 setTimeout(() => {
+                    firstFocusableElement.focus();
+                 }, 50);
+            } else {
+                 // If no focusable element, focus the step container itself (if it can receive focus)
+                 steps[stepIndex].setAttribute('tabindex', '-1'); // Make it focusable
+                 setTimeout(() => {
+                    steps[stepIndex].focus();
+                 }, 50);
+            }
+        }
+
+        function nextStep() {
+            if (validateStep(currentStepIndex)) {
+                saveStepData(currentStepIndex);
+                currentStepIndex++;
+                if (currentStepIndex === totalSteps - 1) { // If moving to review step
+                    populateReviewStep();
+                }
+                showStep(currentStepIndex);
+            } else {
+                // If validation fails, move focus to the first invalid element
+                const firstInvalid = steps[currentStepIndex].querySelector('[aria-invalid="true"]');
+                 if (firstInvalid) {
+                    firstInvalid.focus();
+                 }
+            }
+        }
+
+        function prevStep() {
+            saveStepData(currentStepIndex); // Save data before going back
+            currentStepIndex--;
+            showStep(currentStepIndex);
+        }
+
+        function confirmRegistration() {
+            // In a real app, you would collect formData and send it to the server
+            console.log("Registration Data:", formData);
+
+            // Simulate success
+            formContainer.classList.add('hidden');
+             formContainer.setAttribute('aria-hidden', 'true');
+            successMessage.classList.remove('hidden');
+             successMessage.removeAttribute('aria-hidden');
+
+            // Focus the success message container or heading
+             const successHeading = successMessage.querySelector('h2');
+             if (successHeading) {
+                 successHeading.focus();
+             } else {
+                 successMessage.setAttribute('tabindex', '-1');
+                 successMessage.focus();
+             }
+        }
+
+        // --- Event Listeners ---
+        formContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('next-step')) {
+                nextStep();
+            } else if (event.target.classList.contains('prev-step')) {
+                prevStep();
+            }
+        });
+
+        const confirmButton = document.getElementById('confirm-registration-btn');
+        if (confirmButton) {
+             confirmButton.addEventListener('click', confirmRegistration);
+        }
+
+
+        // Initialize the wizard
+        showStep(currentStepIndex);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Feed</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for loading spinner */
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Utility for visually hidden but accessible content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <header class="bg-white shadow py-4">
+        <div class="container mx-auto px-4">
+            <h1 class="text-2xl font-bold">Simple Social Feed</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div data-testid="social-feed-container" class="max-w-lg mx-auto">
+            <!-- Posts will be appended here by JavaScript -->
+        </div>
+
+        <div data-testid="feed-loading-indicator" class="hidden mt-8 mb-4 flex justify-center items-center" aria-hidden="true">
+             <div class="loading-spinner mr-3"></div>
+             <p class="text-gray-600">Loading more posts...</p>
+        </div>
+    </main>
+
+    <!-- ARIA Live Region for screen reader announcements -->
+    <div data-testid="feed-update-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedContainerEl = document.querySelector('[data-testid="social-feed-container"]');
+            const loadingIndicatorEl = document.querySelector('[data-testid="feed-loading-indicator"]');
+            const announcerEl = document.querySelector('[data-testid="feed-update-announcer"]');
+
+            const postsPerLoad = 5;
+            const initialLoadCount = 10;
+            const scrollThreshold = 400; // Pixels from the bottom to trigger loading
+            let currentPostIndex = 1;
+            let isLoading = false;
+            let totalLikes = 0; // Simple counter for all likes (for demonstration)
+
+            // --- Utility Functions ---
+
+            // Debounce function to limit how often a function is called
+            function debounce(func, wait) {
+                let timeout;
+                return function executed(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // Announce text to screen readers
+            function announce(message) {
+                 if (announcerEl) {
+                     announcerEl.textContent = message;
+                     // Clear the message after a short delay so it doesn't get re-read
+                     setTimeout(() => { announcerEl.textContent = ''; }, 1000);
+                 }
+            }
+
+            // --- Post Generation ---
+
+            function generatePostHTML(index) {
+                const timestamp = new Date(Date.now() - (index * 60 * 1000 * Math.random())).toISOString(); // Simulate varying time
+                return `
+                <article data-testid="feed-post-${index}" class="bg-white rounded-lg shadow-sm p-4 mb-4">
+                    <div class="flex items-center mb-3">
+                        <img src="https://via.placeholder.com/40/A78BFA/FFFFFF?text=${index}" alt="User ${index} avatar" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <p class="font-semibold text-gray-800">User Name ${index}</p>
+                            <time datetime="${timestamp}" class="text-gray-500 text-sm">${new Date(timestamp).toLocaleString()}</time>
+                        </div>
+                    </div>
+                    <div class="mb-4 text-gray-700">
+                        <p>This is post number ${index}. It contains some interesting thoughts and ideas about simulating social feeds with infinite scrolling and accessibility.</p>
+                        <!-- Optional image placeholder -->
+                        <!-- <img src="https://via.placeholder.com/400x200?text=Post+Image" alt="Post image" class="mt-2 rounded-lg w-full"> -->
+                    </div>
+                    <div class="flex items-center text-gray-600 text-sm border-t pt-3">
+                        <button data-testid="like-btn-post${index}" aria-pressed="false" class="like-button flex items-center mr-4 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 -ml-2 transition-colors">
+                            <!-- Placeholder like icon (filled state on pressed) -->
+                            <svg class="h-5 w-5 mr-1 like-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.493 10.935a.75.75 0 00-1.06-1.06l-3.498 3.499a.75.75 0 001.06 1.06l3.498-3.499z"></path><path fill-rule="evenodd" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd"></path></svg>
+                            <span class="like-text">Like</span> <span class="like-count text-xs ml-1">(0)</span>
+                        </button>
+                        <button class="flex items-center mr-4 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 -ml-2 transition-colors">
+                             <!-- Placeholder comment icon -->
+                             <svg class="h-5 w-5 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                            Comment
+                        </button>
+                        <button class="flex items-center hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 -ml-2 transition-colors">
+                             <!-- Placeholder share icon -->
+                             <svg class="h-5 w-5 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 6a3 3 0 110-6m0 6a3 3 0 100-6" /></svg>
+                            Share
+                        </button>
+                    </div>
+                </article>
+                `;
+            }
+
+            // --- Infinite Scroll Logic ---
+
+            function appendPosts(count) {
+                if (isLoading) return;
+
+                isLoading = true;
+                loadingIndicatorEl.classList.remove('hidden');
+                loadingIndicatorEl.setAttribute('aria-hidden', 'false');
+                announce("Loading more posts...");
+
+                // Simulate network request delay
+                setTimeout(() => {
+                    const fragment = document.createDocumentFragment();
+                    for (let i = 0; i < count; i++) {
+                        fragment.appendChild(
+                            new Range().createContextualFragment(generatePostHTML(currentPostIndex))
+                        );
+                        currentPostIndex++;
+                    }
+                    feedContainerEl.appendChild(fragment);
+
+                    loadingIndicatorEl.classList.add('hidden');
+                    loadingIndicatorEl.setAttribute('aria-hidden', 'true');
+                    isLoading = false;
+                    announce("New posts loaded.");
+
+                    // In a real app, you might check if there are more posts to load from the server.
+                    // For this simulation, we assume infinite posts.
+                }, 800); // Simulate 800ms load time
+            }
+
+            const handleScroll = debounce(() => {
+                // Check if user is near the bottom of the page
+                const scrollPosition = window.innerHeight + window.scrollY;
+                const totalHeight = document.documentElement.scrollHeight;
+
+                if (scrollPosition >= totalHeight - scrollThreshold && !isLoading) {
+                    appendPosts(postsPerLoad);
+                }
+            }, 100); // Debounce scroll checks every 100ms
+
+            // --- Like Button Interaction ---
+
+            feedContainerEl.addEventListener('click', (event) => {
+                const targetButton = event.target.closest('.like-button');
+                if (targetButton) {
+                    const isPressed = targetButton.getAttribute('aria-pressed') === 'true';
+                    let currentLikes = parseInt(targetButton.querySelector('.like-count').textContent.replace('(', '').replace(')', ''), 10);
+
+                    if (isPressed) {
+                        // Unlike
+                        targetButton.setAttribute('aria-pressed', 'false');
+                        targetButton.querySelector('.like-text').textContent = 'Like';
+                        currentLikes = Math.max(0, currentLikes - 1); // Don't go below 0
+                        announce(`Unliked post. Likes: ${currentLikes}`);
+                    } else {
+                        // Like
+                        targetButton.setAttribute('aria-pressed', 'true');
+                        targetButton.querySelector('.like-text').textContent = 'Liked';
+                        currentLikes++;
+                        announce(`Liked post. Likes: ${currentLikes}`);
+                    }
+                    targetButton.querySelector('.like-count').textContent = `(${currentLikes})`;
+
+                    // Optional: Toggle color or style on the button/icon based on state
+                    if (targetButton.getAttribute('aria-pressed') === 'true') {
+                         targetButton.classList.add('text-blue-600');
+                         targetButton.classList.remove('text-gray-600'); // Assuming gray was default
+                    } else {
+                        targetButton.classList.add('text-gray-600'); // Assuming gray was default
+                        targetButton.classList.remove('text-blue-600');
+                    }
+                }
+            });
+
+
+            // --- Initial Load and Event Listeners ---
+
+            // Load initial posts
+            appendPosts(initialLoadCount);
+
+            // Add scroll listener
+            window.addEventListener('scroll', handleScroll);
+
+            // Optional: Load more posts when window is resized if near bottom
+            window.addEventListener('resize', handleScroll);
+        });
+    </script>
+
+</body>
+</html>
