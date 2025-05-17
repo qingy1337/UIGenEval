@@ -1,0 +1,268 @@
+{
+    "prompt_id": "P999_Kitchen_Sink_Mega_Test",
+    "prompt_description": "Generate an ultra-comprehensive, responsive application interface featuring: a fixed header with dynamic user menu and live search; a collapsible ARIA-compliant sidebar; a main content area with tabs, a sortable & filterable data table, and an interactive chart; a multi-step form; a draggable element section; and a theme-switching footer. All elements must adhere to strict styling, ARIA, and interaction patterns across desktop and mobile viewports. Test animation, local storage, and complex keyboard navigation.",
+    "viewports_to_test": {"desktop": [1600, 900], "mobile": [390, 844]},
+    "adherence_checks": [
+        {
+            "type": "element_presence", "name": "Fixed Header Presence (role banner)", 
+            "selector": "header[role='banner'][data-testid='app-header']", 
+            "points": 2
+        },
+        {
+            "type": "css_property", "name": "Header Position Fixed", 
+            "selector": "[data-testid='app-header']", "property_name": "position", "expected_value": "fixed", 
+            "points": 1, "viewports": ["desktop"]
+        },
+        {
+            "type": "element_presence", "name": "App Logo in Header", 
+            "selector": "[data-testid='app-header'] img[alt='Application Logo']", 
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "User Menu Dropdown (Header)", "points": 5,
+            "trigger_element": {"selector": "[data-testid='app-header'] button[aria-haspopup='true'][aria-controls='user-menu-popup']"},
+            "sequence": [
+                {"step_name": "Open User Menu", "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                 "expected_outcomes": [
+                     {"outcome_type": "visibility_change", "element_selector": "#user-menu-popup", "expected_visibility": "visible"},
+                     {"outcome_type": "attribute_change", "element_selector": "button[aria-controls='user-menu-popup']", "attribute_name": "aria-expanded", "expected_value": "true"}
+                 ]},
+                {"step_name": "Verify 3 Menu Items", "action": {"type":"wait", "duration_ms":50},
+                 "expected_outcomes": [{"outcome_type": "new_element_count", "element_selector": "#user-menu-popup", "child_element_selector": "li > a", "expected_count": 3, "comparison":"equals"}]},
+                {"step_name": "Close with ESC", "action": {"type": "key_press", "key": "ESCAPE", "target_element_selector": "#user-menu-popup"}, "wait_for_outcome_ms": 500,
+                 "expected_outcomes": [{"outcome_type": "visibility_change", "element_selector": "#user-menu-popup", "expected_visibility": "hidden"}]}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Live Search Input in Header",
+            "selector": "[data-testid='app-header'] input[type='search'][aria-label='Site Search']",
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Live Search Functionality", "points": 4,
+            "trigger_element": {"selector": "input[aria-label='Site Search']"},
+            "sequence": [
+                {"step_name": "Type 'Omega'", "action": {"type": "type_text", "text_to_type": "Omega"}, "wait_for_outcome_ms": 1000,
+                 "expected_outcomes": [
+                     {"outcome_type": "visibility_change", "element_selector": "[data-testid='live-search-results']", "expected_visibility": "visible"},
+                     {"outcome_type": "text_content_change", "element_selector": "[data-testid='live-search-results'] li:first-child", "expected_text": "Omega Result 1", "match_type": "contains"}
+                 ]}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Collapsible Sidebar (nav role)", 
+            "selector": "nav[role='navigation'][data-testid='app-sidebar'][aria-label='Main navigation']", 
+            "points": 2
+        },
+        {
+            "type": "element_presence", "name": "Sidebar Toggle Button (Desktop - for consistency)", 
+            "selector": "button[data-testid='sidebar-toggle-desktop'][aria-controls='app-sidebar']", 
+            "points": 1, "viewports": ["desktop"]
+        },
+        {
+            "type": "interaction", "name": "Sidebar Collapse/Expand (Desktop)", "points": 4, "viewports": ["desktop"],
+            "trigger_element": {"selector": "[data-testid='sidebar-toggle-desktop']"},
+            "sequence": [
+                {"step_name": "Collapse Sidebar", "action": {"type": "click"}, "wait_for_outcome_ms": 700, /* Animation */
+                 "expected_outcomes": [
+                     {"outcome_type": "class_change", "element_selector": "[data-testid='app-sidebar']", "expected_class_present": "is-collapsed"},
+                     {"outcome_type": "attribute_change", "element_selector": "[data-testid='sidebar-toggle-desktop']", "attribute_name": "aria-expanded", "expected_value": "false"},
+                     {"outcome_type": "animation_or_transition_ends", "element_selector": "[data-testid='app-sidebar']", "max_wait_ms": 650}
+                 ]},
+                {"step_name": "Expand Sidebar", "action": {"type": "click"}, "wait_for_outcome_ms": 700,
+                 "expected_outcomes": [
+                     {"outcome_type": "class_change", "element_selector": "[data-testid='app-sidebar']", "expected_class_absent": "is-collapsed"},
+                     {"outcome_type": "attribute_change", "element_selector": "[data-testid='sidebar-toggle-desktop']", "attribute_name": "aria-expanded", "expected_value": "true"}
+                 ]}
+            ]
+        },
+        {
+            "type": "css_property", "name": "Sidebar Hidden Off-Screen (Mobile)", 
+            "selector": "[data-testid='app-sidebar']", "property_name": "transform", "expected_value": "translateX(-100%)", /* Example, could be width 0 */
+            "points": 1, "viewports": ["mobile"]
+        },
+        {
+            "type": "element_presence", "name": "Main Content Area (main role)", 
+            "selector": "main[role='main'][data-testid='main-content-area']", 
+            "points": 1
+        },
+        {
+            "type": "element_presence", "name": "Breadcrumbs Nav (aria-label)", 
+            "selector": "[data-testid='main-content-area'] nav[aria-label='Breadcrumbs']", 
+            "points": 1
+        },
+        {
+            "type": "element_count", "name": "Breadcrumb Items (min 3)", 
+            "selector": "nav[aria-label='Breadcrumbs'] ol li", "min_count": 3, 
+            "points": 1
+        },
+        {
+            "type": "element_presence", "name": "Tab Interface (Tablist role)", 
+            "selector": "[data-testid='main-content-area'] [role='tablist'][data-testid='content-tabs']", 
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Tab Switching (Keyboard & Click)", "points": 5,
+            "trigger_element": {"selector": "[data-testid='content-tabs'] [role='tab']:nth-child(2)"},
+            "sequence": [
+                {"step_name": "Click Tab 2", "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                 "expected_outcomes": [
+                     {"outcome_type": "attribute_change", "element_selector": "[data-testid='content-tabs'] [role='tab']:nth-child(2)", "attribute_name": "aria-selected", "expected_value": "true"},
+                     {"outcome_type": "visibility_change", "element_selector": "#tabpanel-2", "expected_visibility": "visible"},
+                     {"outcome_type": "visibility_change", "element_selector": "#tabpanel-1", "expected_visibility": "hidden"}
+                 ]},
+                {"step_name": "Navigate to Tab 3 with Arrow Right", "action": {"type": "key_press", "key": "ARROW_RIGHT"}, "wait_for_outcome_ms": 200,
+                 "expected_outcomes": [{"outcome_type": "custom_script_evaluates_true", "script": "return document.activeElement === document.querySelector(\"[data-testid='content-tabs'] [role='tab']:nth-child(3)\");"}]},
+                {"step_name": "Activate Tab 3 with Enter", "action": {"type": "key_press", "key": "ENTER"}, "wait_for_outcome_ms": 500,
+                 "expected_outcomes": [{"outcome_type": "visibility_change", "element_selector": "#tabpanel-3", "expected_visibility": "visible"}]}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Data Table Presence", 
+            "selector": "[data-testid='main-content-area'] table[aria-labelledby='data-table-caption']", 
+            "points": 1
+        },
+        {
+            "type": "element_presence", "name": "Data Table Caption", 
+            "selector": "table caption#data-table-caption", 
+            "points": 1
+        },
+        {
+            "type": "element_count", "name": "Table Rows (min 5 body rows)", 
+            "selector": "table[aria-labelledby='data-table-caption'] tbody tr", "min_count": 5, 
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Table Sort by Column (Name)", "points": 3,
+            "trigger_element": {"selector": "table th:contains('Name') button[aria-label*='Sort by Name']"},
+            "action": {"type": "click"}, "wait_for_outcome_ms": 1000, /* Data re-render */
+            "expected_outcomes": [
+                {"outcome_type": "attribute_change", "element_selector": "table th:contains('Name') button", "attribute_name": "aria-sort", "expected_value": "ascending"},
+                {"outcome_type": "text_content_change", "element_selector": "table tbody tr:first-child td:first-child", "expected_text": "Aaron", "match_type":"starts_with", "note":"Assumes Aaron is first alphabetically after sort"}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Table Filter Input", 
+            "selector": "input[type='search'][aria-controls='data-table-id']", /* Assuming table has id 'data-table-id' */
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Table Filter by Text", "points": 3,
+            "trigger_element": {"selector": "input[aria-controls='data-table-id']"},
+            "action": {"type": "type_text", "text_to_type": "Smith"}, "wait_for_outcome_ms": 1000,
+            "expected_outcomes": [
+                {"outcome_type": "new_element_count", "parent_element_selector": "table[aria-labelledby='data-table-caption'] tbody", "child_element_selector": "tr", "expected_count": 1, "comparison": "less_than_or_equals", "note": "Assuming 1 or 0 Smiths"}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Interactive Chart (Canvas or SVG)", 
+            "selector": "[data-testid='main-content-area'] .chart-container > canvas, [data-testid='main-content-area'] .chart-container > svg", 
+            "points": 2
+        },
+        {
+            "type": "interaction", "name": "Chart Tooltip on Hover", "points": 3,
+            "trigger_element": {"selector": ".chart-container canvas", "note":"Hovering over chart area, specific segment is hard"},
+            "action": {"type": "hover"}, "wait_for_outcome_ms": 500,
+            "expected_outcomes": [
+                {"outcome_type": "visibility_change", "element_selector": ".chart-tooltip[role='tooltip']", "expected_visibility": "visible"}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Multi-Step Form Start", 
+            "selector": "[data-testid='wizard-form'] [data-testid='step-1-content']", 
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Complete Multi-Step Form", "points": 6,
+            "trigger_element": {"selector":"[data-testid='wizard-form']"}, /* Context for finding buttons */
+            "sequence": [
+                {"step_name": "Fill Step 1 & Next", 
+                 "action": {"type":"execute_script_on_element", "script":"arguments[0].querySelector(\"[data-testid='step-1-next-btn']\").click();", "note":"Complex pre-fill skipped for brevity"}, 
+                 "wait_for_outcome_ms":500,
+                 "expected_outcomes": [{"outcome_type":"visibility_change", "element_selector":"[data-testid='step-2-content']", "expected_visibility":"visible"}]},
+                {"step_name": "Fill Step 2 & Next", 
+                 "action": {"type":"execute_script_on_element", "script":"arguments[0].querySelector(\"[data-testid='step-2-next-btn']\").click();"}, 
+                 "wait_for_outcome_ms":500,
+                 "expected_outcomes": [{"outcome_type":"visibility_change", "element_selector":"[data-testid='step-3-confirmation']", "expected_visibility":"visible"}]},
+                {"step_name": "Submit Wizard", 
+                 "action": {"type":"execute_script_on_element", "script":"arguments[0].querySelector(\"[data-testid='wizard-submit-final']\").click();"}, 
+                 "wait_for_outcome_ms":1000,
+                 "expected_outcomes": [{"outcome_type":"element_exists", "element_selector":"[data-testid='wizard-success-message']"}]}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Draggable Item Section", 
+            "selector": "[data-testid='drag-drop-zone']", 
+            "points": 1
+        },
+        {
+            "type": "element_presence", "name": "Draggable Item", 
+            "selector": "[data-testid='drag-item-1'][draggable='true']", 
+            "points": 1
+        },
+        {
+            "type": "element_presence", "name": "Drop Target Zone", 
+            "selector": "[data-testid='drop-target-alpha']", 
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Drag and Drop Item", "points": 4,
+            "trigger_element": {"selector": "[data-testid='drag-item-1']"},
+            "action": {"type": "drag_and_drop", "target_element_selector": "[data-testid='drop-target-alpha']"},
+            "wait_for_outcome_ms": 1000,
+            "expected_outcomes": [
+                {"outcome_type": "custom_script_evaluates_true", "script": "return document.querySelector(\"[data-testid='drop-target-alpha']\").contains(document.querySelector(\"[data-testid='drag-item-1']\"));"}
+            ]
+        },
+        {
+            "type": "element_presence", "name": "Theme Switcher Footer (contentinfo role)", 
+            "selector": "footer[role='contentinfo'][data-testid='app-footer']", 
+            "points": 1
+        },
+        {
+            "type": "element_presence", "name": "Theme Toggle Button in Footer", 
+            "selector": "[data-testid='app-footer'] button[data-testid='theme-toggle-btn']", 
+            "points": 1
+        },
+        {
+            "type": "interaction", "name": "Theme Switch & LocalStorage Persistence", "points": 6,
+            "trigger_element": {"selector": "[data-testid='theme-toggle-btn']"},
+            "initial_setup": [{"action_type": "execute_script", "script": "localStorage.removeItem('appTheme'); document.body.classList.remove('theme-dark');"}],
+            "sequence": [
+                {"step_name": "Toggle to Dark", "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                 "expected_outcomes": [
+                     {"outcome_type": "class_change", "element_selector": "body", "expected_class_present": "theme-dark"},
+                     {"outcome_type": "custom_script_evaluates_true", "script": "return localStorage.getItem('appTheme') === 'dark';"}
+                 ]},
+                {"step_name": "Reload Page (Simulated)", "action": {"type":"execute_script_on_element", "script":"location.reload();", "note":"This will require re-finding elements or a new driver session for a true test"}, "wait_for_outcome_ms": 2000},
+                {"step_name": "Verify Dark Theme Persists After Reload", "action": {"type":"wait", "duration_ms":100}, "wait_for_outcome_ms": 500,
+                 "expected_outcomes":[
+                      {"outcome_type": "class_change", "element_selector": "body", "expected_class_present": "theme-dark"},
+                      {"outcome_type": "custom_script_evaluates_true", "script": "return localStorage.getItem('appTheme') === 'dark';"}
+                 ]}
+            ],
+            "final_cleanup": [{"action_type": "execute_script", "script": "localStorage.removeItem('appTheme');"}]
+        },
+        {
+            "type": "url_change", "name": "Navigation to About Page (via link click)", "points": 3,
+            "outcome_type": "url_change", /* This is an outcome type, but used as a top-level simple check */
+            "trigger_element_for_action_if_needed": {"selector": "a[href='/about-us-page']"}, /* Action is implicit click */
+            "expected_url_part": "/about-us-page",
+            "match_type": "ends_with",
+            "note": "This is a simplified way to check navigation. Full interaction would be better."
+        },
+        {
+            "type": "attribute_value", "name": "All Images Have Non-Empty Alt Text",
+            "selector": "img:not([alt=''])", /* Selects images that DO have an alt that is not empty */
+            "attribute_name":"alt-check-passed", /* Dummy attribute, we check count */
+            "find_multiple": true,
+            "points": 0, /* Points are from count check below */
+            "note":"This selector gets valid ones. We then compare its count to total images."
+        },
+        {
+             "type": "custom_script_evaluates_true", "name": "Image Alt Text Quality Check", "points": 3,
+             "script": "const allImgs = Array.from(document.querySelectorAll('img')); const imgsWithGoodAlts = allImgs.filter(img => img.alt && img.alt.trim().length > 3 && img.alt.toLowerCase() !== 'image'); return allImgs.length === 0 || (imgsWithGoodAlts.length / allImgs.length) > 0.8;",
+             "note": "At least 80% of images should have decent alt text."
+        }
+    ]
+}

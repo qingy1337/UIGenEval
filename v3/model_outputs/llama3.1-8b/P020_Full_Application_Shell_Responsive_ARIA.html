@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Shell</title>
+    <style>
+        /* Always provide a default CSS reset for consistency and accessibility */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 62.5%; }
+        body { font-size: 1.6rem; line-height: 1.75; }
+
+        /* Define your application's base styles here */
+        .app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            background-color: #2d3860;
+            padding: .5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .logo {
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+
+        .user-menu {
+            visibility: hidden;
+            width: 180px;
+            position: absolute;
+            z-index: 1000;
+            right: 0;
+            top: 50px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        .user-menu-trigger {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 1.5rem;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .search {
+            flex: 1;
+            padding: 0.5rem;
+            padding-right: 1rem;
+            background-color: #ddd;
+            border-radius: 0.25rem;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            height: calc(100vh - 50px);
+            border-right: 1px solid #ccc;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 1.5rem;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .main-content {
+            display: block;
+            flex: 1;
+            padding: 2rem;
+            background: #f9f9f9;
+        }
+
+        .main-content nav {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #main-content-breadcrumbs {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+        }
+
+        /* Add these CSS classes for responsive classes of the menu and header */
+        /* Move the content of the page when the sidebar is clicked on mobile */
+        .mobile .sidebar {
+            position: relative;
+            left: -300px;
+            width: 300px;
+        }
+
+        .mobile .sidebar-trigger {
+            margin-left: auto;
+        }
+
+        /* Mobile */
+        .mobile {
+            @media only screen and (max-width: 768px) {
+                .main-content {
+                    margin-left: 300px;
+                    padding: 20px;
+                    width: calc(100vw - 300px);
+                }
+
+                .mobile .sidebar {
+                    position: relative;
+                    left: 0;
+                }
+
+                .main-content nav{
+                    position: relative;
+                    left: -100vw;
+                    width: 200px;
+                    padding: 20px;
+                    background-color: #f2f2f2;
+                    border: 1px solid #ccc;
+                    transform: translate(-100px, 0);
+                    transition: transform 300ms;
+                }
+
+                .main-content nav.expanded {
+                    transform: translate(0,0);
+                }
+            }
+        }
+    </style>
+</head>
+<body class="app">
+    <div class="app">
+        <header class="app-header" role="banner">
+            <div class="logo" class="mobile-sidebar-trigger" aria-label="Application Logo"></div>
+            <input class="search" type="search" placeholder="Search" aria-label="Search something" />
+            <button class="user-menu-trigger" aria-haspopup="true" data-testid="user-menu-trigger">User Menu</button>
+            <button class="button mobile-toggle" aria-label="Toggle sidebar" data-testid="sidebar-toggle">Menu</button>
+        </header>
+        <nav class="sidebar mobile sessionStorage-show-expander" data-testid="app-sidebar" role="navigation">
+            <h2>Menu Items</h2>
+            <ul>
+                <li><a href="#">Item 1</a></li>
+                <li><a href="#">Item 2</a></li>
+                <li><a href="#">Item 3</a></li>
+            </ul>
+        </nav>
+        <main class="main-content" role="main">
+            <nav class="mobile-navigation orange select menu" aria-label="Breadcrumb" id="main-content-breadcrumbs">
+                <ul>
+                    <li><a href="#" aria-current="page">Home</a></li>
+                    <li às aria-current="page" class="map-disable-select">Software</a> item</li>
+                </ul>
+            </nav>
+            <section role="region" aria-labelledby="main-setting-effect-caregoryt buttons"><strong id="main-setting-effect-category">Category:</strong>expansion appel temppto er caus corporate time twist graphical expenses game retained morning cout des refrdoor Wstre schedule holds plan Four apro Petit Ins sub during mask isol pick dont extrem trigger valor Consolebid ahead son const empty Mater ability stitch More Good attentive Saves br thumb ends Similarly intrusion wood open there organization Shi office very decree vigil bl free Use Bene ecommerce posting bracket Only throwing Post route plac speeding days spacious influment th suggest uncertain conferences deposit Christ groups disclosed Pacific Sub Cost copy lore enforcing dancer commit tiers point materior activation Alloc factions procedure Bun Current house anti chrome August rec Five lets-pro杳 national i grant stop openness failures need join Advice anch
+
+
+
+
+
+Disconnected Add upheld flooded Honolulu descend attractive weeks Oct imply porch uint drives Loo sud return spacing wanted imstry]
+
+
+            </section>
+            <nav class="actionpermit update pledanal change compared below governance advocate maintainceived Selection structure teacher articulate ignore doubt reached folders icon proced Started出现 rad artic discard bringing disagree Statementhouse te consult Leaves convincing sens smith heal Mess Async ble Fall si socio lon Malu '.$ Ziel Fridays Folk squ everywhere Floor List Future Light.The Number n ninh Beh pantry quant num Five wi Gro bless faint valued Ter hill Terr Pro prompts Dublin scanned comoH:expr'D Struct postpon sine fast Hang Harvard compel Eq girl href sank Grip rest function Military persu valid University requests Ghana developer Batt Que Public worry Popular appropriate void Along segue gi stress ran <!-- Macro simulation de indices minor ofrec metrics emotion)})
+            </main>
+        <footer class="app-footer" role="contentinfo">
+          <div class="item">
+            <span data-testid="app-status">Ready</span>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle sidebar
+        const toggleSidebar = document.querySelector('[data-testid="mobile-expaner"]');
+        const sidebar = document.querySelector('[data-testid="app-sidebar"]');
+        const expandStatus = 'expanded';
+
+        const toggleButton = document.querySelector('[data-testid="sidebar-toggle"]');
+
+        toggleButton.addEventListener('click', () => {
+            if (sidebar.classList.contains(expandStatus)) {
+			sidebar.classList.remove(expandStatus);
+                toggleButton.innerHTML = 'Open navigation menu';
+            } else {
+                sidebar.classList.add(expandStatus);
+                toggleButton.innerHTML = 'Close navigation menu';
+'}
+            /* sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none'; */
+            toggleButton.setAttribute('aria-expanded', sidebar.hasAttribute('aria-expanded'));
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Shell</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Basic layout adjustments for fixed header/footer */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            flex-shrink: 0; /* Prevent header/footer from shrinking */
+        }
+        main {
+             /* Adjust padding top for fixed header, bottom for fixed footer */
+            padding-top: 4rem; /* Assuming header height is ~4rem (64px) */
+            padding-bottom: 2rem; /* Assuming footer height is ~2rem (32px) */
+            flex-grow: 1; /* Allow main content to fill space */
+        }
+
+        /* Sidebar specific styles */
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Desktop/Tablet sidebar state */
+        @media (min-width: 768px) { /* md breakpoint in Tailwind */
+            .sidebar {
+                 /* Always visible on desktop */
+                transform: translateX(0) !important;
+                position: fixed; /* Fixed on desktop */
+                height: calc(100vh - 4rem); /* Full height minus header */
+                top: 4rem; /* Position below header */
+            }
+             /* Adjust main content left padding when sidebar is open on desktop */
+            main {
+                padding-left: 16rem; /* Equivalent to md:w-64 */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Header -->
+    <header role="banner" class="fixed top-0 left-0 right-0 bg-white shadow-md z-10 h-16 flex items-center px-4">
+        <div class="flex items-center justify-between w-full">
+            <!-- Mobile Sidebar Toggle -->
+            <button data-testid="sidebar-toggle" aria-controls="app-sidebar" aria-expanded="false" class="md:hidden p-2 mr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <span class="sr-only">Toggle Sidebar</span>
+            </button>
+
+            <!-- App Logo -->
+            <div data-testid="app-logo" class="text-xl font-bold text-blue-600 mr-auto">
+                App Logo
+            </div>
+
+            <!-- Search -->
+            <div class="flex-grow max-w-md mx-4">
+                <input type="search" aria-label="Search application" placeholder="Search..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- User Menu Trigger -->
+            <button data-testid="user-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="user-dropdown-menu" class="p-2 rounded-full bg-gray-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+                <span class="sr-only">User Menu</span>
+            </button>
+             <!-- A conceptual user menu dropdown could go here, linked by aria-controls="user-dropdown-menu" -->
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav id="app-sidebar" role="navigation" data-testid="app-sidebar" class="sidebar fixed md:relative top-16 md:top-0 left-0 w-64 md:w-64 h-full md:h-auto bg-gray-800 text-white transform -translate-x-full md:translate-x-0 overflow-y-auto z-20 md:z-auto">
+        <div class="p-4">
+            <h2 class="text-xl font-semibold mb-4">Navigation</h2>
+            <ul>
+                <li class="mb-2">
+                    <a href="#" class="block py-2 px-3 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-gray-700" tabindex="0">Dashboard</a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" class="block py-2 px-3 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-gray-700" tabindex="0">Settings</a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" class="block py-2 px-3 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-gray-700" tabindex="0">Reports</a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" class="block py-2 px-3 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-gray-700" tabindex="0">Users</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main role="main" class="flex-grow p-4 md:p-6">
+        <!-- Breadcrumbs -->
+        <nav aria-label="Breadcrumb" class="mb-6 text-gray-700">
+            <ol class="list-none p-0 inline-flex">
+                <li class="flex items-center">
+                    <a href="#" class="text-blue-600 hover:text-blue-800 focus:outline-none focus:underline" tabindex="0">Home</a>
+                    <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+                </li>
+                <li>
+                    <span aria-current="page" class="text-gray-500">Current Page</span>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Placeholder for main content -->
+        <section class="bg-white p-6 rounded-lg shadow-md">
+            <h1 class="text-2xl font-semibold mb-4">Welcome</h1>
+            <p>This is the main content area. Your application's primary content will go here.</p>
+             <div class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                Additional content block.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Status Footer -->
+    <footer role="contentinfo" class="fixed bottom-0 left-0 right-0 bg-gray-200 text-gray-700 text-sm p-2 flex justify-end z-10 h-8">
+        <div data-testid="app-status">Status: Ready</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('app-sidebar');
+            const sidebarToggle = document.querySelector('[data-testid="sidebar-toggle"]');
+            const userMenuTrigger = document.querySelector('[data-testid="user-menu-trigger"]');
+
+            // Sidebar Toggle Functionality (Mobile)
+            if (sidebar && sidebarToggle) {
+                // Set initial state based on screen size
+                 const isMobile = window.innerWidth < 768;
+                 sidebarToggle.setAttribute('aria-expanded', !isMobile);
+                 if (isMobile) {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebar.classList.remove('translate-x-0');
+                 } else {
+                    sidebar.classList.add('translate-x-0');
+                    sidebar.classList.remove('-translate-x-full');
+                 }
+
+
+                sidebarToggle.addEventListener('click', () => {
+                    const isExpanded = sidebarToggle.getAttribute('aria-expanded') === 'true';
+                    sidebarToggle.setAttribute('aria-expanded', !isExpanded);
+
+                    if (isExpanded) {
+                        sidebar.classList.add('-translate-x-full');
+                        sidebar.classList.remove('translate-x-0');
+                    } else {
+                        sidebar.classList.remove('-translate-x-full');
+                        sidebar.classList.add('translate-x-0');
+                    }
+                });
+
+                 // Close sidebar when clicking outside on mobile (optional but common)
+                document.body.addEventListener('click', (event) => {
+                    const isMobile = window.innerWidth < 768;
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnToggle = sidebarToggle.contains(event.target);
+                    const isSidebarExpanded = sidebarToggle.getAttribute('aria-expanded') === 'true';
+
+                    if (isMobile && isSidebarExpanded && !isClickInsideSidebar && !isClickOnToggle) {
+                         sidebarToggle.click(); // Simulate a click on the toggle
+                    }
+                });
+
+                 // Handle window resize to manage sidebar state on breakpoint change
+                 window.addEventListener('resize', () => {
+                    const isMobile = window.innerWidth < 768;
+                    const isExpanded = sidebarToggle.getAttribute('aria-expanded') === 'true';
+
+                    if (!isMobile && (sidebar.classList.contains('-translate-x-full') || !isExpanded)) {
+                         // On desktop, ensure sidebar is visible and aria-expanded is true
+                         sidebar.classList.remove('-translate-x-full');
+                         sidebar.classList.add('translate-x-0');
+                         sidebarToggle.setAttribute('aria-expanded', 'true');
+                    } else if (isMobile && sidebar.classList.contains('translate-x-0') && isExpanded) {
+                         // On mobile, if sidebar is currently visible, keep aria-expanded true but hide it initially
+                         // This state might occur if resized from desktop to mobile while sidebar is open
+                         // A better approach might be to just reset aria-expanded and transform based *only* on breakpoint
+                          sidebarToggle.setAttribute('aria-expanded', 'false'); // It's collapsed on mobile load
+                          sidebar.classList.add('-translate-x-full');
+                          sidebar.classList.remove('translate-x-0');
+                    }
+                 });
+            }
+
+
+            // User Menu Trigger Functionality (Basic aria-expanded toggle)
+            if (userMenuTrigger) {
+                // This is basic toggle, a real menu would need focus management etc.
+                userMenuTrigger.addEventListener('click', () => {
+                    const isExpanded = userMenuTrigger.getAttribute('aria-expanded') === 'true';
+                    userMenuTrigger.setAttribute('aria-expanded', !isExpanded);
+                    // In a real app, you would show/hide the menu element here
+                });
+            }
+
+             // Example of updating status (optional)
+             const appStatus = document.querySelector('[data-testid="app-status"]');
+             if(appStatus) {
+                 setTimeout(() => {
+                     appStatus.textContent = 'Status: Loaded';
+                 }, 1000);
+             }
+        });
+    </script>
+
+</body>
+</html>

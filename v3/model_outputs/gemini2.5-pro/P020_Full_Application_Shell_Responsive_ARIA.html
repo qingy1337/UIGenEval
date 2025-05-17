@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Shell</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom transition for sidebar */
+        #app-sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        /* Class to open sidebar on mobile, overrides Tailwind's -translate-x-full */
+        .sidebar-mobile-open {
+            transform: translateX(0) !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+
+    <div id="app-shell" class="flex flex-col min-h-screen">
+
+        <!-- 1. Fixed Responsive Header -->
+        <header role="banner" class="bg-blue-600 text-white shadow-md fixed w-full top-0 z-50 h-16 flex items-center">
+            <div class="container mx-auto px-4 flex items-center justify-between w-full">
+                <!-- Mobile Sidebar Toggle: Shown only on mobile (md:hidden) -->
+                <button id="sidebar-toggle-button" data-testid="sidebar-toggle" aria-controls="app-sidebar" aria-expanded="false" class="md:hidden p-2 rounded text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 mr-3">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <span class="sr-only">Toggle sidebar</span>
+                </button>
+
+                <!-- Logo -->
+                <div data-testid="app-logo" class="text-xl font-bold">
+                    MyAppLogo
+                </div>
+
+                <!-- Search: Hidden on extra-small screens (sm:flex), centered in available space -->
+                <div class="flex-grow mx-4 hidden sm:flex justify-center">
+                    <div class="max-w-xl w-full">
+                         <input type="search" aria-label="Search site content" placeholder="Search..." class="w-full p-2 rounded bg-blue-500 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    </div>
+                </div>
+
+                <!-- User Menu: Pushed to the right if search is hidden (ml-auto) -->
+                <div class="relative ml-auto sm:ml-0">
+                    <button id="user-menu-button" data-testid="user-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="user-menu-dropdown" class="p-2 rounded text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="sr-only">Open user menu</span>
+                    </button>
+                    <div id="user-menu-dropdown" class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-1 z-50 hidden origin-top-right" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none" role="menuitem">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none" role="menuitem">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none" role="menuitem">Sign Out</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- This div contains Sidebar and Main Content, and handles padding for fixed header -->
+        <div class="flex flex-1 pt-16"> <!-- pt-16 ensures content starts below the h-16 header -->
+            <!-- 2. Collapsible Sidebar Navigation -->
+            <nav id="app-sidebar" role="navigation" data-testid="app-sidebar"
+                 class="bg-gray-800 text-white w-64 p-4 space-y-4
+                        fixed top-16 left-0 h-[calc(100vh-4rem)] z-30 transform -translate-x-full
+                        md:relative md:top-0 md:left-0 md:h-auto md:translate-x-0 md:flex-shrink-0
+                        overflow-y-auto">
+                <!-- Sidebar content -->
+                <div>
+                    <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2">Main Menu</h2>
+                    <ul class="mt-2 space-y-1">
+                        <li><a href="#" class="block px-2 py-2 text-sm rounded hover:bg-gray-700 focus:bg-gray-700 focus:outline-none">Dashboard</a></li>
+                        <li><a href="#" class="block px-2 py-2 text-sm rounded hover:bg-gray-700 focus:bg-gray-700 focus:outline-none">Analytics</a></li>
+                        <li><a href="#" class="block px-2 py-2 text-sm rounded hover:bg-gray-700 focus:bg-gray-700 focus:outline-none">Reports</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mt-4">Account</h2>
+                     <ul class="mt-2 space-y-1">
+                        <li><a href="#" class="block px-2 py-2 text-sm rounded hover:bg-gray-700 focus:bg-gray-700 focus:outline-none">Profile</a></li>
+                        <li><a href="#" class="block px-2 py-2 text-sm rounded hover:bg-gray-700 focus:bg-gray-700 focus:outline-none">Settings</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 3. Main Content Area -->
+            <main role="main" class="flex-1 p-6 overflow-y-auto bg-gray-50">
+                <!-- Breadcrumbs -->
+                <nav aria-label="Breadcrumb" class="mb-6">
+                    <ol class="flex flex-wrap space-x-1 text-sm text-gray-500">
+                        <li><a href="#" class="hover:underline hover:text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-0.5 py-0.5">Home</a></li>
+                        <li><span class="mx-1 select-none" aria-hidden="true">/</span></li>
+                        <li><a href="#" class="hover:underline hover:text-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-0.5 py-0.5">Current Section</a></li>
+                        <li><span class="mx-1 select-none" aria-hidden="true">/</span></li>
+                        <li aria-current="page" class="text-gray-700 font-medium px-0.5 py-0.5">Current Page</li>
+                    </ol>
+                </nav>
+
+                <h1 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">Main Content Title</h1>
+                <article class="prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl max-w-none text-gray-700">
+                    <p>
+                        This is the main content area. Replace this with your application's specific content.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                    <p>
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </article>
+                <!-- More content here -->
+            </main>
+        </div>
+
+        <!-- 4. Status Footer -->
+        <footer role="contentinfo" class="bg-gray-200 text-gray-700 p-4 text-center border-t border-gray-300">
+            <p data-testid="app-status" class="text-sm">Ready</p>
+            <p class="text-xs text-gray-500 mt-1">© 2023 MyApp. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sidebar Toggle
+            const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
+            const sidebar = document.getElementById('app-sidebar');
+
+            if (sidebarToggleButton && sidebar) {
+                const setInitialSidebarState = () => {
+                    const isMobile = window.innerWidth < 768; // Tailwind's 'md' breakpoint is 768px
+                    if (isMobile) {
+                        sidebar.classList.remove('sidebar-mobile-open'); // Ensure it's closed using transform
+                        sidebarToggleButton.setAttribute('aria-expanded', 'false');
+                    } else {
+                        // On desktop, Tailwind's `md:translate-x-0` ensures sidebar is visible.
+                        // The `sidebar-mobile-open` class is not needed for desktop state.
+                        sidebar.classList.remove('sidebar-mobile-open');
+                        // The button is hidden on desktop (md:hidden), but conceptually sidebar is expanded
+                        sidebarToggleButton.setAttribute('aria-expanded', 'true');
+                    }
+                };
+
+                sidebarToggleButton.addEventListener('click', () => {
+                    // .toggle() returns true if class is added, false if removed.
+                    const isNowOpen = sidebar.classList.toggle('sidebar-mobile-open');
+                    sidebarToggleButton.setAttribute('aria-expanded', isNowOpen.toString());
+                });
+
+                // Set initial state on load and on resize to handle viewport changes
+                setInitialSidebarState();
+                window.addEventListener('resize', setInitialSidebarState);
+            }
+
+            // User Menu Toggle
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userMenuDropdown = document.getElementById('user-menu-dropdown');
+
+            if (userMenuButton && userMenuDropdown) {
+                userMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent click from immediately bubbling to document
+                    const isCurrentlyExpanded = userMenuButton.getAttribute('aria-expanded') === 'true';
+                    userMenuButton.setAttribute('aria-expanded', (!isCurrentlyExpanded).toString());
+                    userMenuDropdown.classList.toggle('hidden'); // Tailwind's hidden class (display: none !important)
+
+                    if (!isCurrentlyExpanded) { // If menu is being opened
+                        // Focus the first item in the menu
+                         userMenuDropdown.querySelector('[role="menuitem"]')?.focus();
+                    }
+                });
+
+                // Close dropdown if clicked outside of it or its trigger button
+                document.addEventListener('click', (event) => {
+                    if (userMenuButton.getAttribute('aria-expanded') === 'true' &&
+                        !userMenuButton.contains(event.target) &&
+                        !userMenuDropdown.contains(event.target)) {
+                            userMenuButton.setAttribute('aria-expanded', 'false');
+                            userMenuDropdown.classList.add('hidden');
+                    }
+                });
+
+                // Keyboard navigation for user menu
+                const menuItems = Array.from(userMenuDropdown.querySelectorAll('[role="menuitem"]'));
+
+                userMenuDropdown.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        userMenuButton.setAttribute('aria-expanded', 'false');
+                        userMenuDropdown.classList.add('hidden');
+                        userMenuButton.focus();
+                        return;
+                    }
+
+                    const activeIndex = menuItems.findIndex(item => item === document.activeElement);
+
+                    if (event.key === 'ArrowDown') {
+                        event.preventDefault();
+                        menuItems[(activeIndex + 1) % menuItems.length].focus();
+                    } else if (event.key === 'ArrowUp') {
+                        event.preventDefault();
+                        menuItems[(activeIndex - 1 + menuItems.length) % menuItems.length].focus();
+                    } else if (event.key === 'Home') {
+                        event.preventDefault();
+                        menuItems[0].focus();
+                    } else if (event.key === 'End') {
+                        event.preventDefault();
+                        menuItems[menuItems.length - 1].focus();
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

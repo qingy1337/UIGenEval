@@ -1,0 +1,436 @@
+{
+    "benchmark_run_name": "ComprehensiveBenchmark_v3",
+    "prompts": [
+        {
+            "prompt_id": "P001_Basic_Heading",
+            "prompt_description": "Generate a webpage with a single H1 heading containing the text 'Welcome Page'.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "H1 Presence", "selector": "h1", "points": 5},
+                {"type": "text_content", "name": "H1 Text", "selector": "h1", "expected_text": "Welcome Page", "match_type":"exact", "points": 5}
+            ]
+        },
+        {
+            "prompt_id": "P002_Paragraph_With_Link",
+            "prompt_description": "Generate a paragraph containing the text 'Learn more about us at ' followed by a link with text 'Our Website' pointing to 'https://example.com'.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Paragraph Presence", "selector": "p", "points": 3},
+                {"type": "text_content", "name": "Paragraph Start Text", "selector": "p", "expected_text": "Learn more about us at ", "match_type":"contains", "points": 3},
+                {"type": "element_presence", "name": "Link Presence in Paragraph", "selector": "p > a", "points": 3},
+                {"type": "text_content", "name": "Link Text", "selector": "p > a", "expected_text": "Our Website", "points": 3},
+                {"type": "attribute_value", "name": "Link Href", "selector": "p > a", "attribute_name": "href", "expected_value": "https://example.com/", "points": 3}
+            ]
+        },
+        {
+            "prompt_id": "P003_Simple_Image_Card",
+            "prompt_description": "Generate a simple card with an image (src 'img.jpg', alt 'Product Image') and a caption below it 'Cool Product'. Card should have a class 'simple-card'.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Card Element", "selector": ".simple-card", "points": 4},
+                {"type": "element_presence", "name": "Image in Card", "selector": ".simple-card img", "points": 3},
+                {"type": "attribute_value", "name": "Image Src", "selector": ".simple-card img", "attribute_name": "src", "expected_value": "img.jpg", "points": 3},
+                {"type": "attribute_value", "name": "Image Alt", "selector": ".simple-card img", "attribute_name": "alt", "expected_value": "Product Image", "points": 3},
+                {"type": "element_presence", "name": "Caption Element (e.g., p or figcaption)", "selector": ".simple-card img + *", "note": "Element immediately after img", "points": 2},
+                {"type": "text_content", "name": "Caption Text", "selector": ".simple-card img + *", "expected_text": "Cool Product", "points": 3}
+            ]
+        },
+        {
+            "prompt_id": "P004_Basic_List_Nav",
+            "prompt_description": "Generate an unordered list for navigation with three items: 'Home', 'Products', 'Support'. The list should be inside a <nav> element.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Nav Element", "selector": "nav", "points": 4},
+                {"type": "element_presence", "name": "Unordered List in Nav", "selector": "nav > ul", "points": 3},
+                {"type": "element_count", "name": "List Items Count", "selector": "nav > ul > li", "expected_count": 3, "points": 4},
+                {"type": "text_content", "name": "First Item Text", "selector": "nav > ul > li:nth-child(1)", "expected_text": "Home", "points": 2},
+                {"type": "text_content", "name": "Second Item Text", "selector": "nav > ul > li:nth-child(2)", "expected_text": "Products", "points": 2},
+                {"type": "text_content", "name": "Third Item Text", "selector": "nav > ul > li:nth-child(3)", "expected_text": "Support", "points": 2}
+            ]
+        },
+        {
+            "prompt_id": "P005_Form_With_Labels",
+            "prompt_description": "Generate a form with two text inputs: one for 'Username' (id 'user-name') and one for 'Password' (id 'user-pass', type 'password'). Each must have a corresponding <label for='...'>. Include a submit button.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Form Element", "selector": "form", "points": 3},
+                {"type": "element_presence", "name": "Username Input", "selector": "input#user-name", "points": 2},
+                {"type": "element_presence", "name": "Username Label", "selector": "label[for='user-name']", "points": 3},
+                {"type": "text_content", "name": "Username Label Text", "selector": "label[for='user-name']", "expected_text": "Username", "match_type": "contains", "case_sensitive": false, "points": 1},
+                {"type": "element_presence", "name": "Password Input", "selector": "input#user-pass[type='password']", "points": 2},
+                {"type": "element_presence", "name": "Password Label", "selector": "label[for='user-pass']", "points": 3},
+                {"type": "text_content", "name": "Password Label Text", "selector": "label[for='user-pass']", "expected_text": "Password", "match_type": "contains", "case_sensitive": false, "points": 1},
+                {"type": "element_presence", "name": "Submit Button", "selector": "form button[type='submit']", "points": 2}
+            ]
+        },
+        {
+            "prompt_id": "P006_Header_Main_Footer_Layout",
+            "prompt_description": "Generate a page with a <header>, <main>, and <footer>. Header should contain an H1. Main content should have at least two paragraphs. Footer should have a copyright notice.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Header Element", "selector": "header", "points": 4},
+                {"type": "element_presence", "name": "H1 in Header", "selector": "header h1", "points": 3},
+                {"type": "element_presence", "name": "Main Element", "selector": "main", "points": 4},
+                {"type": "element_count", "name": "Paragraphs in Main", "selector": "main p", "min_count": 2, "points": 4},
+                {"type": "element_presence", "name": "Footer Element", "selector": "footer", "points": 4},
+                {"type": "text_content", "name": "Footer Copyright", "selector": "footer", "expected_text": "©", "match_type":"contains", "points": 3},
+                {"type": "element_order", "name": "Layout Order (Header, Main, Footer)", "selectors_in_order": ["header", "main", "footer"], "points": 5}
+            ]
+        },
+        {
+            "prompt_id": "P007_Styled_Button_Interaction",
+            "prompt_description": "Generate a button with data-testid 'action-button'. Initial text 'Activate'. Background color blue. On click, text changes to 'Active!' and background to green. Font color should remain white.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Action Button", "selector": "[data-testid='action-button']", "points": 3},
+                {"type": "text_content", "name": "Initial Button Text", "selector": "[data-testid='action-button']", "expected_text": "Activate", "points": 3},
+                {"type": "css_property", "name": "Initial BG Color Blue", "selector": "[data-testid='action-button']", "property_name": "background-color", "expected_value": "rgb(0, 0, 255)", "points": 4},
+                {"type": "css_property", "name": "Initial Text Color White", "selector": "[data-testid='action-button']", "property_name": "color", "expected_value": "rgb(255, 255, 255)", "points": 3},
+                {
+                    "type": "interaction", "name": "Button Click State Change", "points": 12,
+                    "trigger_element": {"selector": "[data-testid='action-button']"},
+                    "action": {"type": "click"},
+                    "wait_for_outcome_ms": 500,
+                    "expected_outcomes": [
+                        {"outcome_type": "text_content_change", "element_selector": "[data-testid='action-button']", "expected_text": "Active!"},
+                        {"outcome_type": "css_property_change", "element_selector": "[data-testid='action-button']", "property_name": "background-color", "expected_value": "rgb(0, 128, 0)"},
+                        {"outcome_type": "css_property_change", "element_selector": "[data-testid='action-button']", "property_name": "color", "expected_value": "rgb(255, 255, 255)", "note": "Ensure text color remains white"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P008_Responsive_Two_Column_Layout",
+            "prompt_description": "Generate a two-column layout: a sidebar (data-testid 'sidebar-content', width 30%) and a main content area (data-testid 'main-content', width 70%) on desktop. On mobile, sidebar should stack above main content (both 100% width).",
+            "viewports_to_test": {"desktop": [1200, 800], "mobile": [400, 600]},
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Sidebar Element", "selector": "[data-testid='sidebar-content']", "points": 3},
+                {"type": "element_presence", "name": "Main Content Element", "selector": "[data-testid='main-content']", "points": 3},
+                {"type": "css_property", "name": "Sidebar Width Desktop", "selector": "[data-testid='sidebar-content']", "property_name": "width", "expected_value": "360px", "note": "30% of 1200px. May need regex or range for percentages.", "viewports": ["desktop"], "points": 4},
+                {"type": "css_property", "name": "Main Content Width Desktop", "selector": "[data-testid='main-content']", "property_name": "width", "expected_value": "840px", "note": "70% of 1200px.", "viewports": ["desktop"], "points": 4},
+                {"type": "css_property", "name": "Sidebar Width Mobile", "selector": "[data-testid='sidebar-content']", "property_name": "width", "expected_value": "400px", "note": "100% of 400px.", "viewports": ["mobile"], "points": 4},
+                {"type": "css_property", "name": "Main Content Width Mobile", "selector": "[data-testid='main-content']", "property_name": "width", "expected_value": "400px", "note": "100% of 400px.", "viewports": ["mobile"], "points": 4},
+                {"type": "element_order", "name": "Visual Order Mobile (Sidebar above Main)", "selectors_in_order": ["[data-testid='sidebar-content']", "[data-testid='main-content']"], "note":"Relies on getBoundingClientRect for visual top/bottom", "viewports": ["mobile"], "points": 5, "check_visual_order_y": true}
+            ]
+        },
+        {
+            "prompt_id": "P009_Tab_Interface_ARIA",
+            "prompt_description": "Generate a tab interface with 3 tabs ('Tab 1', 'Tab 2', 'Tab 3') and corresponding panels. Implement ARIA roles: tablist, tab, tabpanel. Initially, Tab 1 is active (aria-selected='true') and its panel visible. Clicking Tab 2 makes it active and shows its panel, hiding others.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Tablist Element", "selector": "[role='tablist']", "points": 4},
+                {"type": "element_count", "name": "Tabs Count", "selector": "[role='tablist'] [role='tab']", "expected_count": 3, "points": 4},
+                {"type": "element_count", "name": "Tab Panels Count", "selector": "[role='tabpanel']", "expected_count": 3, "points": 4},
+                {"type": "attribute_value", "name": "Tab 1 Initially Selected", "selector": "[role='tablist'] [role='tab']:nth-child(1)", "attribute_name": "aria-selected", "expected_value": "true", "points": 3},
+                {"type": "visibility_change", "name": "Tab Panel 1 Initially Visible", "element_selector": "[role='tabpanel']:nth-child(1)", "expected_visibility": "visible", "points": 3},
+                {"type": "visibility_change", "name": "Tab Panel 2 Initially Hidden", "element_selector": "[role='tabpanel']:nth-child(2)", "expected_visibility": "hidden", "points": 2},
+                {
+                    "type": "interaction", "name": "Switch to Tab 2", "points": 15,
+                    "trigger_element": {"selector": "[role='tablist'] [role='tab']:nth-child(2)"},
+                    "action": {"type": "click"},
+                    "wait_for_outcome_ms": 500,
+                    "expected_outcomes": [
+                        {"outcome_type": "attribute_change", "element_selector": "[role='tablist'] [role='tab']:nth-child(2)", "attribute_name": "aria-selected", "expected_value": "true"},
+                        {"outcome_type": "attribute_change", "element_selector": "[role='tablist'] [role='tab']:nth-child(1)", "attribute_name": "aria-selected", "expected_value": "false"},
+                        {"outcome_type": "visibility_change", "element_selector": "[role='tabpanel']:nth-child(2)", "expected_visibility": "visible"},
+                        {"outcome_type": "visibility_change", "element_selector": "[role='tabpanel']:nth-child(1)", "expected_visibility": "hidden"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P010_Advanced_Form_Validation_Interaction",
+            "prompt_description": "Generate a signup form: Email (required, type email), Password (required, minlength 8), Confirm Password (must match Password). On submit, if errors, show error messages next to fields (e.g., class 'error-message'). If success, show 'Signup successful!'.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Email Input", "selector": "input[name='email'][type='email'][required]", "points": 3},
+                {"type": "element_presence", "name": "Password Input", "selector": "input[name='password'][type='password'][required][minlength='8']", "points": 3},
+                {"type": "element_presence", "name": "Confirm Password Input", "selector": "input[name='confirm_password'][type='password'][required]", "points": 3},
+                {"type": "element_presence", "name": "Submit Button", "selector": "button[type='submit']", "points": 2},
+                {
+                    "type": "interaction", "name": "Submit Empty Form (Show Errors)", "points": 10,
+                    "trigger_element": {"selector": "button[type='submit']"},
+                    "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                    "expected_outcomes": [
+                        {"outcome_type": "element_exists", "element_selector": "input[name='email'] + .error-message", "note":"Assumes error message is sibling"},
+                        {"outcome_type": "element_exists", "element_selector": "input[name='password'] + .error-message"}
+                    ]
+                },
+                {
+                    "type": "interaction", "name": "Submit Mismatched Passwords", "points": 10,
+                     "initial_setup": [ 
+                        {"action_type": "execute_script", "script": "document.querySelectorAll('.error-message').forEach(el => el.textContent = '');"}
+                    ],
+                    "trigger_element": {"selector": "button[type='submit']"},
+                    "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                    "pre_actions": [
+                        {"action_type": "type_text", "element_selector": "input[name='email']", "text_to_type": "test@example.com"},
+                        {"action_type": "type_text", "element_selector": "input[name='password']", "text_to_type": "password123"},
+                        {"action_type": "type_text", "element_selector": "input[name='confirm_password']", "text_to_type": "password321"}
+                    ],
+                    "expected_outcomes": [
+                        {"outcome_type": "element_exists", "element_selector": "input[name='confirm_password'] + .error-message", "note": "Error for confirm password"}
+                    ]
+                },
+                {
+                    "type": "interaction", "name": "Submit Valid Form (Show Success)", "points": 10,
+                    "initial_setup": [
+                        {"action_type": "execute_script", "script": "document.querySelectorAll('.error-message').forEach(el => el.textContent = ''); if(document.querySelector('#signup-success')) document.querySelector('#signup-success').style.display='none';"}
+                    ],
+                    "trigger_element": {"selector": "button[type='submit']"},
+                    "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                    "pre_actions": [
+                        {"action_type": "type_text", "element_selector": "input[name='email']", "text_to_type": "valid@example.com"},
+                        {"action_type": "type_text", "element_selector": "input[name='password']", "text_to_type": "longpassword123"},
+                        {"action_type": "type_text", "element_selector": "input[name='confirm_password']", "text_to_type": "longpassword123"}
+                    ],
+                    "expected_outcomes": [
+                        {"outcome_type": "element_exists", "element_selector": "#signup-success[style*='display: block']", "note": "Or check text content of success message"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P011_Carousel_Basic_Interaction",
+            "prompt_description": "Generate a carousel/slider with 3 slides (data-testid 'slide-1', 'slide-2', 'slide-3'), 'Next' and 'Previous' buttons. Initially slide-1 is visible. Clicking 'Next' shows slide-2, etc. Clicking 'Previous' from slide-1 could loop to slide-3.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Carousel Container", "selector": "[data-testid='carousel']", "points": 3},
+                {"type": "element_count", "name": "Slide Count", "selector": "[data-testid='carousel'] [data-testid^='slide-']", "expected_count": 3, "points": 4},
+                {"type": "element_presence", "name": "Next Button", "selector": "[data-testid='carousel-next-btn']", "points": 2},
+                {"type": "element_presence", "name": "Previous Button", "selector": "[data-testid='carousel-prev-btn']", "points": 2},
+                {"type": "visibility_change", "name": "Slide 1 Initially Visible", "element_selector": "[data-testid='slide-1']", "expected_visibility": "visible", "points": 2},
+                {"type": "visibility_change", "name": "Slide 2 Initially Hidden", "element_selector": "[data-testid='slide-2']", "expected_visibility": "hidden", "points": 1},
+                {
+                    "type": "interaction", "name": "Carousel Navigation", "points": 15,
+                    "sequence": [
+                        {"step_name": "Click Next (Slide 1 to 2)", "trigger_element": {"selector": "[data-testid='carousel-next-btn']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 700, "note":"Allow for animation",
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='slide-1']", "expected_visibility": "hidden"},
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='slide-2']", "expected_visibility": "visible"}
+                         ]},
+                        {"step_name": "Click Next (Slide 2 to 3)", "trigger_element": {"selector": "[data-testid='carousel-next-btn']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 700,
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='slide-2']", "expected_visibility": "hidden"},
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='slide-3']", "expected_visibility": "visible"}
+                         ]},
+                        {"step_name": "Click Previous (Slide 3 to 2)", "trigger_element": {"selector": "[data-testid='carousel-prev-btn']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 700,
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='slide-3']", "expected_visibility": "hidden"},
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='slide-2']", "expected_visibility": "visible"}
+                         ]}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P012_Complex_Product_Filter",
+            "prompt_description": "E-commerce: Filters for 'Category' (dropdown: Electronics, Books) and 'Price Range' (checkboxes: $0-50, $51-100). Product list (initially 5 items). Applying 'Electronics' filter should update list to show 2 specific electronic items.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Category Dropdown", "selector": "select[name='category-filter']", "points": 3},
+                {"type": "element_count", "name": "Category Options", "selector": "select[name='category-filter'] option", "min_count": 2, "points": 2},
+                {"type": "element_presence", "name": "Price Filter Checkbox 1", "selector": "input[type='checkbox'][value='0-50']", "points": 2},
+                {"type": "element_presence", "name": "Price Filter Checkbox 2", "selector": "input[type='checkbox'][value='51-100']", "points": 2},
+                {"type": "element_count", "name": "Initial Product List Items", "selector": "#product-list .product-item", "expected_count": 5, "points": 4},
+                {
+                    "type": "interaction", "name": "Filter by Electronics Category", "points": 15,
+                    "trigger_element": {"selector": "select[name='category-filter']"},
+                    "action": {"type": "select_option", "option_text": "Electronics"},
+                    "wait_for_outcome_ms": 1000, 
+                    "expected_outcomes": [
+                        {"outcome_type": "new_element_count", "parent_element_selector": "#product-list", "child_element_selector": ".product-item[data-category='electronics']", "expected_count": 2, "comparison": "equals", "note": "Assumes items get data-category attribute"},
+                        {"outcome_type": "new_element_count", "parent_element_selector": "#product-list", "child_element_selector": ".product-item:not([data-category='electronics'])", "expected_count": 0, "comparison": "equals", "note": "No non-electronic items visible"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P013_Draggable_Kanban_Items",
+            "prompt_description": "Generate a Kanban board with 3 columns ('To Do', 'In Progress', 'Done'). 'To Do' has 2 draggable items. Dragging item 1 from 'To Do' to 'In Progress' should reflect this change in the DOM (item moves to the new column container).",
+            "adherence_checks": [
+                {"type": "element_count", "name": "Kanban Columns", "selector": ".kanban-column", "expected_count": 3, "points": 5},
+                {"type": "element_count", "name": "Initial Draggable Items in 'To Do'", "selector": ".kanban-column[data-status='todo'] .draggable-item", "expected_count": 2, "points": 5},
+                {
+                    "type": "interaction", "name": "Drag Item to 'In Progress'", "points": 20,
+                    "trigger_element": {"selector": ".kanban-column[data-status='todo'] .draggable-item:first-child", "note": "The item to drag"},
+                    "action": {
+                        "type": "drag_and_drop",
+                        "target_element_selector": ".kanban-column[data-status='inprogress']", "note": "The column to drop into"
+                    },
+                    "wait_for_outcome_ms": 1000,
+                    "expected_outcomes": [
+                        {"outcome_type": "new_element_count", "parent_element_selector": ".kanban-column[data-status='todo']", "child_element_selector": ".draggable-item", "expected_count": 1, "comparison":"equals"},
+                        {"outcome_type": "new_element_count", "parent_element_selector": ".kanban-column[data-status='inprogress']", "child_element_selector": ".draggable-item", "expected_count": 1, "comparison":"equals", "note":"Assumes only one item moved there"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P014_Infinite_Scroll_Content_Load",
+            "prompt_description": "Generate a page with a list of 10 items. Scrolling to the bottom of the page should load 10 more items (total 20). (Simplified: check item count increases after scroll).",
+            "adherence_checks": [
+                {"type": "element_count", "name": "Initial List Items", "selector": "#infinite-list .list-item", "expected_count": 10, "points": 5},
+                {
+                    "type": "interaction", "name": "Scroll to Load More", "points": 15,
+                    "trigger_element": {"selector": "body"}, 
+                    "action": {"type": "scroll_window", "direction": "bottom"},
+                    "wait_for_outcome_ms": 2000, 
+                    "expected_outcomes": [
+                        {"outcome_type": "new_element_count", "parent_element_selector": "#infinite-list", "child_element_selector": ".list-item", "expected_count": 20, "comparison": "equals", "note": "Or use min_count: 11 if exact new count is unsure"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P015_Live_Search_With_Debounce_Effect",
+            "prompt_description": "Generate a search input. Typing 'apple' should filter a list of fruits. After typing stops for 300ms (debounce), results update. (Simplified: check results after typing and a fixed wait).",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Search Input", "selector": "input[type='search'][data-testid='live-search']", "points": 4},
+                {"type": "element_count", "name": "Initial Search Results (e.g. all fruits)", "selector": "#search-results-list .fruit-item", "min_count": 3, "points": 3},
+                {
+                    "type": "interaction", "name": "Type and Filter Results", "points": 15,
+                    "trigger_element": {"selector": "[data-testid='live-search']"},
+                    "action": {"type": "type_text", "text_to_type": "apple", "key_delay_ms": 50},
+                    "wait_for_outcome_ms": 1000, 
+                    "expected_outcomes": [
+                        {"outcome_type": "new_element_count", "parent_element_selector": "#search-results-list", "child_element_selector": ".fruit-item[data-fruit-name*='apple' i]", "expected_count": 1, "comparison": "equals", "note":"Assuming one item matches 'apple'"},
+                        {"outcome_type": "new_element_count", "parent_element_selector": "#search-results-list", "child_element_selector": ".fruit-item:not([data-fruit-name*='apple' i])", "expected_count": 0, "comparison": "equals", "note":"Other items hidden/removed"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P016_Keyboard_Accessible_Menu",
+            "prompt_description": "Generate a dropdown menu (like P005) but ensure it's keyboard accessible: trigger opens with Enter/Space, items navigable with Up/Down arrows, item selection with Enter, Escape closes.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Menu Trigger Button", "selector": "button[data-testid='kb-menu-trigger'][aria-haspopup='true']", "points": 4},
+                {
+                    "type": "interaction", "name": "Keyboard Navigation", "points": 25,
+                    "sequence": [
+                        {"step_name": "Open with Enter", "trigger_element": {"selector": "button[data-testid='kb-menu-trigger']"}, "action": {"type": "key_press", "key": "ENTER"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [{"outcome_type": "visibility_change", "element_selector": "[data-testid='kb-menu-list']", "expected_visibility": "visible"}]},
+                        {"step_name": "Focus First Item (Down Arrow)", "trigger_element": {"selector": "[data-testid='kb-menu-list']"}, "action": {"type": "key_press", "key": "ARROW_DOWN"}, "wait_for_outcome_ms": 200,
+                         "expected_outcomes": [{"outcome_type": "custom_script_evaluates_true", "script": "return document.activeElement === document.querySelector('[data-testid=kb-menu-list] li:first-child a');"}]},
+                        {"step_name": "Focus Second Item (Down Arrow)", "trigger_element": {"selector": "[data-testid='kb-menu-list']"}, "action": {"type": "key_press", "key": "ARROW_DOWN"}, "wait_for_outcome_ms": 200,
+                         "expected_outcomes": [{"outcome_type": "custom_script_evaluates_true", "script": "return document.activeElement === document.querySelector('[data-testid=kb-menu-list] li:nth-child(2) a');"}]},
+                        {"step_name": "Select Second Item (Enter)", "trigger_element": {"selector": "[data-testid='kb-menu-list'] li:nth-child(2) a"}, "action": {"type": "key_press", "key": "ENTER"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='kb-menu-list']", "expected_visibility": "hidden"},
+                             {"outcome_type": "text_content_change", "element_selector": "[data-testid='kb-menu-selected-value']", "expected_text": "Item 2 Text", "note":"Assuming selected value is displayed"}
+                         ]},
+                        {"step_name": "Re-open with Space", "trigger_element": {"selector": "button[data-testid='kb-menu-trigger']"}, "action": {"type": "key_press", "key": "SPACE"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [{"outcome_type": "visibility_change", "element_selector": "[data-testid='kb-menu-list']", "expected_visibility": "visible"}]},
+                        {"step_name": "Close with Escape", "trigger_element": {"selector": "[data-testid='kb-menu-list']"}, "action": {"type": "key_press", "key": "ESCAPE"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [{"outcome_type": "visibility_change", "element_selector": "[data-testid='kb-menu-list']", "expected_visibility": "hidden"}]}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P017_Complex_Dashboard_Widget_Update",
+            "prompt_description": "Dashboard widget (data-testid 'sales-chart-widget') shows 'Loading...'. After 1s (simulated API call), it updates to show a chart (e.g., an SVG or canvas appears) and title changes from 'Sales Data (Loading)' to 'Sales Data (Last 7 Days)'.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Widget Presence", "selector": "[data-testid='sales-chart-widget']", "points": 5},
+                {"type": "text_content", "name": "Initial Loading Text", "selector": "[data-testid='sales-chart-widget'] .widget-title", "expected_text": "Sales Data (Loading)", "points": 4},
+                {"type": "element_does_not_exist", "name": "Chart SVG/Canvas Initially Absent", "selector": "[data-testid='sales-chart-widget'] svg, [data-testid='sales-chart-widget'] canvas", "points": 3},
+                {
+                    "type": "interaction", "name": "Widget Data Load Simulation", "points": 15,
+                    "trigger_element": {"selector": "body"}, "action": {"type": "wait", "duration_ms": 1200, "note": "Simulate API call delay + render"},
+                    "expected_outcomes": [
+                        {"outcome_type": "text_content_change", "element_selector": "[data-testid='sales-chart-widget'] .widget-title", "expected_text": "Sales Data (Last 7 Days)"},
+                        {"outcome_type": "element_exists", "element_selector": "[data-testid='sales-chart-widget'] svg", "note": "Or canvas, depending on chart library"},
+                        {"outcome_type": "custom_script_evaluates_true", "script":"return document.querySelector(\"[data-testid='sales-chart-widget']\").textContent.indexOf('Loading...') === -1;"}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P018_Multi_Step_Wizard_Form",
+            "prompt_description": "A 3-step wizard form. Step 1: Personal Info. Step 2: Address. Step 3: Confirmation. 'Next' button advances, 'Previous' goes back. Final step has 'Submit'. Progress indicators (e.g. 'Step 1 of 3') update.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Wizard Container", "selector": "[data-testid='wizard-form']", "points": 3},
+                {"type": "element_presence", "name": "Step 1 Content Visible Initially", "selector": "[data-testid='wizard-step-1'][style*='display: block']", "note":"Or check class for active", "points": 3},
+                {"type": "element_presence", "name": "Step 2 Content Hidden Initially", "selector": "[data-testid='wizard-step-2'][style*='display: none']", "points": 2},
+                {"type": "text_content", "name": "Initial Progress Indicator", "selector": "[data-testid='wizard-progress']", "expected_text": "Step 1 of 3", "points": 3},
+                {
+                    "type": "interaction", "name": "Wizard Navigation", "points": 20,
+                    "sequence": [
+                        {"step_name": "Go to Step 2", "trigger_element": {"selector": "[data-testid='wizard-next-btn']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='wizard-step-1']", "expected_visibility": "hidden"},
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='wizard-step-2']", "expected_visibility": "visible"},
+                             {"outcome_type": "text_content_change", "element_selector": "[data-testid='wizard-progress']", "expected_text": "Step 2 of 3"}
+                         ]},
+                        {"step_name": "Go to Step 3", "trigger_element": {"selector": "[data-testid='wizard-next-btn']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='wizard-step-3']", "expected_visibility": "visible"},
+                             {"outcome_type": "text_content_change", "element_selector": "[data-testid='wizard-progress']", "expected_text": "Step 3 of 3"},
+                             {"outcome_type": "element_exists", "element_selector": "[data-testid='wizard-submit-btn']"}
+                         ]},
+                        {"step_name": "Go Back to Step 2", "trigger_element": {"selector": "[data-testid='wizard-prev-btn']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 500,
+                         "expected_outcomes": [
+                             {"outcome_type": "visibility_change", "element_selector": "[data-testid='wizard-step-2']", "expected_visibility": "visible"},
+                             {"outcome_type": "text_content_change", "element_selector": "[data-testid='wizard-progress']", "expected_text": "Step 2 of 3"}
+                         ]}
+                    ]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P019_Theme_Switcher_LocalStorage",
+            "prompt_description": "Implement a theme switcher button (data-testid 'theme-toggle'). Clicking it toggles a 'dark-mode' class on the <body> and saves preference 'theme:dark' or 'theme:light' in localStorage. Page should load with saved theme.",
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Theme Toggle Button", "selector": "[data-testid='theme-toggle']", "points": 5},
+                {
+                    "type": "interaction", "name": "Toggle Dark Mode & Check LocalStorage", "points": 20,
+                     "initial_setup": [{"action_type": "clear_local_storage_key", "key":"theme"}], 
+                    "sequence": [
+                        {"step_name": "Click to Dark Mode", "trigger_element": {"selector": "[data-testid='theme-toggle']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 300,
+                         "expected_outcomes": [
+                             {"outcome_type": "class_change", "element_selector": "body", "expected_class_present": "dark-mode"},
+                             {"outcome_type": "custom_script_evaluates_true", "script": "return localStorage.getItem('theme') === 'dark';"}
+                         ]},
+                        {"step_name": "Click to Light Mode", "trigger_element": {"selector": "[data-testid='theme-toggle']"}, "action": {"type": "click"}, "wait_for_outcome_ms": 300,
+                         "expected_outcomes": [
+                             {"outcome_type": "class_change", "element_selector": "body", "expected_class_absent": "dark-mode"},
+                             {"outcome_type": "custom_script_evaluates_true", "script": "return localStorage.getItem('theme') === 'light';"}
+                         ]}
+                    ],
+                    "final_cleanup": [{"action_type": "clear_local_storage_key", "key":"theme"}]
+                },
+                {
+                    "type": "interaction", "name": "Load with Saved Dark Theme", "points": 10,
+                    "initial_setup": [{"action_type": "set_local_storage_key", "key":"theme", "value":"dark"}],
+                    "trigger_element": {"selector":"body"}, "action":{"type":"wait", "duration_ms":100, "note":"Page reloads implicitly if this is a separate test run. Or script needs to reload page."},
+                     "wait_for_outcome_ms": 500,
+                     "expected_outcomes": [
+                        {"outcome_type": "class_change", "element_selector": "body", "expected_class_present": "dark-mode"}
+                     ],
+                    "final_cleanup": [{"action_type": "clear_local_storage_key", "key":"theme"}]
+                }
+            ]
+        },
+        {
+            "prompt_id": "P020_Full_Application_Shell_Responsive_ARIA",
+            "prompt_description": "Generate a full application shell: fixed responsive header (logo, user menu, search), collapsible sidebar navigation (ARIA landmark, keyboard navigable), main content area with breadcrumbs, and a status footer. Ensure all interactive elements are focusable and have accessible names.",
+            "viewports_to_test": {"desktop": [1440, 900], "mobile": [390, 844]},
+            "adherence_checks": [
+                {"type": "element_presence", "name": "Header (banner role)", "selector": "header[role='banner']", "points": 5},
+                {"type": "element_presence", "name": "Logo in Header", "selector": "header [data-testid='app-logo']", "points": 3},
+                {"type": "element_presence", "name": "User Menu in Header (button with aria-haspopup)", "selector": "header button[aria-haspopup='true'][data-testid='user-menu-trigger']", "points": 4},
+                {"type": "element_presence", "name": "Search Input in Header", "selector": "header input[type='search'][aria-label*='Search']", "points": 4},
+                
+                {"type": "element_presence", "name": "Sidebar Navigation (navigation role)", "selector": "nav[role='navigation'][data-testid='app-sidebar']", "points": 5},
+                {"type": "css_property", "name": "Sidebar Collapsed on Mobile (e.g., width 0 or transform)", "selector": "[data-testid='app-sidebar']", "property_name": "width", "expected_value": "0px", "viewports":["mobile"], "points": 4, "note":"Or check for a class that hides it, or transformX(-100%)"},
+                {"type": "element_presence", "name": "Sidebar Toggle Button (mobile)", "selector": "button[data-testid='sidebar-toggle'][aria-controls='app-sidebar']", "viewports":["mobile"], "points": 3},
+                
+                {"type": "element_presence", "name": "Main Content Area (main role)", "selector": "main[role='main']", "points": 5},
+                {"type": "element_presence", "name": "Breadcrumbs Nav", "selector": "main nav[aria-label='Breadcrumb']", "points": 3},
+                {"type": "element_count", "name": "Breadcrumb Items", "selector": "main nav[aria-label='Breadcrumb'] li", "min_count": 2, "points": 2},
+                
+                {"type": "element_presence", "name": "Status Footer (contentinfo role)", "selector": "footer[role='contentinfo']", "points": 5},
+                {"type": "text_content", "name": "Status Text in Footer", "selector": "footer [data-testid='app-status']", "expected_text": "Ready", "match_type":"contains", "points": 2},
+
+                {"type": "interaction", "name": "Sidebar Toggle on Mobile", "points": 10, "viewports":["mobile"],
+                    "initial_setup":[{"action_type":"execute_script", "script":"document.querySelector('[data-testid=app-sidebar]').style.width='0px';"}],
+                    "trigger_element": {"selector": "button[data-testid='sidebar-toggle']"}, "action": {"type":"click"}, "wait_for_outcome_ms":500,
+                    "expected_outcomes": [
+                        {"outcome_type": "css_property_change", "element_selector": "[data-testid='app-sidebar']", "property_name":"width", "expected_value":"250px", "note":"Or check for class change / transform reset"},
+                        {"outcome_type": "attribute_change", "element_selector":"button[data-testid='sidebar-toggle']", "attribute_name":"aria-expanded", "expected_value":"true"}
+                    ]
+                },
+                {"type": "custom_script_evaluates_true", "name": "All Buttons Have Accessible Names", "script": "return Array.from(document.querySelectorAll('button')).every(btn => btn.textContent.trim() || btn.getAttribute('aria-label') || btn.querySelector('img[alt], svg[aria-label]'));", "points": 8, "note":"Very generic check, specific checks per button are better."}
+            ]
+        }
+    ]
+}

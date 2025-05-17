@@ -1,0 +1,25 @@
+{
+  "benchmark_run_name": "Dummy Run",
+  "prompts": [
+    {
+      "prompt_id": "example_prompt_001",
+      "prompt_description": "A simple page.",
+      "viewports_to_test": {
+        "desktop": [
+          1280,
+          720
+        ]
+      },
+      "adherence_checks": [
+        {
+          "type": "text_content",
+          "name": "Page Title Check",
+          "selector": "title",
+          "selector_type": "tag_name",
+          "expected_text": "Test Page",
+          "points": 5
+        }
+      ]
+    }
+  ]
+}

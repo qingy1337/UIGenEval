@@ -1,0 +1,996 @@
+{
+  "file_analyzed": "C:\\Users\\Smirk\\Documents\\Programming\\Studio\\UIGEN-Benchmark\\second_try\\example_prompt.html",
+  "prompt_config_file": "C:\\Users\\Smirk\\Documents\\Programming\\Studio\\UIGEN-Benchmark\\second_try\\example_prompt_config.json",
+  "prompt_description": "A simple page with navbar, hero, gallery, and footer.",
+  "page_title": "Comprehensive Test Page",
+  "analysis_timestamp": "20250516-222325",
+  "technical_quality": {
+    "earned": 102.65,
+    "max": 105,
+    "categories": {
+      "HTML Structure & Semantics": {
+        "earned": 10.0,
+        "max": 11.0,
+        "details": [
+          {
+            "check": "HTML Lang",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 1.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Page Title",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 1.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Main Tag",
+            "status": "FAIL",
+            "message": "No <main> element found.",
+            "points_earned": 0.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Nav Tag",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 1.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Footer Tag",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 1.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "H1 Count",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 1.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Heading Order Logic",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Image Alts",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 1.0,
+            "max_points": 1.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Form Labels",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          }
+        ]
+      },
+      "Accessibility (Axe-core)": {
+        "earned": 15.0,
+        "max": 20.0,
+        "details": [
+          {
+            "check": "Axe Violations",
+            "status": "WARN",
+            "message": "3 Axe violations (Crit:0,Ser:1,Mod:2,Min:0). Report: axe_report_example_001_desktop.json",
+            "points_earned": 15.0,
+            "max_points": 20.0,
+            "viewport": "desktop",
+            "data": [
+              "color-contrast",
+              "landmark-one-main",
+              "region"
+            ]
+          }
+        ]
+      },
+      "CSS Quality & Responsiveness": {
+        "earned": 6.0,
+        "max": 10.0,
+        "details": [
+          {
+            "check": "Viewport Meta",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "CSS Variables",
+            "status": "WARN",
+            "message": "No :root CSS variables.",
+            "points_earned": 0.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Modern Layout",
+            "status": "INFO",
+            "message": "Flex/Grid not on body/main.",
+            "points_earned": 0.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Inline Styles",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "!important Usage",
+            "status": "INFO",
+            "message": "PASS",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          }
+        ]
+      },
+      "Rendered Color & Contrast": {
+        "earned": 24.0,
+        "max": 30.0,
+        "details": [
+          {
+            "check": "Contrast Failure (AA)",
+            "status": "FAIL",
+            "message": "AA FAIL 3.86 for 'Low contrast text.' in <p data-testid='lowcontrast-text' class='bad-contrast'>",
+            "points_earned": 0.0,
+            "max_points": 0.0,
+            "viewport": "desktop",
+            "data": {
+              "ratio": 3.8596550990537786,
+              "text": "Low contrast text.",
+              "fg": "rgb(119, 119, 119)",
+              "bg_eff": "rgb(238, 238, 238)",
+              "font": "16px 400"
+            }
+          },
+          {
+            "check": "Contrast Check Result",
+            "status": "FAIL",
+            "message": "1 WCAG AA failures on 9 instances.",
+            "points_earned": 12.0,
+            "max_points": 15.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Contrast Failure (AA)",
+            "status": "FAIL",
+            "message": "AA FAIL 3.86 for 'Low contrast text.' in <p data-testid='lowcontrast-text' class='bad-contrast'>",
+            "points_earned": 0.0,
+            "max_points": 0.0,
+            "viewport": "mobile",
+            "data": {
+              "ratio": 3.8596550990537786,
+              "text": "Low contrast text.",
+              "fg": "rgb(119, 119, 119)",
+              "bg_eff": "rgb(238, 238, 238)",
+              "font": "16px 400"
+            }
+          },
+          {
+            "check": "Contrast Check Result",
+            "status": "FAIL",
+            "message": "1 WCAG AA failures on 9 instances.",
+            "points_earned": 12.0,
+            "max_points": 15.0,
+            "viewport": "mobile"
+          }
+        ]
+      },
+      "Responsiveness (No Horizontal Scroll)": {
+        "earned": 10.0,
+        "max": 10.0,
+        "details": [
+          {
+            "check": "Horizontal Scrollbar",
+            "status": "PASS",
+            "message": "No horizontal scrollbar detected.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Horizontal Scrollbar",
+            "status": "PASS",
+            "message": "No horizontal scrollbar detected.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "mobile"
+          }
+        ]
+      },
+      "JavaScript Health": {
+        "earned": 0.0,
+        "max": 5.0,
+        "details": [
+          {
+            "check": "JS Console Errors",
+            "status": "FAIL",
+            "message": "3 JS error(s).",
+            "points_earned": 0.0,
+            "max_points": 5.0,
+            "viewport": "desktop",
+            "data": [
+              "JS ERROR: file:///C:/Users/Smirk/Documents/Programming/Studio/UIGEN-Benchmark/second_try/example_prompt.html 8:28 \"A minor JS test error!\"",
+              "JS ERROR: https://via.placeholder.com/100?text=2 - Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+              "JS ERROR: https://via.placeholder.com/100?text=1 - Failed to load resource: net::ERR_NAME_NOT_RESOLVED"
+            ]
+          }
+        ]
+      },
+      "Performance (Lighthouse)": {
+        "earned": 20.0,
+        "max": 40.0,
+        "details": [
+          {
+            "check": "Lighthouse Score",
+            "status": "PASS",
+            "message": "100/100",
+            "points_earned": 20.0,
+            "max_points": 20.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Lighthouse Execution",
+            "status": "FAIL",
+            "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+            "points_earned": 0.0,
+            "max_points": 20.0,
+            "viewport": "mobile",
+            "data": {
+              "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+            }
+          }
+        ]
+      },
+      "Accessibility (Lighthouse)": {
+        "earned": 9.2,
+        "max": 20.0,
+        "details": [
+          {
+            "check": "Lighthouse Score",
+            "status": "PASS",
+            "message": "92/100",
+            "points_earned": 9.2,
+            "max_points": 10.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Lighthouse Execution",
+            "status": "FAIL",
+            "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+            "points_earned": 0.0,
+            "max_points": 10.0,
+            "viewport": "mobile",
+            "data": {
+              "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+            }
+          }
+        ]
+      },
+      "Best Practices (Lighthouse)": {
+        "earned": 3.9,
+        "max": 10.0,
+        "details": [
+          {
+            "check": "Lighthouse Score",
+            "status": "WARN",
+            "message": "78/100",
+            "points_earned": 3.9,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Lighthouse Execution",
+            "status": "FAIL",
+            "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+            "points_earned": 0.0,
+            "max_points": 5.0,
+            "viewport": "mobile",
+            "data": {
+              "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+            }
+          }
+        ]
+      },
+      "SEO (Lighthouse)": {
+        "earned": 4.55,
+        "max": 10.0,
+        "details": [
+          {
+            "check": "Lighthouse Score",
+            "status": "PASS",
+            "message": "91/100",
+            "points_earned": 4.55,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Lighthouse Execution",
+            "status": "FAIL",
+            "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+            "points_earned": 0.0,
+            "max_points": 5.0,
+            "viewport": "mobile",
+            "data": {
+              "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "prompt_adherence": {
+    "earned": 80.0,
+    "max": 40,
+    "categories": {
+      "Prompt Adherence": {
+        "earned": 80.0,
+        "max": 80.0,
+        "details": [
+          {
+            "check": "Navbar Presence",
+            "status": "PASS",
+            "message": "Element 'nav[data-testid='navbar']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Hero Section Presence",
+            "status": "PASS",
+            "message": "Element '[data-testid='hero-section']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Gallery Presence",
+            "status": "PASS",
+            "message": "Element '[data-testid='image-gallery']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Footer Presence",
+            "status": "PASS",
+            "message": "Element 'footer[data-testid='footer']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Basic Layout Order",
+            "status": "PASS",
+            "message": "Elements are in the expected DOM order.",
+            "points_earned": 10.0,
+            "max_points": 10.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Gallery Image Count",
+            "status": "PASS",
+            "message": "Count is 2 (expected 2).",
+            "points_earned": 3.0,
+            "max_points": 3.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Hero Title Text",
+            "status": "PASS",
+            "message": "Text content matches (type: exact). Actual: 'Hero Title...'",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Hero CTA Test ID",
+            "status": "PASS",
+            "message": "Attribute 'data-testid' value matches.",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Footer Background Color",
+            "status": "PASS",
+            "message": "CSS 'background-color' matches 'rgb(51, 51, 51)'.",
+            "points_earned": 3.0,
+            "max_points": 3.0,
+            "viewport": "desktop"
+          },
+          {
+            "check": "Navbar Presence",
+            "status": "PASS",
+            "message": "Element 'nav[data-testid='navbar']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Hero Section Presence",
+            "status": "PASS",
+            "message": "Element '[data-testid='hero-section']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Gallery Presence",
+            "status": "PASS",
+            "message": "Element '[data-testid='image-gallery']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Footer Presence",
+            "status": "PASS",
+            "message": "Element 'footer[data-testid='footer']' present and visible.",
+            "points_earned": 5.0,
+            "max_points": 5.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Basic Layout Order",
+            "status": "PASS",
+            "message": "Elements are in the expected DOM order.",
+            "points_earned": 10.0,
+            "max_points": 10.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Gallery Image Count",
+            "status": "PASS",
+            "message": "Count is 2 (expected 2).",
+            "points_earned": 3.0,
+            "max_points": 3.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Hero Title Text",
+            "status": "PASS",
+            "message": "Text content matches (type: exact). Actual: 'Hero Title...'",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Hero CTA Test ID",
+            "status": "PASS",
+            "message": "Attribute 'data-testid' value matches.",
+            "points_earned": 2.0,
+            "max_points": 2.0,
+            "viewport": "mobile"
+          },
+          {
+            "check": "Footer Background Color",
+            "status": "PASS",
+            "message": "CSS 'background-color' matches 'rgb(51, 51, 51)'.",
+            "points_earned": 3.0,
+            "max_points": 3.0,
+            "viewport": "mobile"
+          }
+        ]
+      }
+    }
+  },
+  "overall_score_earned": 182.65,
+  "overall_score_max": 145,
+  "overall_percentage": 125.97,
+  "detailed_findings_by_category": {
+    "HTML Structure & Semantics": {
+      "earned": 10.0,
+      "max": 11.0,
+      "details": [
+        {
+          "check": "HTML Lang",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 1.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Page Title",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 1.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Main Tag",
+          "status": "FAIL",
+          "message": "No <main> element found.",
+          "points_earned": 0.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Nav Tag",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 1.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Footer Tag",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 1.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "H1 Count",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 1.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Heading Order Logic",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Image Alts",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 1.0,
+          "max_points": 1.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Form Labels",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        }
+      ]
+    },
+    "Accessibility (Axe-core)": {
+      "earned": 15.0,
+      "max": 20.0,
+      "details": [
+        {
+          "check": "Axe Violations",
+          "status": "WARN",
+          "message": "3 Axe violations (Crit:0,Ser:1,Mod:2,Min:0). Report: axe_report_example_001_desktop.json",
+          "points_earned": 15.0,
+          "max_points": 20.0,
+          "viewport": "desktop",
+          "data": [
+            "color-contrast",
+            "landmark-one-main",
+            "region"
+          ]
+        }
+      ]
+    },
+    "CSS Quality & Responsiveness": {
+      "earned": 6.0,
+      "max": 10.0,
+      "details": [
+        {
+          "check": "Viewport Meta",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "CSS Variables",
+          "status": "WARN",
+          "message": "No :root CSS variables.",
+          "points_earned": 0.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Modern Layout",
+          "status": "INFO",
+          "message": "Flex/Grid not on body/main.",
+          "points_earned": 0.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Inline Styles",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "!important Usage",
+          "status": "INFO",
+          "message": "PASS",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        }
+      ]
+    },
+    "Rendered Color & Contrast": {
+      "earned": 24.0,
+      "max": 30.0,
+      "details": [
+        {
+          "check": "Contrast Failure (AA)",
+          "status": "FAIL",
+          "message": "AA FAIL 3.86 for 'Low contrast text.' in <p data-testid='lowcontrast-text' class='bad-contrast'>",
+          "points_earned": 0.0,
+          "max_points": 0.0,
+          "viewport": "desktop",
+          "data": {
+            "ratio": 3.8596550990537786,
+            "text": "Low contrast text.",
+            "fg": "rgb(119, 119, 119)",
+            "bg_eff": "rgb(238, 238, 238)",
+            "font": "16px 400"
+          }
+        },
+        {
+          "check": "Contrast Check Result",
+          "status": "FAIL",
+          "message": "1 WCAG AA failures on 9 instances.",
+          "points_earned": 12.0,
+          "max_points": 15.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Contrast Failure (AA)",
+          "status": "FAIL",
+          "message": "AA FAIL 3.86 for 'Low contrast text.' in <p data-testid='lowcontrast-text' class='bad-contrast'>",
+          "points_earned": 0.0,
+          "max_points": 0.0,
+          "viewport": "mobile",
+          "data": {
+            "ratio": 3.8596550990537786,
+            "text": "Low contrast text.",
+            "fg": "rgb(119, 119, 119)",
+            "bg_eff": "rgb(238, 238, 238)",
+            "font": "16px 400"
+          }
+        },
+        {
+          "check": "Contrast Check Result",
+          "status": "FAIL",
+          "message": "1 WCAG AA failures on 9 instances.",
+          "points_earned": 12.0,
+          "max_points": 15.0,
+          "viewport": "mobile"
+        }
+      ]
+    },
+    "Responsiveness (No Horizontal Scroll)": {
+      "earned": 10.0,
+      "max": 10.0,
+      "details": [
+        {
+          "check": "Horizontal Scrollbar",
+          "status": "PASS",
+          "message": "No horizontal scrollbar detected.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Horizontal Scrollbar",
+          "status": "PASS",
+          "message": "No horizontal scrollbar detected.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "mobile"
+        }
+      ]
+    },
+    "JavaScript Health": {
+      "earned": 0.0,
+      "max": 5.0,
+      "details": [
+        {
+          "check": "JS Console Errors",
+          "status": "FAIL",
+          "message": "3 JS error(s).",
+          "points_earned": 0.0,
+          "max_points": 5.0,
+          "viewport": "desktop",
+          "data": [
+            "JS ERROR: file:///C:/Users/Smirk/Documents/Programming/Studio/UIGEN-Benchmark/second_try/example_prompt.html 8:28 \"A minor JS test error!\"",
+            "JS ERROR: https://via.placeholder.com/100?text=2 - Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+            "JS ERROR: https://via.placeholder.com/100?text=1 - Failed to load resource: net::ERR_NAME_NOT_RESOLVED"
+          ]
+        }
+      ]
+    },
+    "Performance (Lighthouse)": {
+      "earned": 20.0,
+      "max": 40.0,
+      "details": [
+        {
+          "check": "Lighthouse Score",
+          "status": "PASS",
+          "message": "100/100",
+          "points_earned": 20.0,
+          "max_points": 20.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Lighthouse Execution",
+          "status": "FAIL",
+          "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+          "points_earned": 0.0,
+          "max_points": 20.0,
+          "viewport": "mobile",
+          "data": {
+            "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+          }
+        }
+      ]
+    },
+    "Accessibility (Lighthouse)": {
+      "earned": 9.2,
+      "max": 20.0,
+      "details": [
+        {
+          "check": "Lighthouse Score",
+          "status": "PASS",
+          "message": "92/100",
+          "points_earned": 9.2,
+          "max_points": 10.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Lighthouse Execution",
+          "status": "FAIL",
+          "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+          "points_earned": 0.0,
+          "max_points": 10.0,
+          "viewport": "mobile",
+          "data": {
+            "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+          }
+        }
+      ]
+    },
+    "Best Practices (Lighthouse)": {
+      "earned": 3.9,
+      "max": 10.0,
+      "details": [
+        {
+          "check": "Lighthouse Score",
+          "status": "WARN",
+          "message": "78/100",
+          "points_earned": 3.9,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Lighthouse Execution",
+          "status": "FAIL",
+          "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+          "points_earned": 0.0,
+          "max_points": 5.0,
+          "viewport": "mobile",
+          "data": {
+            "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+          }
+        }
+      ]
+    },
+    "SEO (Lighthouse)": {
+      "earned": 4.55,
+      "max": 10.0,
+      "details": [
+        {
+          "check": "Lighthouse Score",
+          "status": "PASS",
+          "message": "91/100",
+          "points_earned": 4.55,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Lighthouse Execution",
+          "status": "FAIL",
+          "message": "Lighthouse CLI failed. Code: 1. Stderr: Invalid values:\n  Argument: preset, Given: \"mobile\", Choices: \"perf\", \"experimental\", \"desktop\"\n\nSpecify --help for available options\n",
+          "points_earned": 0.0,
+          "max_points": 5.0,
+          "viewport": "mobile",
+          "data": {
+            "cmd": "C:\\Users\\Smirk\\AppData\\Roaming\\npm\\lighthouse.CMD http://localhost:57302/example_prompt.html --output=json --output=html --output-path=ui_benchmark_runs\\example_001_20250516-222325\\lighthouse_reports_mobile\\lh_example_001 --quiet --throttling-method=simulate --chrome-flags=--headless=new --disable-gpu --no-sandbox --no-zygote --preset=mobile --only-categories=performance,accessibility,best-practices,seo"
+          }
+        }
+      ]
+    },
+    "Prompt Adherence": {
+      "earned": 80.0,
+      "max": 80.0,
+      "details": [
+        {
+          "check": "Navbar Presence",
+          "status": "PASS",
+          "message": "Element 'nav[data-testid='navbar']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Hero Section Presence",
+          "status": "PASS",
+          "message": "Element '[data-testid='hero-section']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Gallery Presence",
+          "status": "PASS",
+          "message": "Element '[data-testid='image-gallery']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Footer Presence",
+          "status": "PASS",
+          "message": "Element 'footer[data-testid='footer']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Basic Layout Order",
+          "status": "PASS",
+          "message": "Elements are in the expected DOM order.",
+          "points_earned": 10.0,
+          "max_points": 10.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Gallery Image Count",
+          "status": "PASS",
+          "message": "Count is 2 (expected 2).",
+          "points_earned": 3.0,
+          "max_points": 3.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Hero Title Text",
+          "status": "PASS",
+          "message": "Text content matches (type: exact). Actual: 'Hero Title...'",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Hero CTA Test ID",
+          "status": "PASS",
+          "message": "Attribute 'data-testid' value matches.",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Footer Background Color",
+          "status": "PASS",
+          "message": "CSS 'background-color' matches 'rgb(51, 51, 51)'.",
+          "points_earned": 3.0,
+          "max_points": 3.0,
+          "viewport": "desktop"
+        },
+        {
+          "check": "Navbar Presence",
+          "status": "PASS",
+          "message": "Element 'nav[data-testid='navbar']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Hero Section Presence",
+          "status": "PASS",
+          "message": "Element '[data-testid='hero-section']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Gallery Presence",
+          "status": "PASS",
+          "message": "Element '[data-testid='image-gallery']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Footer Presence",
+          "status": "PASS",
+          "message": "Element 'footer[data-testid='footer']' present and visible.",
+          "points_earned": 5.0,
+          "max_points": 5.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Basic Layout Order",
+          "status": "PASS",
+          "message": "Elements are in the expected DOM order.",
+          "points_earned": 10.0,
+          "max_points": 10.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Gallery Image Count",
+          "status": "PASS",
+          "message": "Count is 2 (expected 2).",
+          "points_earned": 3.0,
+          "max_points": 3.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Hero Title Text",
+          "status": "PASS",
+          "message": "Text content matches (type: exact). Actual: 'Hero Title...'",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Hero CTA Test ID",
+          "status": "PASS",
+          "message": "Attribute 'data-testid' value matches.",
+          "points_earned": 2.0,
+          "max_points": 2.0,
+          "viewport": "mobile"
+        },
+        {
+          "check": "Footer Background Color",
+          "status": "PASS",
+          "message": "CSS 'background-color' matches 'rgb(51, 51, 51)'.",
+          "points_earned": 3.0,
+          "max_points": 3.0,
+          "viewport": "mobile"
+        }
+      ]
+    }
+  }
+}
