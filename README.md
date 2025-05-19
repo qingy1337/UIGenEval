@@ -97,7 +97,7 @@ npm install -g lighthouse
 Run your script to generate model outputs:
 
 ```bash
-python data_collection/data_collection.py prompts.json
+python data_collection/data_collection.py all_code_outputs/fullpage_challenge/master_prompts_benchmark_config.json
 
 ```
 
