@@ -116,8 +116,7 @@ generated_html_benchmarks/
 ### 3. 📂 Prepare Benchmark Input Directory
 
 ```bash
-mv generated_html_benchmarks/FullPageChallenge_v1/ ./all_code_outputs/
-mv ./all_code_outputs/FullPageChallenge_v1 ./all_code_outputs/fullpage_challenge
+mv generated_html_benchmarks/FullPageChallenge_v1/* all_code_outputs/fullpage_challenge/
 
 ```
 
