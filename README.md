@@ -80,7 +80,7 @@ Mobile, desktop, and custom viewport integrity checks
 uv venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
 uv pip install selenium webdriver-manager axe-selenium-python wcag-contrast-ratio jinja2 matplotlib pandas
-
+uv pip install openai tiktoken
 ```
 
 #### Chrome & Lighthouse (optional but recommended)
