@@ -117,6 +117,7 @@ generated_html_benchmarks/
 
 ```bash
 mv generated_html_benchmarks/FullPageChallenge_v1/ ./all_code_outputs/
+mv ./all_code_outputs/FullPageChallenge_v1 ./all_code_outputs/fullpage_challenge
 
 ```
 
