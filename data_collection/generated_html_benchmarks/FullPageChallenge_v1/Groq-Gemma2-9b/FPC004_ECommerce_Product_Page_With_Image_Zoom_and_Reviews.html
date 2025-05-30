@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Performance Laptop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header class="bg-gray-800 text-white py-4">
+        <!-- ... Your header content ... -->
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row">
+            <div class="w-full md:w-2/3">
+                <div class="relative">
+                    <img id="main-product-image" data-testid="main-product-image" src="laptop-image.jpg" alt="High-Performance Laptop" class="w-full object-cover h-64 md:h-96">
+                    <div id="image-zoom-view" data-testid="image-zoom-view" class="hidden absolute top-0 left-0 w-full h-full">
+                        <!-- Zoom image content will be loaded here -->
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <img src="thumbnail-1.jpg" alt="Thumbnail 1" class="w-24 h-24 mr-2 cursor-pointer" data-testid="thumbnail-1">
+                    <img src="thumbnail-2.jpg" alt="Thumbnail 2" class="w-24 h-24 mr-2 cursor-pointer">
+                    <img src="thumbnail-3.jpg" alt="Thumbnail 3" class="w-24 h-24 mr-2 cursor-pointer">
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 ml-4 md:ml-0">
+                <h1 class="text-3xl font-bold mb-2">High-Performance Laptop</h1>
+                <p class="text-gray-600 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisi eget ultricies lacinia, lectus justo ultricies lectus, at ultrices justo dolor ac quam.</p>
+                <span data-testid="product-price" class="text-2xl font-bold">$1299</span>
+                <div class="mt-4">
+                    <label for="color" class="block text-gray-700 font-medium mb-2">Color:</label>
+                    <select id="color" class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                        <option value="silver">Silver</option>
+                        <option value="space-gray">Space Gray</option>
+                        <option value="gold">Gold</option>
+                    </select>
+                </div>
+                <div class="mt-4">
+                    <label for="storage" class="block text-gray-700 font-medium mb-2">Storage:</label>
+                    <select id="storage" class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                        <option value="256gb">256GB</option>
+                        <option value="512gb">512GB</option>
+                        <option value="1tb">1TB</option>
+                    </select>
+                </div>
+                <div class="mt-4">
+                    <label for="quantity" class="block text-gray-700 font-medium mb-2">Quantity:</label>
+                    <input type="number" id="quantity" data-testid="quantity-input" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" value="1">
+                </div>
+                <button data-testid="add-to-cart-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <ul role="tablist" data-testid="product-tabs" class="flex mb-4">
+                <li>
+                    <a href="#description" role="tab" aria-controls="description" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-t-lg rounded-l-lg">Full Description</a>
+                </li>
+                <li>
+                    <a href="#specifications" role="tab" aria-controls="specifications" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-t-lg">Specifications</a>
+                </li>
+                <li>
+                    <a href="#reviews" role="tab" aria-controls="reviews" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-t-lg rounded-r-lg">Customer Reviews</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="description" role="tabpanel" aria-labelledby="description-tab" data-testid="tab-panel-description" class="p-4">
+                    <!-- Full product description content -->
+                </div>
+                <div id="specifications" role="tabpanel" aria-labelledby="specifications-tab" class="p-4">
+                    <!-- Product specifications content -->
+                </div>
+                <div id="reviews" role="tabpanel" aria-labelledby="reviews-tab" data-testid="tab-panel-reviews" class="p-4">
+                    <!-- Customer reviews content -->
+                    <form>
+                        <div class="mb-4">
+                            <label for="review-name" class="block text-gray-700 font-medium mb-2">Your Name:</label>
+                            <input type="text" id="review-name" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="review-rating" class="block text-gray-700 font-medium mb-2">Rating:</label>
+                            <select id="review-rating" class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="review-text" class="block text-gray-700 font-medium mb-2">Your Review:</label>
+                            <textarea id="review-text" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <!-- ... Your footer content ... -->
+    </footer>
+</body>
+</html>

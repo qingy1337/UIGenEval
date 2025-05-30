@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Text Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for cursors and selections */
+        .cursor-user {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background-color: #ff4444;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .selection-user {
+            background-color: #ffd700;
+            padding: 1px;
+        }
+
+        /* Custom toolbar styling */
+        .toolbar-button {
+            @apply px-3 py-1 rounded border border-gray-300;
+        }
+        
+        .toolbar-button[aria-pressed="true"] {
+            @apply bg-gray-100 border-gray-500;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto p-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Collaboration Updates Announcer -->
+            <div 
+                class="sr-only"
+                role="log"
+                aria-live="polite"
+                aria-atomic="true"
+                data-testid="collaboration-updates"
+            ></div>
+
+            <!-- Editor Toolbar -->
+            <div 
+                class="bg-white rounded-t-lg shadow-sm p-2 mb-2"
+                data-testid="editor-toolbar"
+            >
+                <button 
+                    class="toolbar-button"
+                    data-testid="toolbar-bold-btn"
+                    aria-label="Bold"
+                    onclick="document.execCommand('bold')"
+                >
+                    Bold
+                </button>
+                <button 
+                    class="toolbar-button ml-2"
+                    aria-label="Italic"
+                    onclick="document.execCommand('italic')"
+                >
+                    Italic
+                </button>
+                <button 
+                    class="toolbar-button ml-2"
+                    aria-label="Underline"
+                    onclick="document.execCommand('underline')"
+                >
+                    Underline
+                </button>
+            </div>
+
+            <!-- Main Editor Content Area -->
+            <div 
+                class="bg-white rounded-b-lg shadow-sm p-4 min-h-[400px]"
+                data-testid="editor-content-area"
+                contenteditable="true"
+                role="textbox"
+                aria-multiline="true"
+                spellcheck="true"
+            >
+                Start typing here... 
+                <!-- Simulated initial content -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate other users' cursors and selections
+        function simulateUserCursors() {
+            const editor = document.querySelector('[data-testid="editor-content-area"]');
+            
+            // Add Alice's cursor
+            const aliceCursor = document.createElement('div');
+            aliceCursor.className = 'cursor-user';
+            aliceCursor.setAttribute('data-testid', 'cursor-user-Alice');
+            aliceCursor.title = 'Alice';
+            aliceCursor.style.left = `${Math.random() * 300}px`;
+            aliceCursor.style.top = `${Math.random() * 200}px`;
+            editor.appendChild(aliceCursor);
+
+            // Add Bob's cursor
+            const bobCursor = document.createElement('div');
+            bobCursor.className = 'cursor-user';
+            bobCursor.title = 'Bob';
+            bobCursor.style.left = `${Math.random() * 300}px`;
+            bobCursor.style.top = `${Math.random() * 200}px`;
+            editor.appendChild(bobCursor);
+        }
+
+        // Simulate live changes
+        function simulateLiveChange() {
+            const editor = document.querySelector('[data-testid="editor-content-area"]');
+            const text = '... added by Bob ...';
+            
+            // Insert text at a random position
+            const position = Math.floor(Math.random() * editor.childNodes.length);
+            editor.insertBefore(document.createTextNode(text), editor.childNodes[position]);
+
+            // Announce the change
+            const announcer = document.querySelector('[data-testid="collaboration-updates"]');
+            announcer.textContent = 'Bob made an edit.';
+        }
+
+        // Initialize the editor
+        document.addEventListener('DOMContentLoaded', () => {
+            simulateUserCursors();
+            
+            // Simulate periodic changes
+            setTimeout(simulateLiveChange, 3000);
+        });
+
+        // Handle toolbar button states
+        document.execCommand = function(command) {
+            const buttons = document.querySelectorAll('.toolbar-button');
+            buttons.forEach(button => {
+                const commandName = button.textContent.toLowerCase();
+                button.setAttribute(
+                    'aria-pressed',
+                    command === commandName ? 'true' : 'false'
+                );
+            });
+        };
+    </script>
+</body>
+</html>

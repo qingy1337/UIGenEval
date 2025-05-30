@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible WYSIWYG Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for toolbar and modals */
+        .toolbar-btn {
+            @apply px-3 py-1 rounded border border-gray-300;
+            transition: all 0.2s ease;
+        }
+        .toolbar-btn:hover {
+            @apply bg-gray-100;
+        }
+        .toolbar-btn[aria-pressed="true"] {
+            @apply bg-gray-200 border-blue-500;
+        }
+        .modal {
+            @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center;
+        }
+        .modal-content {
+            @apply bg-white p-4 rounded-lg max-w-sm w-full;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .modal-header {
+            @apply flex justify-between items-center mb-2;
+        }
+        .modal-close {
+            @apply text-gray-500 hover:text-gray-700 cursor-pointer;
+        }
+        .editor-content {
+            @apply min-h-[300px] p-4 border rounded-lg mt-2;
+        }
+        .table-dimensions-grid {
+            @apply grid grid-cols-5 gap-2;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4">
+        <div data-testid="wysiwyg-toolbar" class="toolbar flex flex-wrap gap-2 mb-2">
+            <!-- Text Formatting -->
+            <button data-testid="toolbar-btn-bold" class="toolbar-btn" aria-label="Bold">
+                <strong>B</strong>
+            </button>
+            <button data-testid="toolbar-btn-italic" class="toolbar-btn" aria-label="Italic">
+                <em>I</em>
+            </button>
+            <button data-testid="toolbar-btn-underline" class="toolbar-btn" aria-label="Underline">
+                <u>U</u>
+            </button>
+
+            <!-- Block Formatting -->
+            <select data-testid="toolbar-select-heading" class="toolbar-btn">
+                <option value="paragraph">Paragraph</option>
+                <option value="heading-1">H1</option>
+                <option value="heading-2">H2</option>
+                <option value="heading-3">H3</option>
+                <option value="heading-4">H4</option>
+                <option value="heading-5">H5</option>
+                <option value="heading-6">H6</option>
+            </select>
+
+            <!-- List Formatting -->
+            <button data-testid="toolbar-btn-unordered-list" class="toolbar-btn" aria-label="Unordered List">
+                <span style="padding-left: 20px; text-indent: -20px;">•</span>
+            </button>
+            <button data-testid="toolbar-btn-ordered-list" class="toolbar-btn" aria-label="Ordered List">
+                1.
+            </button>
+
+            <!-- Alignment -->
+            <button data-testid="toolbar-btn-align-left" class="toolbar-btn" aria-label="Align Left">
+                ←
+            </button>
+            <button data-testid="toolbar-btn-align-center" class="toolbar-btn" aria-label="Align Center">
+                ↔
+            </button>
+            <button data-testid="toolbar-btn-align-right" class="toolbar-btn" aria-label="Align Right">
+                →
+            </button>
+
+            <!-- Link Button -->
+            <button data-testid="toolbar-btn-link" class="toolbar-btn" aria-label="Insert Link">
+                🔗
+            </button>
+
+            <!-- Image Button -->
+            <button data-testid="toolbar-btn-image" class="toolbar-btn" aria-label="Insert Image">
+                📷
+            </button>
+
+            <!-- Table Button -->
+            <button data-testid="toolbar-btn-table" class="toolbar-btn" aria-label="Insert Table">
+                ┌──┐
+                └──┘
+            </button>
+
+            <!-- Undo/Redo -->
+            <button data-testid="toolbar-btn-undo" class="toolbar-btn" aria-label="Undo">
+                ↩
+            </button>
+            <button data-testid="toolbar-btn-redo" class="toolbar-btn" aria-label="Redo">
+                ↪
+            </button>
+        </div>
+
+        <div data-testid="wysiwyg-editor" role="textbox" aria-multiline="true" class="editor-content" contenteditable="true"></div>
+
+        <!-- Modals -->
+        <div id="link-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Insert Link</h3>
+                    <button class="modal-close" onclick="hideModal('link')">✕</button>
+                </div>
+                <input data-testid="link-modal-url-input" type="url" placeholder="Enter URL">
+                <input type="text" placeholder="Enter link text">
+                <button onclick="insertLink()">Insert</button>
+            </div>
+        </div>
+
+        <div id="image-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Insert Image</h3>
+                    <button class="modal-close" onclick="hideModal('image')">✕</button>
+                </div>
+                <input type="url" placeholder="Enter image URL">
+                <button onclick="insertImage()">Insert</button>
+            </div>
+        </div>
+
+        <div id="table-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Insert Table</h3>
+                    <button class="modal-close" onclick="hideModal('table')">✕</button>
+                </div>
+                <div class="table-dimensions-grid">
+                    <button onclick="insertTable(3,2)">3x2</button>
+                    <button onclick="insertTable(4,3)">4x3</button>
+                    <button onclick="insertTable(5,4)">5x4</button>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="viewHTML()">View HTML</button>
+        <pre data-testid="html-output-area" id="html-output"></pre>
+    </div>
+
+    <script>
+        // Core editor functionality
+        const editor = document.querySelector('[data-testid="wysiwyg-editor"]');
+        let currentRange = null;
+
+        // Store the current selection
+        function storeSelection() {
+            currentRange = window.getSelection().getRangeAt(0);
+        }
+
+        // Apply formatting command
+        function applyCommand(command, value = null) {
+            storeSelection();
+            document.execCommand(command, false, value);
+            editor.focus();
+        }
+
+        // Toggle formatting command
+        function toggleCommand(command) {
+            storeSelection();
+            document.execCommand(command, false, !document.queryCommandState(command));
+            editor.focus();
+        }
+
+        // Insert link
+        function insertLink() {
+            const url = document.querySelector('[data-testid="link-modal-url-input"]').value;
+            const text = document.querySelector('[data-testid="link-modal-url-input"] + input').value;
+            applyCommand('insertHTML', `<a href="${url}">${text}</a>`);
+            hideModal('link');
+        }
+
+        // Insert image
+        function insertImage() {
+            const url = document.querySelector('#image-modal input').value;
+            applyCommand('insertHTML', `<img src="${url}" alt="Inserted image">`);
+            hideModal('image');
+        }
+
+        // Insert table
+        function insertTable(rows, cols) {
+            let html = '<table border="1">';
+            for (let i = 0; i < rows; i++) {
+                html += '<tr>';
+                for (let j = 0; j < cols; j++) {
+                    html += '<td contenteditable="true"></td>';
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            applyCommand('insertHTML', html);
+            hideModal('table');
+        }
+
+        // Show/hide modals
+        function showModal(type) {
+            document.getElementById(type + '-modal').classList.remove('hidden');
+            // Focus trap implementation needed
+        }
+
+        function hideModal(type) {
+            document.getElementById(type + '-modal').classList.add('hidden');
+        }
+
+        // View HTML output
+        function viewHTML() {
+            const html = editor.innerHTML;
+            document.getElementById('html-output').textContent = html;
+        }
+
+        // Event listeners for toolbar buttons
+        document.querySelectorAll('[data-testid^="toolbar-btn"]').forEach(button => {
+            const command = button.getAttribute('aria-label').toLowerCase().replace(' ', '');
+            button.addEventListener('click', () => {
+                if (button.getAttribute('aria-pressed') === 'true') {
+                    button.removeAttribute('aria-pressed');
+                } else {
+                    button.setAttribute('aria-pressed', 'true');
+                }
+                toggleCommand(command);
+            });
+        });
+
+        // Event listeners for select elements
+        document.querySelector('[data-testid="toolbar-select-heading"]').addEventListener('change', (e) => {
+            const value = e.target.value;
+            if (value === 'paragraph') {
+                applyCommand('formatBlock', 'P');
+            } else {
+                applyCommand('formatBlock', value);
+            }
+        });
+
+        // Event listeners for modals
+        document.querySelector('[data-testid="toolbar-btn-link"]').addEventListener('click', () => showModal('link'));
+        document.querySelector('[data-testid="toolbar-btn-image"]').addEventListener('click', () => showModal('image'));
+        document.querySelector('[data-testid="toolbar-btn-table"]').addEventListener('click', () => showModal('table'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Performance Laptop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for image zoom */
+        .image-zoom-view {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            z-index: 1;
+            display: none;
+        }
+        .image-zoom-view img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+        }
+        .image-zoom-view.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12 xl:p-24">
+        <div class="flex flex-col lg:flex-row">
+            <div class="lg:w-1/2 xl:w-1/3 p-4">
+                <img 
+                    data-testid='main-product-image' 
+                    src="https://example.com/laptop-main.jpg" 
+                    alt="High-Performance Laptop" 
+                    class="w-full h-auto"
+                >
+                <div class="image-zoom-view" data-testid='image-zoom-view'>
+                    <img src="" alt="" class="w-full h-full object-contain">
+                </div>
+                <div class="flex flex-wrap justify-center mt-4">
+                    <img 
+                        data-testid='thumbnail-1' 
+                        src="https://example.com/laptop-thumb-1.jpg" 
+                        alt="Laptop Thumbnail 1" 
+                        class="w-24 h-24 object-cover mx-2 cursor-pointer"
+                    >
+                    <img 
+                        data-testid='thumbnail-2' 
+                        src="https://example.com/laptop-thumb-2.jpg" 
+                        alt="Laptop Thumbnail 2" 
+                        class="w-24 h-24 object-cover mx-2 cursor-pointer"
+                    >
+                </div>
+            </div>
+            <div class="lg:w-1/2 xl:w-2/3 p-4">
+                <h1 class="text-3xl font-bold mb-4">High-Performance Laptop</h1>
+                <p class="text-lg mb-6">This laptop is designed for high performance with the latest processor and ample storage.</p>
+                <p 
+                    data-testid='product-price' 
+                    class="text-2xl font-bold mb-6"
+                >
+                    $1,299.99
+                </p>
+                <form>
+                    <div class="mb-4">
+                        <label for="color" class="block mb-2">Color:</label>
+                        <select id="color" class="block w-full p-2 border border-gray-400">
+                            <option value="silver">Silver</option>
+                            <option value="black">Black</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="storage" class="block mb-2">Storage:</label>
+                        <select id="storage" class="block w-full p-2 border border-gray-400">
+                            <option value="512gb">512GB</option>
+                            <option value="1tb">1TB</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="quantity" class="block mb-2">Quantity:</label>
+                        <input 
+                            data-testid='quantity-input' 
+                            type="number" 
+                            id="quantity" 
+                            min="1" 
+                            value="1" 
+                            class="block w-full p-2 border border-gray-400"
+                        >
+                    </div>
+                    <button 
+                        data-testid='add-to-cart-button' 
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Add to Cart
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="mt-12">
+            <div 
+                data-testid='product-tabs' 
+                role="tablist" 
+                class="flex flex-wrap mb-4 border-b border-gray-300"
+            >
+                <button 
+                    role="tab" 
+                    aria-selected="true" 
+                    aria-controls="tab-panel-description" 
+                    id="tab-description" 
+                    class="text-lg font-bold mb-2 mr-4 pb-2 border-b-2 border-transparent hover:border-blue-500 focus:outline-none focus:border-blue-500"
+                >
+                    Full Description
+                </button>
+                <button 
+                    role="tab" 
+                    aria-selected="false" 
+                    aria-controls="tab-panel-specifications" 
+                    id="tab-specifications" 
+                    class="text-lg font-bold mb-2 mr-4 pb-2 border-b-2 border-transparent hover:border-blue-500 focus:outline-none focus:border-blue-500"
+                >
+                    Specifications
+                </button>
+                <button 
+                    role="tab" 
+                    aria-selected="false" 
+                    aria-controls="tab-panel-reviews" 
+                    id="tab-reviews" 
+                    class="text-lg font-bold mb-2 mr-4 pb-2 border-b-2 border-transparent hover:border-blue-500 focus:outline-none focus:border-blue-500"
+                >
+                    Customer Reviews
+                </button>
+            </div>
+            <div 
+                id="tab-panel-description" 
+                data-testid='tab-panel-description' 
+                role="tabpanel" 
+                aria-labelledby="tab-description" 
+                class="tab-panel"
+            >
+                <p class="text-lg mb-6">This laptop features a powerful processor, ample storage, and a high-resolution display, making it perfect for demanding tasks.</p>
+            </div>
+            <div 
+                id="tab-panel-specifications" 
+                data-testid='tab-panel-specifications' 
+                role="tabpanel" 
+                aria-labelledby="tab-specifications" 
+                class="tab-panel hidden"
+            >
+                <ul>
+                    <li>Processor: Intel Core i9</li>
+                    <li>Storage: 512GB SSD</li>
+                    <li>Display: 15.6" 4K UHD</li>
+                </ul>
+            </div>
+            <div 
+                id="tab-panel-reviews" 
+                data-testid='tab-panel-reviews' 
+                role="tabpanel" 
+                aria-labelledby="tab-reviews" 
+                class="tab-panel hidden"
+            >
+                <h2 class="text-xl font-bold mb-4">Customer Reviews</h2>
+                <div class="mb-6">
+                    <p>5/5 stars - Great laptop!</p>
+                    <p>Reviewer: John Doe</p>
+                </div>
+                <div class="mb-6">
+                    <p>4/5 stars - Good performance.</p>
+                    <p>Reviewer: Jane Smith</p>
+                </div>
+                <form>
+                    <label for="review-rating" class="block mb-2">Rating:</label>
+                    <select id="review-rating" class="block w-full p-2 border border-gray-400">
+                        <option value="1">1 star</option>
+                        <option value="2">2 stars</option>
+                        <option value="3">3 stars</option>
+                        <option value="4">4 stars</option>
+                        <option value="5">5 stars</option>
+                    </select>
+                    <label for="review-text" class="block mb-2">Review:</label>
+                    <textarea 
+                        id="review-text" 
+                        class="block w-full p-2 border border-gray-400"
+                    ></textarea>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image zoom functionality
+        const mainProductImage = document.querySelector('[data-testid="main-product-image"]');
+        const imageZoomView = document.querySelector('[data-testid="image-zoom-view"]');
+        mainProductImage.addEventListener('mouseover', (e) => {
+            const rect = mainProductImage.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const img = mainProductImage.src;
+            imageZoomView.style.top = `${e.clientY}px`;
+            imageZoomView.style.left = `${e.clientX}px`;
+            imageZoomView.querySelector('img').src = img;
+            imageZoomView.classList.add('show');
+        });
+        mainProductImage.addEventListener('mouseout', () => {
+            imageZoomView.classList.remove('show');
+        });
+
+        // Thumbnail click handler
+        const thumbnails = document.querySelectorAll('[data-testid^="thumbnail-"]');
+        thumbnails.forEach((thumbnail) => {
+            thumbnail.addEventListener('click', () => {
+                mainProductImage.src = thumbnail.src;
+            });
+        });
+
+        // Tab interface functionality
+        const tabs = document.querySelectorAll('[role="tab"]');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                tabs.forEach((t) => t.setAttribute('aria-selected', 'false'));
+                tab.setAttribute('aria-selected', 'true');
+                tabPanels.forEach((panel) => panel.classList.add('hidden'));
+                tabPanels[index].classList.remove('hidden');
+            });
+        });
+
+        // Keyboard navigation for tabs
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                let currentTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true');
+                let currentIndex = tabs.indexOf(currentTab);
+                if (currentIndex < tabs.length - 1) {
+                    tabs[currentIndex].setAttribute('aria-selected', 'false');
+                    tabs[currentIndex + 1].setAttribute('aria-selected', 'true');
+                    tabPanels[currentIndex].classList.add('hidden');
+                    tabPanels[currentIndex + 1].classList.remove('hidden');
+                }
+            } else if (e.key === 'ArrowLeft') {
+                let currentTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true');
+                let currentIndex = tabs.indexOf(currentTab);
+                if (currentIndex > 0) {
+                    tabs[currentIndex].setAttribute('aria-selected', 'false');
+                    tabs[currentIndex - 1].setAttribute('aria-selected', 'true');
+                    tabPanels[currentIndex].classList.add('hidden');
+                    tabPanels[currentIndex - 1].classList.remove('hidden');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

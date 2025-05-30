@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Wizard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for progress bar and step transitions */
+        .progress-bar {
+            background-color: #ccc;
+            height: 10px;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .progress-bar-fill {
+            background-color: #4CAF50;
+            height: 10px;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .step-transition {
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4" data-testid="event-wizard-form">
+        <div class="progress-bar" data-testid="wizard-progress-indicator">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+        <div class="wizard-steps">
+            <div class="step step-1" data-testid="wizard-step-1">
+                <h2 class="text-lg font-bold mb-4">Step 1: Personal Information</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="fullName" data-testid="input-fullName" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        <div class="text-red-500" data-testid="error-fullName"></div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" data-testid="input-email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        <div class="text-red-500" data-testid="error-email"></div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" id="phoneNumber" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="nextStep(1)">Next</button>
+                </form>
+            </div>
+            <div class="step step-2 hidden" data-testid="wizard-step-2">
+                <h2 class="text-lg font-bold mb-4">Step 2: Event Preferences</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="ticketType" class="block text-sm font-medium text-gray-700">Ticket Type</label>
+                        <select id="ticketType" class="mt-1 block w-full py-2 pl-3 pr-10 text-base text-gray-700 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            <option value="standard">Standard</option>
+                            <option value="vip">VIP</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="numberOfTickets" class="block text-sm font-medium text-gray-700">Number of Tickets</label>
+                        <input type="number" id="numberOfTickets" min="1" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div class="mb-4">
+                        <label for="dietaryRestrictions" class="block text-sm font-medium text-gray-700">Dietary Restrictions</label>
+                        <textarea id="dietaryRestrictions" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                    </div>
+                    <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="previousStep(2)">Previous</button>
+                    <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="nextStep(2)">Next</button>
+                </form>
+            </div>
+            <div class="step step-3 hidden" data-testid="wizard-step-3">
+                <h2 class="text-lg font-bold mb-4">Step 3: Payment Details</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="cardNumber" class="block text-sm font-medium text-gray-700">Card Number</label>
+                        <input type="text" id="cardNumber" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div class="mb-4">
+                        <label for="expiryDate" class="block text-sm font-medium text-gray-700">Expiry Date</label>
+                        <input type="text" id="expiryDate" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <div class="mb-4">
+                        <label for="cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                        <input type="text" id="cvv" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="previousStep(3)">Previous</button>
+                    <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="nextStep(3)">Next</button>
+                </form>
+            </div>
+            <div class="step step-4 hidden" data-testid="wizard-step-4">
+                <h2 class="text-lg font-bold mb-4">Step 4: Review & Confirm</h2>
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold mb-2">Personal Information</h3>
+                    <p id="summary-fullName"></p>
+                    <p id="summary-email"></p>
+                    <p id="summary-phoneNumber"></p>
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold mb-2">Event Preferences</h3>
+                    <p id="summary-ticketType"></p>
+                    <p id="summary-numberOfTickets"></p>
+                    <p id="summary-dietaryRestrictions"></p>
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold mb-2">Payment Details</h3>
+                    <p id="summary-cardNumber"></p>
+                    <p id="summary-expiryDate"></p>
+                    <p id="summary-cvv"></p>
+                </div>
+                <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="previousStep(4)">Previous</button>
+                <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" data-testid="confirm-registration-btn" onclick="confirmRegistration()">Confirm Registration</button>
+            </div>
+        </div>
+        <div class="success-message hidden" data-testid="registration-success-msg">
+            <h2 class="text-lg font-bold mb-4">Registration Successful!</h2>
+            <p>Thank you for registering for the event.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let formData = {};
+
+        function nextStep(step) {
+            let valid = true;
+            if (step === 1) {
+                let fullName = document.getElementById('fullName').value;
+                let email = document.getElementById('email').value;
+                if (fullName === '') {
+                    document.querySelector('[data-testid="error-fullName"]').innerText = 'Full name is required';
+                    valid = false;
+                } else {
+                    document.querySelector('[data-testid="error-fullName"]').innerText = '';
+                }
+                if (email === '') {
+                    document.querySelector('[data-testid="error-email"]').innerText = 'Email is required';
+                    valid = false;
+                } else if (!validateEmail(email)) {
+                    document.querySelector('[data-testid="error-email"]').innerText = 'Invalid email';
+                    valid = false;
+                } else {
+                    document.querySelector('[data-testid="error-email"]').innerText = '';
+                }
+                if (valid) {
+                    formData.fullName = fullName;
+                    formData.email = email;
+                    formData.phoneNumber = document.getElementById('phoneNumber').value;
+                    showStep(2);
+                }
+            } else if (step === 2) {
+                let ticketType = document.getElementById('ticketType').value;
+                let numberOfTickets = document.getElementById('numberOfTickets').value;
+                let dietaryRestrictions = document.getElementById('dietaryRestrictions').value;
+                formData.ticketType = ticketType;
+                formData.numberOfTickets = numberOfTickets;
+                formData.dietaryRestrictions = dietaryRestrictions;
+                showStep(3);
+            } else if (step === 3) {
+                let cardNumber = document.getElementById('cardNumber').value;
+                let expiryDate = document.getElementById('expiryDate').value;
+                let cvv = document.getElementById('cvv').value;
+                formData.cardNumber = cardNumber;
+                formData.expiryDate = expiryDate;
+                formData.cvv = cvv;
+                showStep(4);
+            }
+        }
+
+        function previousStep(step) {
+            if (step === 2) {
+                showStep(1);
+            } else if (step === 3) {
+                showStep(2);
+            } else if (step === 4) {
+                showStep(3);
+            }
+        }
+
+        function showStep(step) {
+            let steps = document.querySelectorAll('.step');
+            steps.forEach((s) => {
+                s.classList.add('hidden');
+            });
+            document.querySelector(`.step-${step}`).classList.remove('hidden');
+            currentStep = step;
+            updateProgressIndicator();
+            updateSummary();
+        }
+
+        function updateProgressIndicator() {
+            let progressIndicator = document.querySelector('[data-testid="wizard-progress-indicator"]');
+            let progressBarFill = progressIndicator.querySelector('.progress-bar-fill');
+            let width = (currentStep / 4) * 100;
+            progressBarFill.style.width = `${width}%`;
+            progressIndicator.querySelector('span').innerText = `Step ${currentStep} of 4`;
+        }
+
+        function updateSummary() {
+            if (currentStep === 4) {
+                document.getElementById('summary-fullName').innerText = `Full Name: ${formData.fullName}`;
+                document.getElementById('summary-email').innerText = `Email: ${formData.email}`;
+                document.getElementById('summary-phoneNumber').innerText = `Phone Number: ${formData.phoneNumber}`;
+                document.getElementById('summary-ticketType').innerText = `Ticket Type: ${formData.ticketType}`;
+                document.getElementById('summary-numberOfTickets').innerText = `Number of Tickets: ${formData.numberOfTickets}`;
+                document.getElementById('summary-dietaryRestrictions').innerText = `Dietary Restrictions: ${formData.dietaryRestrictions}`;
+                document.getElementById('summary-cardNumber').innerText = `Card Number: ${formData.cardNumber}`;
+                document.getElementById('summary-expiryDate').innerText = `Expiry Date: ${formData.expiryDate}`;
+                document.getElementById('summary-cvv').innerText = `CVV: ${formData.cvv}`;
+            }
+        }
+
+        function confirmRegistration() {
+            document.querySelector('[data-testid="event-wizard-form"]').classList.add('hidden');
+            document.querySelector('[data-testid="registration-success-msg"]').classList.remove('hidden');
+        }
+
+        function validateEmail(email) {
+            let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</body>
+</html>

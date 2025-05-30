@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header class="bg-gray-100 py-4">
+        <h1 class="text-3xl text-center">Social Media Feed</h1>
+    </header>
+    <main class="max-w-5xl mx-auto p-4">
+        <div id="social-feed-container" data-testid="social-feed-container" class="flex flex-col gap-4">
+            <!-- Posts will be generated and appended here -->
+        </div>
+        <div id="feed-loading-indicator" data-testid="feed-loading-indicator" class="text-center hidden">Loading...</div>
+        <div id="feed-update-announcer" data-testid="feed-update-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    </main>
+    <script>
+        // Function to generate a post
+        function generatePost(id) {
+            const post = document.createElement('article');
+            post.classList.add('bg-white', 'p-4', 'shadow-md', 'rounded');
+            post.dataset.testid = `feed-post-${id}`;
+
+            const avatar = document.createElement('img');
+            avatar.src = 'https://via.placeholder.com/50';
+            avatar.alt = 'User Avatar';
+            avatar.classList.add('w-12', 'h-12', 'rounded-full');
+
+            const userName = document.createElement('span');
+            userName.textContent = `User ${id}`;
+            userName.classList.add('text-lg', 'font-bold', 'ml-2');
+
+            const timestamp = document.createElement('time');
+            timestamp.textContent = new Date().toLocaleTimeString();
+            timestamp.classList.add('text-gray-500', 'text-sm');
+
+            const content = document.createElement('p');
+            content.textContent = `This is a sample post content for post ${id}.`;
+            content.classList.add('mt-2');
+
+            const likeButton = document.createElement('button');
+            likeButton.textContent = 'Like';
+            likeButton.dataset.testid = `like-btn-post${id}`;
+            likeButton.classList.add('bg-blue-500', 'text-white', 'px-4', 'py-2', 'rounded');
+            likeButton.addEventListener('click', () => {
+                likeButton.ariaPressed = likeButton.ariaPressed === 'true' ? 'false' : 'true';
+                likeButton.textContent = likeButton.ariaPressed === 'true' ? 'Unlike' : 'Like';
+            });
+
+            const commentButton = document.createElement('button');
+            commentButton.textContent = 'Comment';
+            commentButton.classList.add('bg-gray-200', 'text-gray-500', 'px-4', 'py-2', 'rounded', 'ml-2');
+
+            const shareButton = document.createElement('button');
+            shareButton.textContent = 'Share';
+            shareButton.classList.add('bg-gray-200', 'text-gray-500', 'px-4', 'py-2', 'rounded', 'ml-2');
+
+            const actionButtons = document.createElement('div');
+            actionButtons.classList.add('flex', 'gap-2', 'mt-2');
+            actionButtons.appendChild(likeButton);
+            actionButtons.appendChild(commentButton);
+            actionButtons.appendChild(shareButton);
+
+            post.appendChild(avatar);
+            post.appendChild(userName);
+            post.appendChild(timestamp);
+            post.appendChild(content);
+            post.appendChild(actionButtons);
+
+            return post;
+        }
+
+        // Function to load more posts
+        function loadMorePosts() {
+            const feedContainer = document.getElementById('social-feed-container');
+            const loadingIndicator = document.getElementById('feed-loading-indicator');
+            const announcer = document.getElementById('feed-update-announcer');
+
+            loadingIndicator.classList.remove('hidden');
+
+            // Simulate API call
+            setTimeout(() => {
+                for (let i = feedContainer.children.length + 1; i <= feedContainer.children.length + 5; i++) {
+                    const post = generatePost(i);
+                    feedContainer.appendChild(post);
+                }
+
+                loadingIndicator.classList.add('hidden');
+                announcer.textContent = 'More posts loaded';
+                setTimeout(() => {
+                    announcer.textContent = '';
+                }, 2000);
+            }, 1000);
+        }
+
+        // Initial posts
+        for (let i = 1; i <= 10; i++) {
+            const post = generatePost(i);
+            document.getElementById('social-feed-container').appendChild(post);
+        }
+
+        // Infinite scroll
+        const feedContainer = document.getElementById('social-feed-container');
+        feedContainer.addEventListener('scroll', () => {
+            if (feedContainer.scrollTop + feedContainer.offsetHeight >= feedContainer.scrollHeight) {
+                loadMorePosts();
+            }
+        });
+    </script>
+</body>
+</html>
