@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col items-center">
+  <h1 class="text-3xl font-bold mb-4">Kanban Board</h1>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div data-testid="kanban-column-todo" class="bg-gray-100 p-4 rounded-lg">
+      <h2>To Do</h2>
+      <ul id="todo-list" class="list-none">
+        <li data-testid="kanban-card-1" class="bg-white p-3 rounded-lg mb-2 draggable">
+          <h3 class="text-lg font-medium">Task 1</h3>
+          <p>Description for Task 1</p>
+        </li>
+        <li data-testid="kanban-card-2" class="bg-white p-3 rounded-lg mb-2 draggable">
+          <h3 class="text-lg font-medium">Task 2</h3>
+          <p>Description for Task 2</p>
+        </li>
+      </ul>
+      <button data-testid="add-card-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Task</button>
+    </div>
+    <div data-testid="kanban-column-inprogress" class="bg-gray-100 p-4 rounded-lg">
+      <h2>In Progress</h2>
+      <ul id="inprogress-list" class="list-none">
+        <li data-testid="kanban-card-3" class="bg-white p-3 rounded-lg mb-2 draggable">
+          <h3 class="text-lg font-medium">Task 3</h3>
+          <p>Description for Task 3</p>
+        </li>
+      </ul>
+    </div>
+    <div data-testid="kanban-column-done" class="bg-gray-100 p-4 rounded-lg">
+      <h2>Done</h2>
+      <ul id="done-list" class="list-none">
+        <li data-testid="kanban-card-4" class="bg-white p-3 rounded-lg mb-2 draggable">
+          <h3 class="text-lg font-medium">Task 4</h3>
+          <p>Description for Task 4</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const todoList = document.getElementById('todo-list');
+    const inprogressList = document.getElementById('inprogress-list');
+    const doneList = document.getElementById('done-list');
+
+    const draggableCards = document.querySelectorAll('.draggable');
+
+    draggableCards.forEach(card => {
+      card.addEventListener('dragstart', (event) => {
+        event.dataTransfer.setData('text/plain', event.target.id);
+      });
+    });
+
+    const dropZones = [todoList, inprogressList, doneList];
+
+    dropZones.forEach(dropZone => {
+      dropZone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+      });
+
+      dropZone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const cardId = event.dataTransfer.getData('text/plain');
+        const card = document.getElementById(cardId);
+        dropZone.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for date picker and autocomplete */
+        .autocomplete-suggestions {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .autocomplete-suggestions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .autocomplete-suggestions li {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .autocomplete-suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+        .date-picker {
+            position: relative;
+        }
+        .date-picker-calendar {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-blue-500 text-white p-4 text-center">
+        <h1 class="text-3xl">Flight Booking System</h1>
+    </header>
+    <main class="container mx-auto p-4 mt-4">
+        <form data-testid="flight-search-form" class="flex flex-col md:flex-row gap-4">
+            <div class="flex flex-col">
+                <label for="origin" class="mb-2">From:</label>
+                <input data-testid="input-origin" type="text" id="origin" class="w-full p-2 border border-gray-400 rounded" autocomplete="off">
+                <div data-testid="autocomplete-suggestions" class="autocomplete-suggestions">
+                    <ul id="origin-suggestions"></ul>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <label for="destination" class="mb-2">To:</label>
+                <input data-testid="input-destination" type="text" id="destination" class="w-full p-2 border border-gray-400 rounded" autocomplete="off">
+                <div data-testid="autocomplete-suggestions" class="autocomplete-suggestions">
+                    <ul id="destination-suggestions"></ul>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <label for="departure-date" class="mb-2">Departure Date:</label>
+                <input data-testid="input-departure-date" type="text" id="departure-date" class="w-full p-2 border border-gray-400 rounded date-picker" readonly>
+                <div class="date-picker-calendar">
+                    <!-- Date picker calendar will be rendered here -->
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <label for="return-date" class="mb-2">Return Date:</label>
+                <input data-testid="input-return-date" type="text" id="return-date" class="w-full p-2 border border-gray-400 rounded date-picker" readonly>
+                <div class="date-picker-calendar">
+                    <!-- Date picker calendar will be rendered here -->
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <label for="passengers" class="mb-2">Passengers:</label>
+                <input data-testid="input-passengers" type="number" id="passengers" class="w-full p-2 border border-gray-400 rounded">
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2">Trip Type:</label>
+                <div class="flex gap-2">
+                    <input type="radio" id="one-way" name="trip-type" value="one-way" class="mr-2">
+                    <label for="one-way">One-way</label>
+                    <input type="radio" id="round-trip" name="trip-type" value="round-trip" class="mr-2" checked>
+                    <label for="round-trip">Round-trip</label>
+                </div>
+            </div>
+            <button data-testid="search-flights-btn" class="bg-blue-500 text-white p-2 rounded">Search Flights</button>
+        </form>
+        <div data-testid="flight-results-area" class="mt-4">
+            <!-- Search results will be rendered here -->
+        </div>
+        <div class="flex flex-col md:flex-row gap-4 mt-4">
+            <div data-testid="results-filters" class="w-full md:w-1/3">
+                <!-- Filters will be rendered here -->
+                <h2 class="text-lg">Filters:</h2>
+                <div class="flex flex-col">
+                    <label for="price-min" class="mb-2">Price Range:</label>
+                    <input data-testid="filter-price-min" type="number" id="price-min" class="w-full p-2 border border-gray-400 rounded">
+                    <input data-testid="filter-price-max" type="number" id="price-max" class="w-full p-2 border border-gray-400 rounded mt-2">
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-2">Number of Stops:</label>
+                    <div class="flex gap-2">
+                        <input type="checkbox" id="non-stop" class="mr-2">
+                        <label for="non-stop">Non-stop</label>
+                        <input type="checkbox" id="1-stop" class="mr-2">
+                        <label for="1-stop">1 stop</label>
+                        <input type="checkbox" id="2+-stops" class="mr-2">
+                        <label for="2+-stops">2+ stops</label>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-2">Airlines:</label>
+                    <div class="flex flex-col">
+                        <!-- Airline checkboxes will be rendered here -->
+                    </div>
+                </div>
+            </div>
+            <div data-testid="results-sort-controls" class="w-full md:w-2/3">
+                <!-- Sort controls will be rendered here -->
+                <h2 class="text-lg">Sort by:</h2>
+                <div class="flex gap-2">
+                    <button data-testid="sort-by-price" class="bg-blue-500 text-white p-2 rounded">Price (low-high)</button>
+                    <button class="bg-blue-500 text-white p-2 rounded">Duration (shortest first)</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simulated airport data for autocomplete
+        const airports = [
+            'New York (JFK)',
+            'Los Angeles (LAX)',
+            'Chicago (ORD)',
+            'Houston (IAH)',
+            'Phoenix (PHX)',
+            'Philadelphia (PHL)',
+            'San Antonio (SAT)',
+            'San Diego (SAN)',
+            'Dallas (DFW)',
+            'San Jose (SJC)',
+        ];
+
+        // Simulated flight data for search results
+        const flights = [
+            {
+                id: 1,
+                airline: 'American Airlines',
+                logo: 'https://example.com/aa-logo.png',
+                departureTime: '08:00',
+                arrivalTime: '10:00',
+                duration: '2h',
+                price: 200,
+            },
+            {
+                id: 2,
+                airline: 'Delta Air Lines',
+                logo: 'https://example.com/dl-logo.png',
+                departureTime: '09:00',
+                arrivalTime: '11:00',
+                duration: '2h',
+                price: 250,
+            },
+            // Add more flight data...
+        ];
+
+        // Autocomplete functionality
+        const originInput = document.getElementById('origin');
+        const originSuggestions = document.getElementById('origin-suggestions');
+        const destinationInput = document.getElementById('destination');
+        const destinationSuggestions = document.getElementById('destination-suggestions');
+
+        originInput.addEventListener('input', () => {
+            const suggestions = airports.filter(airport => airport.includes(originInput.value));
+            originSuggestions.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.textContent = suggestion;
+                li.addEventListener('click', () => {
+                    originInput.value = suggestion;
+                    originSuggestions.style.display = 'none';
+                });
+                originSuggestions.appendChild(li);
+            });
+            originSuggestions.style.display = 'block';
+        });
+
+        destinationInput.addEventListener('input', () => {
+            const suggestions = airports.filter(airport => airport.includes(destinationInput.value));
+            destinationSuggestions.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.textContent = suggestion;
+                li.addEventListener('click', () => {
+                    destinationInput.value = suggestion;
+                    destinationSuggestions.style.display = 'none';
+                });
+                destinationSuggestions.appendChild(li);
+            });
+            destinationSuggestions.style.display = 'block';
+        });
+
+        // Date picker functionality
+        const departureDateInput = document.getElementById('departure-date');
+        const returnDateInput = document.getElementById('return-date');
+
+        // Simulated date picker calendar
+        const datePickerCalendar = document.querySelector('.date-picker-calendar');
+        departureDateInput.addEventListener('click', () => {
+            datePickerCalendar.style.display = 'block';
+        });
+
+        // Search flights functionality
+        const searchFlightsButton = document.querySelector('[data-testid="search-flights-btn"]');
+        searchFlightsButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const origin = originInput.value;
+            const destination = destinationInput.value;
+            const departureDate = departureDateInput.value;
+            const returnDate = returnDateInput.value;
+            const passengers = document.getElementById('passengers').value;
+
+            // Render search results
+            const flightResultsArea = document.querySelector('[data-testid="flight-results-area"]');
+            flightResultsArea.innerHTML = '';
+            flights.forEach(flight => {
+                const flightResultItem = document.createElement('div');
+                flightResultItem.dataset.testid = `flight-result-item-${flight.id}`;
+                flightResultItem.innerHTML = `
+                    <img src="${flight.logo}" alt="${flight.airline} logo">
+                    <span>${flight.airline}</span>
+                    <span>Departure: ${flight.departureTime}</span>
+                    <span>Arrival: ${flight.arrivalTime}</span>
+                    <span>Duration: ${flight.duration}</span>
+                    <span>Price: $${flight.price}</span>
+                    <button>Select Flight</button>
+                `;
+                flightResultsArea.appendChild(flightResultItem);
+            });
+        });
+
+        // Filter and sort functionality
+        const priceMinInput = document.querySelector('[data-testid="filter-price-min"]');
+        const priceMaxInput = document.querySelector('[data-testid="filter-price-max"]');
+        const sortByPriceButton = document.querySelector('[data-testid="sort-by-price"]');
+
+        // Apply filters and sort
+        priceMinInput.addEventListener('input', () => {
+            const filteredFlights = flights.filter(flight => flight.price >= priceMinInput.value);
+            // Update search results
+        });
+
+        sortByPriceButton.addEventListener('click', () => {
+            flights.sort((a, b) => a.price - b.price);
+            // Update search results
+        });
+    </script>
+</body>
+</html>

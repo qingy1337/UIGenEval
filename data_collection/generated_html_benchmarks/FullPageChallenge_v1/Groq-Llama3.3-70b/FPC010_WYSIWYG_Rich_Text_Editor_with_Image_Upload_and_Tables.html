@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WYSIWYG Rich Text Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the editor and toolbar */
+        .editor {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 300px;
+        }
+        
+        .toolbar {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .toolbar button {
+            margin-right: 10px;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        
+        .table-insert-modal {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
+        }
+        
+        .table-insert-modal button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        
+        .table-insert-modal button:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar" data-testid="wysiwyg-toolbar">
+        <button data-testid="toolbar-btn-bold" aria-pressed="false">Bold</button>
+        <button data-testid="toolbar-btn-italic" aria-pressed="false">Italic</button>
+        <button data-testid="toolbar-btn-underline" aria-pressed="false">Underline</button>
+        <button data-testid="toolbar-btn-strikethrough" aria-pressed="false">Strikethrough</button>
+        <button data-testid="toolbar-btn-subscript" aria-pressed="false">Subscript</button>
+        <button data-testid="toolbar-btn-superscript" aria-pressed="false">Superscript</button>
+        <select data-testid="toolbar-select-heading">
+            <option value="h1">H1</option>
+            <option value="h2">H2</option>
+            <option value="h3">H3</option>
+            <option value="h4">H4</option>
+            <option value="h5">H5</option>
+            <option value="h6">H6</option>
+        </select>
+        <button data-testid="toolbar-btn-unordered-list">Unordered List</button>
+        <button data-testid="toolbar-btn-ordered-list">Ordered List</button>
+        <button data-testid="toolbar-btn-left-align">Left Align</button>
+        <button data-testid="toolbar-btn-center-align">Center Align</button>
+        <button data-testid="toolbar-btn-right-align">Right Align</button>
+        <button data-testid="toolbar-btn-justify-align">Justify Align</button>
+        <button data-testid="toolbar-btn-link">Link</button>
+        <button data-testid="toolbar-btn-image">Insert Image</button>
+        <button data-testid="toolbar-btn-table">Insert Table</button>
+        <button data-testid="toolbar-btn-undo">Undo</button>
+        <button data-testid="toolbar-btn-redo">Redo</button>
+        <button data-testid="toolbar-btn-view-html">View HTML</button>
+    </div>
+    <div class="editor" contenteditable="true" role="textbox" aria-multiline="true" data-testid="wysiwyg-editor"></div>
+    <div class="modal" id="link-modal" style="display: none;">
+        <input type="text" placeholder="URL" data-testid="link-modal-url-input">
+        <input type="text" placeholder="Text" data-testid="link-modal-text-input">
+        <button data-testid="link-modal-ok-btn">OK</button>
+        <button data-testid="link-modal-cancel-btn">Cancel</button>
+    </div>
+    <div class="modal-overlay" id="link-modal-overlay" style="display: none;"></div>
+    <div class="modal" id="image-modal" style="display: none;">
+        <input type="text" placeholder="Image URL" data-testid="image-modal-url-input">
+        <button data-testid="image-modal-ok-btn">OK</button>
+        <button data-testid="image-modal-cancel-btn">Cancel</button>
+    </div>
+    <div class="modal-overlay" id="image-modal-overlay" style="display: none;"></div>
+    <div class="modal" id="table-modal" style="display: none;">
+        <div class="table-insert-modal">
+            <button data-testid="table-modal-1x1-btn">1x1</button>
+            <button data-testid="table-modal-2x2-btn">2x2</button>
+            <button data-testid="table-modal-3x3-btn">3x3</button>
+            <button data-testid="table-modal-4x4-btn">4x4</button>
+            <button data-testid="table-modal-5x5-btn">5x5</button>
+        </div>
+        <button data-testid="table-modal-ok-btn">OK</button>
+        <button data-testid="table-modal-cancel-btn">Cancel</button>
+    </div>
+    <div class="modal-overlay" id="table-modal-overlay" style="display: none;"></div>
+    <pre id="html-output" data-testid="html-output-area" style="display: none;"></pre>
+    <script>
+        // Get all the toolbar buttons
+        const toolbarButtons = document.querySelectorAll('#wysiwyg-toolbar button');
+        const toolbarSelect = document.querySelector('#toolbar-select-heading');
+        
+        // Get the editor and modals
+        const editor = document.querySelector('#wysiwyg-editor');
+        const linkModal = document.querySelector('#link-modal');
+        const linkModalOverlay = document.querySelector('#link-modal-overlay');
+        const imageModal = document.querySelector('#image-modal');
+        const imageModalOverlay = document.querySelector('#image-modal-overlay');
+        const tableModal = document.querySelector('#table-modal');
+        const tableModalOverlay = document.querySelector('#table-modal-overlay');
+        const htmlOutput = document.querySelector('#html-output');
+        
+        // Add event listeners to the toolbar buttons
+        toolbarButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const command = button.dataset.command;
+                if (command) {
+                    document.execCommand(command, false, null);
+                }
+            });
+        });
+        
+        // Add event listener to the heading select
+        toolbarSelect.addEventListener('change', () => {
+            const headingLevel = toolbarSelect.value;
+            document.execCommand('formatBlock', false, headingLevel);
+        });
+        
+        // Add event listener to the link button
+        const linkButton = document.querySelector('#toolbar-btn-link');
+        linkButton.addEventListener('click', () => {
+            linkModal.style.display = 'block';
+            linkModalOverlay.style.display = 'block';
+            linkModal.focus();
+        });
+        
+        // Add event listener to the link modal OK button
+        const linkModalOkButton = document.querySelector('#link-modal-ok-btn');
+        linkModalOkButton.addEventListener('click', () => {
+            const urlInput = document.querySelector('#link-modal-url-input');
+            const textInput = document.querySelector('#link-modal-text-input');
+            const url = urlInput.value;
+            const text = textInput.value;
+            document.execCommand('createLink', false, url);
+            const link = editor.querySelector('a');
+            link.textContent = text;
+            linkModal.style.display = 'none';
+            linkModalOverlay.style.display = 'none';
+        });
+        
+        // Add event listener to the link modal cancel button
+        const linkModalCancelButton = document.querySelector('#link-modal-cancel-btn');
+        linkModalCancelButton.addEventListener('click', () => {
+            linkModal.style.display = 'none';
+            linkModalOverlay.style.display = 'none';
+        });
+        
+        // Add event listener to the image button
+        const imageButton = document.querySelector('#toolbar-btn-image');
+        imageButton.addEventListener('click', () => {
+            imageModal.style.display = 'block';
+            imageModalOverlay.style.display = 'block';
+            imageModal.focus();
+        });
+        
+        // Add event listener to the image modal OK button
+        const imageModalOkButton = document.querySelector('#image-modal-ok-btn');
+        imageModalOkButton.addEventListener('click', () => {
+            const urlInput = document.querySelector('#image-modal-url-input');
+            const url = urlInput.value;
+            const image = document.createElement('img');
+            image.src = url;
+            editor.appendChild(image);
+            imageModal.style.display = 'none';
+            imageModalOverlay.style.display = 'none';
+        });
+        
+        // Add event listener to the image modal cancel button
+        const imageModalCancelButton = document.querySelector('#image-modal-cancel-btn');
+        imageModalCancelButton.addEventListener('click', () => {
+            imageModal.style.display = 'none';
+            imageModalOverlay.style.display = 'none';
+        });
+        
+        // Add event listener to the table button
+        const tableButton = document.querySelector('#toolbar-btn-table');
+        tableButton.addEventListener('click', () => {
+            tableModal.style.display = 'block';
+            tableModalOverlay.style.display = 'block';
+            tableModal.focus();
+        });
+        
+        // Add event listener to the table modal OK button
+        const tableModalOkButton = document.querySelector('#table-modal-ok-btn');
+        tableModalOkButton.addEventListener('click', () => {
+            const tableSizeButtons = document.querySelectorAll('.table-insert-modal button');
+            let tableSize;
+            tableSizeButtons.forEach(button => {
+                if (button.dataset.selected) {
+                    tableSize = button.dataset.size;
+                }
+            });
+            const table = document.createElement('table');
+            const rows = tableSize.split('x')[0];
+            const cols = tableSize.split('x')[1];
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < cols; j++) {
+                    const cell = document.createElement('td');
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+            editor.appendChild(table);
+            tableModal.style.display = 'none';
+            tableModalOverlay.style.display = 'none';
+        });
+        
+        // Add event listener to the table modal cancel button
+        const tableModalCancelButton = document.querySelector('#table-modal-cancel-btn');
+        tableModalCancelButton.addEventListener('click', () => {
+            tableModal.style.display = 'none';
+            tableModalOverlay.style.display = 'none';
+        });
+        
+        // Add event listener to the view HTML button
+        const viewHtmlButton = document.querySelector('#toolbar-btn-view-html');
+        viewHtmlButton.addEventListener('click', () => {
+            const html = editor.innerHTML;
+            htmlOutput.textContent = html;
+            htmlOutput.style.display = 'block';
+        });
+        
+        // Add event listener to the editor for keyboard navigation
+        editor.addEventListener('keydown', event => {
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                const focusableElements = editor.querySelectorAll('button, a, img, table, tr, td');
+                const currentFocusIndex = Array.prototype.indexOf.call(focusableElements, document.activeElement);
+                const nextFocusIndex = (currentFocusIndex + 1) % focusableElements.length;
+                focusableElements[nextFocusIndex].focus();
+            }
+        });
+    </script>
+</body>
+</html>

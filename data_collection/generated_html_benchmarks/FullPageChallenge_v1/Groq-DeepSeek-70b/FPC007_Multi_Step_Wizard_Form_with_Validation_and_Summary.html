@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Wizard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .wizard-step {
+            display: none;
+        }
+        .wizard-step.active {
+            display: block;
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-2xl mx-auto py-8 px-4">
+        <form id="eventWizard" class="space-y-6" data-testid="event-wizard-form">
+            <!-- Progress Indicator -->
+            <div class="text-sm font-medium" data-testid="wizard-progress-indicator">
+                <span class="sr-only">Step </span>
+                <span id="currentStep" class="sr-only" aria-live="polite"></span>
+            </div>
+
+            <!-- Step 1 -->
+            <fieldset class="wizard-step active" data-testid="wizard-step-1">
+                <h2 class="text-2xl font-bold mb-4">Personal Information</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium mb-1">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               data-testid="input-fullName">
+                        <div class="error-message" data-testid="error-fullName" aria-live="polite"></div>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" id="email" name="email" required
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               data-testid="input-email">
+                        <div class="error-message" data-testid="error-email" aria-live="polite"></div>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium mb-1">Phone Number</label>
+                        <input type="tel" id="phone" name="phone"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               data-testid="input-phone">
+                        <div class="error-message" data-testid="error-phone" aria-live="polite"></div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-8">
+                    <button type="button" class="next-btn" aria-label="Next">Next</button>
+                </div>
+            </fieldset>
+
+            <!-- Step 2 -->
+            <fieldset class="wizard-step" data-testid="wizard-step-2">
+                <h2 class="text-2xl font-bold mb-4">Event Preferences</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="ticketType" class="block text-sm font-medium mb-1">Ticket Type</label>
+                        <select id="ticketType" name="ticketType" required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Select ticket type</option>
+                            <option value="standard">Standard</option>
+                            <option value="vip">VIP</option>
+                        </select>
+                        <div class="error-message" data-testid="error-ticketType" aria-live="polite"></div>
+                    </div>
+                    <div>
+                        <label for="numTickets" class="block text-sm font-medium mb-1">Number of Tickets</label>
+                        <input type="number" id="numTickets" name="numTickets" min="1" required
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <div class="error-message" data-testid="error-numTickets" aria-live="polite"></div>
+                    </div>
+                    <div>
+                        <label for="dietary" class="block text-sm font-medium mb-1">Dietary Restrictions</label>
+                        <textarea id="dietary" name="dietary" rows="3"
+                                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                  data-testid="input-dietary"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" class="prev-btn" aria-label="Previous">Previous</button>
+                    <button type="button" class="next-btn" aria-label="Next">Next</button>
+                </div>
+            </fieldset>
+
+            <!-- Step 3 -->
+            <fieldset class="wizard-step" data-testid="wizard-step-3">
+                <h2 class="text-2xl font-bold mb-4">Payment Details</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="cardNumber" class="block text-sm font-medium mb-1">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="•••• •••• •••• ••••"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               data-testid="input-cardNumber">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="expiry" class="block text-sm font-medium mb-1">Expiry Date</label>
+                            <input type="text" id="expiry" name="expiry" placeholder="MM/YY"
+                                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                   data-testid="input-expiry">
+                        </div>
+                        <div>
+                            <label for="cvv" class="block text-sm font-medium mb-1">CVV</label>
+                            <input type="text" id="cvv" name="cvv" placeholder="•••"
+                                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                   data-testid="input-cvv">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" class="prev-btn" aria-label="Previous">Previous</button>
+                    <button type="button" class="next-btn" aria-label="Next">Next</button>
+                </div>
+            </fieldset>
+
+            <!-- Step 4 -->
+            <fieldset class="wizard-step" data-testid="wizard-step-4">
+                <h2 class="text-2xl font-bold mb-4">Review & Confirm</h2>
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium mb-2">Personal Information</h3>
+                        <p class="text-sm">Name: <span id="summary-name"></span></p>
+                        <p class="text-sm">Email: <span id="summary-email"></span></p>
+                        <p class="text-sm">Phone: <span id="summary-phone"></span></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium mb-2">Event Preferences</h3>
+                        <p class="text-sm">Ticket Type: <span id="summary-ticketType"></span></p>
+                        <p class="text-sm">Number of Tickets: <span id="summary-numTickets"></span></p>
+                        <p class="text-sm">Dietary Restrictions: <span id="summary-dietary"></span></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium mb-2">Payment Details</h3>
+                        <p class="text-sm">Card Number: <span id="summary-cardNumber"></span></p>
+                        <p class="text-sm">Expiry Date: <span id="summary-expiry"></span></p>
+                        <p class="text-sm">CVV: <span id="summary-cvv"></span></p>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" class="prev-btn" aria-label="Previous">Previous</button>
+                    <button type="button" data-testid="confirm-registration-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" aria-label="Confirm Registration">Confirm Registration</button>
+                </div>
+            </fieldset>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="mt-8 text-center" data-testid="registration-success-msg" style="display: none;">
+                <div class="text-2xl font-bold text-green-600">Registration Successful!</div>
+                <p class="text-sm text-gray-600 mt-2">Thank you for registering. You will receive a confirmation email shortly.</p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const formSteps = document.querySelectorAll('.wizard-step');
+        const nextButtons = document.querySelectorAll('.next-btn');
+        const prevButtons = document.querySelectorAll('.prev-btn');
+        const currentStepIndicator = document.getElementById('currentStep');
+        const form = document.getElementById('eventWizard');
+        const successMessage = document.getElementById('successMessage');
+
+        let currentStep = 0;
+        let formData = {};
+
+        function initializeWizard() {
+            formSteps.forEach(step => step.classList.remove('active'));
+            formSteps[0].classList.add('active');
+            currentStepIndicator.textContent = `Step ${currentStep + 1} of ${formSteps.length}`;
+        }
+
+        function validateStep(step) {
+            let isValid = true;
+            const fields = step.querySelectorAll('input, select, textarea');
+            
+            fields.forEach(field => {
+                if (field.required && !field.value.trim()) {
+                    isValid = false;
+                    showError(field);
+                } else {
+                    clearError(field);
+                }
+            });
+
+            if (!isValid) return false;
+
+            // Additional validation for email
+            const emailField = step.querySelector('input[type="email"]');
+            if (emailField && !isValidEmail(emailField.value)) {
+                showError(emailField);
+                return false;
+            }
+
+            return true;
+        }
+
+        function showError(field) {
+            const errorDiv = document.querySelector(`[data-testid="error-${field.id}"]`);
+            if (errorDiv) {
+                errorDiv.textContent = `${field.labels[0].textContent} is required`;
+            }
+        }
+
+        function clearError(field) {
+            const errorDiv = document.querySelector(`[data-testid="error-${field.id}"]`);
+            if (errorDiv) {
+                errorDiv.textContent = '';
+            }
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        nextButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currentStep = document.querySelector('.wizard-step.active');
+                if (validateStep(currentStep)) {
+                    formData = {
+                        ...formData,
+                        ...Object.fromEntries(new FormData(currentStep))
+                    };
+                    currentStep.classList.remove('active');
+                    currentStep.nextElementSibling.classList.add('active');
+                    currentStep = currentStep.nextElementSibling;
+                    currentStep.querySelector('input, select, textarea').focus();
+                    currentStepIndicator.textContent = `Step ${Array.from(formSteps).indexOf(currentStep) + 1} of ${formSteps.length}`;
+                }
+            });
+        });
+
+        prevButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currentStep = document.querySelector('.wizard-step.active');
+                currentStep.classList.remove('active');
+                currentStep.previousElementSibling.classList.add('active');
+                currentStep.previousElementSibling.querySelector('input, select, textarea').focus();
+                currentStepIndicator.textContent = `Step ${Array.from(formSteps).indexOf(currentStep.previousElementSibling) + 1} of ${formSteps.length}`;
+            });
+        });
+
+        document.querySelector('[data-testid="confirm-registration-btn"]').addEventListener('click', () => {
+            const currentStep = document.querySelector('.wizard-step.active');
+            if (validateStep(currentStep)) {
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+            }
+        });
+
+        // Initialize form data storage and event handlers
+        form.addEventListener('change', (e) => {
+            const input = e.target;
+            if (input.name) {
+                formData[input.name] = input.value;
+            }
+        });
+
+        // Initialize the wizard
+        initializeWizard();
+    </script>
+</body>
+</html>

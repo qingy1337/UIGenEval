@@ -80,7 +80,7 @@ Mobile, desktop, and custom viewport integrity checks
 uv venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
 uv pip install selenium webdriver-manager axe-selenium-python wcag-contrast-ratio jinja2 matplotlib pandas
-uv pip install openai tiktoken
+
 ```
 
 #### Chrome & Lighthouse (optional but recommended)
@@ -97,7 +97,7 @@ npm install -g lighthouse
 Run your script to generate model outputs:
 
 ```bash
-python data_collection/data_collection.py all_code_outputs/fullpage_challenge/master_prompts_benchmark_config.json
+python data_collection/data_collection.py prompts.json
 
 ```
 
@@ -116,7 +116,8 @@ generated_html_benchmarks/
 ### 3. 📂 Prepare Benchmark Input Directory
 
 ```bash
-mv generated_html_benchmarks/FullPageChallenge_v1/* all_code_outputs/fullpage_challenge/
+mv generated_html_benchmarks/fullpage_challenge ./all_code_outputs/
+cp prompts.json ./all_code_outputs/fullpage_challenge/master_prompts_benchmark_config.json
 
 ```
 

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Wizard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div data-testid="event-wizard-form" class="max-w-md mx-auto p-4">
+        <form id="event-wizard-form">
+            <div data-testid="wizard-progress-indicator" class="flex justify-between mb-4">
+                <span id="step-1" data-testid="step-1" class="step-indicator">Step 1</span>
+                <span id="step-2" data-testid="step-2" class="step-indicator">Step 2</span>
+                <span id="step-3" data-testid="step-3" class="step-indicator">Step 3</span>
+                <span id="step-4" data-testid="step-4" class="step-indicator">Step 4</span>
+            </div>
+
+            <fieldset data-testid="wizard-step-1" class="step-fieldset">
+                <legend class="sr-only">Step 1: Personal Information</legend>
+                <div class="mb-4">
+                    <label for="fullName" data-testid="label-fullName" class="block text-sm font-medium">Full Name:</label>
+                    <input type="text" id="fullName" data-testid="input-fullName" class="block w-full p-2 border border-gray-400" required>
+                    <div data-testid="error-fullName" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="email" data-testid="label-email" class="block text-sm font-medium">Email:</label>
+                    <input type="email" id="email" data-testid="input-email" class="block w-full p-2 border border-gray-400" required>
+                    <div data-testid="error-email" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="phoneNumber" data-testid="label-phoneNumber" class="block text-sm font-medium">Phone Number:</label>
+                    <input type="tel" id="phoneNumber" data-testid="input-phoneNumber" class="block w-full p-2 border border-gray-400" required>
+                    <div data-testid="error-phoneNumber" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <button type="button" data-testid="next-btn-step-1" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
+            </fieldset>
+
+            <fieldset data-testid="wizard-step-2" class="step-fieldset hidden">
+                <legend class="sr-only">Step 2: Event Preferences</legend>
+                <div class="mb-4">
+                    <label for="ticketType" data-testid="label-ticketType" class="block text-sm font-medium">Ticket Type:</label>
+                    <select id="ticketType" data-testid="select-ticketType" class="block w-full p-2 border border-gray-400">
+                        <option value="">Select Ticket Type</option>
+                        <option value="Standard">Standard</option>
+                        <option value="VIP">VIP</option>
+                    </select>
+                    <div data-testid="error-ticketType" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="numTickets" data-testid="label-numTickets" class="block text-sm font-medium">Number of Tickets:</label>
+                    <input type="number" id="numTickets" data-testid="input-numTickets" class="block w-full p-2 border border-gray-400" min="1" required>
+                    <div data-testid="error-numTickets" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="dietaryRestrictions" data-testid="label-dietaryRestrictions" class="block text-sm font-medium">Dietary Restrictions:</label>
+                    <textarea id="dietaryRestrictions" data-testid="textarea-dietaryRestrictions" class="block w-full p-2 border border-gray-400"></textarea>
+                </div>
+                <button type="button" data-testid="prev-btn-step-2" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Previous</button>
+                <button type="button" data-testid="next-btn-step-2" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
+            </fieldset>
+
+            <fieldset data-testid="wizard-step-3" class="step-fieldset hidden">
+                <legend class="sr-only">Step 3: Payment Details</legend>
+                <div class="mb-4">
+                    <label for="cardNumber" data-testid="label-cardNumber" class="block text-sm font-medium">Card Number:</label>
+                    <input type="text" id="cardNumber" data-testid="input-cardNumber" class="block w-full p-2 border border-gray-400" required>
+                    <div data-testid="error-cardNumber" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="expiryDate" data-testid="label-expiryDate" class="block text-sm font-medium">Expiry Date:</label>
+                    <input type="text" id="expiryDate" data-testid="input-expiryDate" class="block w-full p-2 border border-gray-400" required>
+                    <div data-testid="error-expiryDate" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="cvv" data-testid="label-cvv" class="block text-sm font-medium">CVV:</label>
+                    <input type="text" id="cvv" data-testid="input-cvv" class="block w-full p-2 border border-gray-400" required>
+                    <div data-testid="error-cvv" class="text-red-600 text-xs mt-1"></div>
+                </div>
+                <button type="button" data-testid="prev-btn-step-3" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Previous</button>
+                <button type="button" data-testid="next-btn-step-3" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next</button>
+            </fieldset>
+
+            <fieldset data-testid="wizard-step-4" class="step-fieldset hidden">
+                <legend class="sr-only">Step 4: Review & Confirm</legend>
+                <div class="mb-4">
+                    <h2 class="text-lg font-bold mb-2">Registration Summary:</h2>
+                    <p data-testid="summary-fullName"></p>
+                    <p data-testid="summary-email"></p>
+                    <p data-testid="summary-phoneNumber"></p>
+                    <p data-testid="summary-ticketType"></p>
+                    <p data-testid="summary-numTickets"></p>
+                    <p data-testid="summary-dietaryRestrictions"></p>
+                </div>
+                <button type="button" data-testid="prev-btn-step-4" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Previous</button>
+                <button type="submit" data-testid="confirm-registration-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Confirm Registration</button>
+            </fieldset>
+
+            <div data-testid="registration-success-msg" class="hidden text-lg font-bold text-green-600">Registration successful!</div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('event-wizard-form');
+        const steps = Array.from(document.querySelectorAll('.step-fieldset'));
+        const progressIndicator = document.querySelector('[data-testid="wizard-progress-indicator"]');
+        const stepElements = Array.from(document.querySelectorAll('[data-testid^="step-"]'));
+        let currentStep = 0;
+
+        // Store entered data
+        const enteredData = {};
+
+        // Show current step
+        showStep(currentStep);
+
+        // Event listeners for navigation
+        form.addEventListener('click', (e) => {
+            if (e.target.dataset.testid === 'next-btn-step-1') {
+                if (validateStep1()) {
+                    enteredData.fullName = document.getElementById('fullName').value;
+                    enteredData.email = document.getElementById('email').value;
+                    enteredData.phoneNumber = document.getElementById('phoneNumber').value;
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            } else if (e.target.dataset.testid === 'prev-btn-step-2') {
+                currentStep--;
+                showStep(currentStep);
+            } else if (e.target.dataset.testid === 'next-btn-step-2') {
+                if (validateStep2()) {
+                    enteredData.ticketType = document.getElementById('ticketType').value;
+                    enteredData.numTickets = document.getElementById('numTickets').value;
+                    enteredData.dietaryRestrictions = document.getElementById('dietaryRestrictions').value;
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            } else if (e.target.dataset.testid === 'prev-btn-step-3') {
+                currentStep--;
+                showStep(currentStep);
+            } else if (e.target.dataset.testid === 'next-btn-step-3') {
+                // Add more validation if needed
+                currentStep++;
+                showStep(currentStep);
+                updateSummary();
+            } else if (e.target.dataset.testid === 'prev-btn-step-4') {
+                currentStep--;
+                showStep(currentStep);
+            } else if (e.target.dataset.testid === 'confirm-registration-btn') {
+                // Add registration logic here
+                document.querySelector('[data-testid="event-wizard-form"]').classList.add('hidden');
+                document.querySelector('[data-testid="registration-success-msg"]').classList.remove('hidden');
+            }
+        });
+
+        // Show step and update progress indicator
+        function showStep(index) {
+            steps.forEach((step, i) => {
+                step.classList.toggle('hidden', i !== index);
+            });
+            stepElements.forEach((step, i) => {
+                step.classList.toggle('text-blue-600', i === index);
+                step.setAttribute('aria-current', i === index ? 'step' : null);
+            });
+            progressIndicator.innerHTML = `Step ${index + 1} of ${steps.length}`;
+        }
+
+        // Validate step 1
+        function validateStep1() {
+            const fullNameInput = document.getElementById('fullName');
+            const emailInput = document.getElementById('email');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const errorFullName = document.querySelector('[data-testid="error-fullName"]');
+            const errorEmail = document.querySelector('[data-testid="error-email"]');
+            const errorPhoneNumber = document.querySelector('[data-testid="error-phoneNumber"]');
+
+            if (!fullNameInput.checkValidity()) {
+                errorFullName.textContent = 'Full name is required';
+                fullNameInput.setAttribute('aria-describedby', 'error-fullName');
+                return false;
+            } else {
+                errorFullName.textContent = '';
+                fullNameInput.removeAttribute('aria-describedby');
+            }
+
+            if (!emailInput.checkValidity()) {
+                errorEmail.textContent = 'Valid email is required';
+                emailInput.setAttribute('aria-describedby', 'error-email');
+                return false;
+            } else {
+                errorEmail.textContent = '';
+                emailInput.removeAttribute('aria-describedby');
+            }
+
+            if (!phoneNumberInput.checkValidity()) {
+                errorPhoneNumber.textContent = 'Phone number is required';
+                phoneNumberInput.setAttribute('aria-describedby', 'error-phoneNumber');
+                return false;
+            } else {
+                errorPhoneNumber.textContent = '';
+                phoneNumberInput.removeAttribute('aria-describedby');
+            }
+
+            return true;
+        }
+
+        // Validate step 2
+        function validateStep2() {
+            const ticketTypeSelect = document.getElementById('ticketType');
+            const numTicketsInput = document.getElementById('numTickets');
+            const errorTicketType = document.querySelector('[data-testid="error-ticketType"]');
+            const errorNumTickets = document.querySelector('[data-testid="error-numTickets"]');
+
+            if (!ticketTypeSelect.checkValidity()) {
+                errorTicketType.textContent = 'Ticket type is required';
+                ticketTypeSelect.setAttribute('aria-describedby', 'error-ticketType');
+                return false;
+            } else {
+                errorTicketType.textContent = '';
+                ticketTypeSelect.removeAttribute('aria-describedby');
+            }
+
+            if (!numTicketsInput.checkValidity()) {
+                errorNumTickets.textContent = 'Number of tickets must be at least 1';
+                numTicketsInput.setAttribute('aria-describedby', 'error-numTickets');
+                return false;
+            } else {
+                errorNumTickets.textContent = '';
+                numTicketsInput.removeAttribute('aria-describedby');
+            }
+
+            return true;
+        }
+
+        // Update summary
+        function updateSummary() {
+            document.querySelector('[data-testid="summary-fullName"]').textContent = `Full Name: ${enteredData.fullName}`;
+            document.querySelector('[data-testid="summary-email"]').textContent = `Email: ${enteredData.email}`;
+            document.querySelector('[data-testid="summary-phoneNumber"]').textContent = `Phone Number: ${enteredData.phoneNumber}`;
+            document.querySelector('[data-testid="summary-ticketType"]').textContent = `Ticket Type: ${enteredData.ticketType}`;
+            document.querySelector('[data-testid="summary-numTickets"]').textContent = `Number of Tickets: ${enteredData.numTickets}`;
+            document.querySelector('[data-testid="summary-dietaryRestrictions"]').textContent = `Dietary Restrictions: ${enteredData.dietaryRestrictions}`;
+        }
+    </script>
+</body>
+</html>

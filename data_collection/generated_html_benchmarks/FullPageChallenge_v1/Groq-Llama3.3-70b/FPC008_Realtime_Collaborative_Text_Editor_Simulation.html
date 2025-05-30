@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Text Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for cursor and selection simulation */
+        .cursor {
+            position: absolute;
+            background-color: #007bff;
+            width: 2px;
+            height: 20px;
+            z-index: 1;
+        }
+        .selection {
+            background-color: #cce5ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12 xl:p-24">
+        <div id="editor-toolbar" data-testid="editor-toolbar" class="flex justify-start mb-4">
+            <button id="toolbar-bold-btn" data-testid="toolbar-bold-btn" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded" aria-pressed="false">Bold</button>
+            <button id="toolbar-italic-btn" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded ml-2" aria-pressed="false">Italic</button>
+            <button id="toolbar-underline-btn" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded ml-2" aria-pressed="false">Underline</button>
+        </div>
+        <div id="editor-content-area" data-testid="editor-content-area" role="textbox" aria-multiline="true" contenteditable="true" class="border border-gray-300 p-4 h-96 overflow-y-auto"></div>
+        <div id="collaboration-updates" data-testid="collaboration-updates" aria-live="polite" class="sr-only"></div>
+    </div>
+
+    <script>
+        // Get elements
+        const editorContentArea = document.getElementById('editor-content-area');
+        const toolbarBoldBtn = document.getElementById('toolbar-bold-btn');
+        const collaborationUpdates = document.getElementById('collaboration-updates');
+
+        // Simulate cursors and selections
+        function simulateCursors() {
+            const cursor1 = document.createElement('div');
+            cursor1.className = 'cursor';
+            cursor1.style.top = '50px';
+            cursor1.style.left = '100px';
+            cursor1.setAttribute('data-testid', 'cursor-user-Alice');
+            cursor1.title = 'Alice';
+            editorContentArea.appendChild(cursor1);
+
+            const cursor2 = document.createElement('div');
+            cursor2.className = 'cursor';
+            cursor2.style.top = '100px';
+            cursor2.style.left = '200px';
+            cursor2.setAttribute('data-testid', 'cursor-user-Bob');
+            cursor2.title = 'Bob';
+            editorContentArea.appendChild(cursor2);
+
+            const selection = document.createElement('span');
+            selection.className = 'selection';
+            selection.style.background = '#cce5ff';
+            selection.textContent = 'Selected text';
+            editorContentArea.appendChild(selection);
+        }
+
+        // Simulate live changes
+        function simulateLiveChanges() {
+            const text = '... added by Bob ...';
+            const range = document.createRange();
+            range.selectNodeContents(editorContentArea);
+            range.collapse(false);
+            const textNode = document.createTextNode(text);
+            range.insertNode(textNode);
+            collaborationUpdates.textContent = 'Bob made an edit';
+        }
+
+        // Initialize
+        simulateCursors();
+        setTimeout(simulateLiveChanges, 3000);
+
+        // Toolbar button functionality
+        toolbarBoldBtn.addEventListener('click', () => {
+            document.execCommand('bold');
+            toolbarBoldBtn.setAttribute('aria-pressed', toolbarBoldBtn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        });
+    </script>
+</body>
+</html>

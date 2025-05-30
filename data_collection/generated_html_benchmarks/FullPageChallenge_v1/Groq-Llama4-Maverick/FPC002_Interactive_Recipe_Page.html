@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom CSS for star rating and timer display */
+    .star-rating {
+      display: flex;
+      gap: 0.25rem;
+    }
+    .star-rating input[type="radio"] {
+      display: none;
+    }
+    .star-rating label {
+      cursor: pointer;
+    }
+    .star-rating svg {
+      fill: #ccc;
+      transition: fill 0.2s ease;
+    }
+    .star-rating input[type="radio"]:checked ~ label svg {
+      fill: #ffd700;
+    }
+    .star-rating label:hover svg,
+    .star-rating label:hover ~ label svg {
+      fill: #ffd700;
+    }
+    #recipe-timer-display {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <header class="bg-white shadow-md p-4 mb-4">
+    <h1 data-testid="recipe-title" class="text-3xl font-bold mb-2">Chocolate Lava Cakes</h1>
+    <img src="https://example.com/chocolate-lava-cakes.jpg" alt="Rich, gooey chocolate lava cakes fresh out of the oven" class="w-full h-64 object-cover mb-4">
+    <p class="text-lg mb-2">Indulge in these decadent chocolate lava cakes, perfect for a special treat.</p>
+    <ul class="flex flex-wrap gap-2 text-sm">
+      <li>Prep Time: 15 minutes</li>
+      <li>Cook Time: 12-15 minutes</li>
+      <li>Serves: 4</li>
+    </ul>
+  </header>
+  <main class="container mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <section class="lg:col-span-2">
+      <h2 class="text-2xl font-bold mb-2">Ingredients</h2>
+      <ul data-testid="ingredients-list" class="list-none p-0">
+        <li class="flex items-center mb-2">
+          <input type="checkbox" id="ingredient-1" class="mr-2">
+          <label for="ingredient-1" class="flex-1">2 ounces high-quality dark chocolate</label>
+        </li>
+        <li class="flex items-center mb-2">
+          <input type="checkbox" id="ingredient-2" class="mr-2">
+          <label for="ingredient-2" class="flex-1">1/2 cup (1 stick) unsalted butter, at room temperature</label>
+        </li>
+        <li class="flex items-center mb-2">
+          <input type="checkbox" id="ingredient-3" class="mr-2">
+          <label for="ingredient-3" class="flex-1">1 cup granulated sugar</label>
+        </li>
+        <!-- Add more ingredients here -->
+      </ul>
+      <h2 class="text-2xl font-bold mb-2 mt-4">Instructions</h2>
+      <ol class="list-decimal list-inside">
+        <li class="mb-2">
+          Preheat oven to 425°F (220°C).
+          <button data-testid="timer-btn-step1" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Start Timer</button>
+        </li>
+        <li class="mb-2">
+          Melt chocolate and butter in a double boiler.
+        </li>
+        <li class="mb-2">
+          Whisk together eggs and sugar until pale and thick.
+          <button data-testid="timer-btn-step3" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Start Timer</button>
+        </li>
+        <!-- Add more steps here -->
+      </ol>
+      <div data-testid="recipe-timer-display" class="text-center mt-4"></div>
+    </section>
+    <aside class="lg:col-span-1">
+      <h2 class="text-2xl font-bold mb-2">Nutrition Information</h2>
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 p-2">Nutrient</th>
+            <th class="border border-gray-300 p-2">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 p-2">Calories</td>
+            <td class="border border-gray-300 p-2">320</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 p-2">Protein</td>
+            <td class="border border-gray-300 p-2">4g</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 p-2">Fat</td>
+            <td class="border border-gray-300 p-2">24g</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 p-2">Carbs</td>
+            <td class="border border-gray-300 p-2">20g</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2 class="text-2xl font-bold mb-2 mt-4">User Reviews</h2>
+      <form data-testid="review-form" class="flex flex-col gap-2">
+        <label for="review-name" class="text-sm">Name:</label>
+        <input type="text" id="review-name" class="p-2 border border-gray-300 rounded">
+        <label for="review-rating" class="text-sm">Rating:</label>
+        <div class="star-rating">
+          <input type="radio" id="star-1" name="rating" value="1">
+          <label for="star-1"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></label>
+          <input type="radio" id="star-2" name="rating" value="2">
+          <label for="star-2"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></label>
+          <input type="radio" id="star-3" name="rating" value="3">
+          <label for="star-3"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></label>
+          <input type="radio" id="star-4" name="rating" value="4">
+          <label for="star-4"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></label>
+          <input type="radio" id="star-5" name="rating" value="5">
+          <label for="star-5"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg></label>
+        </div>
+        <label for="review-comment" class="text-sm">Comment:</label>
+        <textarea id="review-comment" class="p-2 border border-gray-300 rounded"></textarea>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+      </form>
+    </aside>
+  </main>
+  <script>
+    // JavaScript for timer functionality and ingredient checkbox interactivity
+    const timerDisplay = document.querySelector('[data-testid="recipe-timer-display"]');
+    const timerButtons = document.querySelectorAll('[data-testid^="timer-btn-step"]');
+    const ingredientCheckboxes = document.querySelectorAll('#ingredients-list input[type="checkbox"]');
+
+    // Timer functionality
+    let currentTimer = null;
+    timerButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const stepText = button.parentNode.textContent;
+        const match = stepText.match(/(\d+)-?(\d+)? minutes/);
+        if (match) {
+          const minutes = parseInt(match[1]);
+          const seconds = (match[2] ? parseInt(match[2]) : minutes) * 60;
+          startTimer(seconds);
+        }
+      });
+    });
+
+    function startTimer(seconds) {
+      if (currentTimer) {
+        clearInterval(currentTimer);
+      }
+      let timeRemaining = seconds;
+      timerDisplay.textContent = formatTime(timeRemaining);
+      currentTimer = setInterval(() => {
+        timeRemaining--;
+        timerDisplay.textContent = formatTime(timeRemaining);
+        if (timeRemaining <= 0) {
+          clearInterval(currentTimer);
+          alert('Timer finished!');
+        }
+      }, 1000);
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secondsRemaining = seconds % 60;
+      return `${minutes.toString().padStart(2, '0')}:${secondsRemaining.toString().padStart(2, '0')}`;
+    }
+
+    // Ingredient checkbox interactivity
+    ingredientCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        const label = checkbox.nextElementSibling;
+        if (checkbox.checked) {
+          label.style.textDecoration = 'line-through';
+          label.setAttribute('aria-checked', 'true');
+        } else {
+          label.style.textDecoration = 'none';
+          label.setAttribute('aria-checked', 'false');
+        }
+      });
+    });
+
+    // Review form submission (basic example, actual implementation may vary)
+    const reviewForm = document.querySelector('[data-testid="review-form"]');
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(reviewForm);
+      // Submit form data to server or handle locally
+      console.log(formData);
+    });
+  </script>
+</body>
+</html>

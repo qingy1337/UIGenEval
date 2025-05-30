@@ -22,18 +22,18 @@ RETRY_BACKOFF_FACTOR = 2
 
 # Define your models here
 MODELS_CONFIG = [
-     {
-         "name": "Qwen-2.5-Coder-7B-Nebius-16k-context",
-         "api_key": os.environ.get("NEBIUS_API_KEY"),
-         "api_base_url": "https://api.studio.nebius.com/v1/",
-         "model_identifier": "Qwen/Qwen2.5-Coder-7B",
-         "parallel_workers": 5,
-         "tpm_limit": 100000000, # Example TPM for GPT-4o
-         "custom_params": {
-             "temperature": 0.7,
-             "max_tokens": 16384,
-         }
-     },
+    # {
+    #     "name": "GPT4_O_OpenAI",
+    #     "api_key": os.environ.get("OPENAI_API_KEY_GPT4O"),
+    #     "api_base_url": "https://api.openai.com/v1",
+    #     "model_identifier": "gpt-4o",
+    #     "parallel_workers": 2,
+    #     "tpm_limit": 100000, # Example TPM for GPT-4o
+    #     "custom_params": {
+    #         "temperature": 0.2,
+    #         "max_tokens": 4090,
+    #     }
+    # },
 ]
 BASE_OUTPUT_DIR = Path("generated_html_benchmarks")
 SYSTEM_PROMPT_BASE = """You are an expert, accessibility-first front-end web developer. Your primary goal is to generate complete, correct, production-quality HTML, CSS (using Tailwind CSS primarily, but open to minimal custom CSS for complex needs), and JavaScript code based on the user's requirements. You will output a single code block.
@@ -131,7 +131,7 @@ def wait_for_tpm_budget(model_config: dict, tokens_needed: int):
                 break # Budget acquired
             else:
                 wait_time = max(0.1, (tpm_info["minute_start_time"] + 60) - current_time)
-
+        
         # print(f"    TPM: Limit for {model_config['name']} ({tpm_info['tokens_used_this_minute']}/{tpm_info['limit']}). Needs {tokens_needed}. Waiting {wait_time:.2f}s...")
         time.sleep(wait_time)
 
@@ -143,11 +143,11 @@ def call_llm_api(client: OpenAI, model_config: dict, system_prompt: str, user_pr
     """
     model_identifier = model_config["model_identifier"]
     custom_params = model_config.get("custom_params", {})
-
+    
     # Calculate input tokens for TPM
     input_text_for_token_count = system_prompt + user_prompt
     tokens_for_this_call = count_tokens(input_text_for_token_count)
-
+    
     # Wait for TPM budget if applicable
     wait_for_tpm_budget(model_config, tokens_for_this_call)
 
@@ -164,7 +164,7 @@ def call_llm_api(client: OpenAI, model_config: dict, system_prompt: str, user_pr
     for attempt in range(MAX_API_RETRIES + 1):
         try:
             # print(f"    Attempt {attempt + 1}/{MAX_API_RETRIES + 1}: Calling {model_identifier} for prompt \"{user_prompt[:50].replace('\n', ' ')}...\" ({tokens_for_this_call} tokens)")
-
+            
             start_api_call_time = time.time()
             response = client.chat.completions.create(**completion_params)
             end_api_call_time = time.time()
@@ -219,7 +219,7 @@ def call_llm_api(client: OpenAI, model_config: dict, system_prompt: str, user_pr
 def process_prompt_for_model(prompt_data: dict, model_config: dict, model_output_dir: Path, system_prompt_base: str, user_prompt_wrapper: str):
     prompt_id = prompt_data["prompt_id"]
     prompt_description = prompt_data["prompt_description"]
-
+    
     effective_system_prompt = system_prompt_base
     effective_user_prompt = user_prompt_wrapper.format(user_prompt_description=prompt_description)
 
@@ -231,7 +231,7 @@ def process_prompt_for_model(prompt_data: dict, model_config: dict, model_output
 
     model_id = model_config["model_identifier"]
     semaphore = MODEL_SEMAPHORES[model_id]
-
+    
     with semaphore: # Limits concurrent calls for THIS model
         start_prompt_time = time.time()
         # print(f"  Worker acquired for {model_config['name']}, prompt {prompt_id}. Active for model: {model_config['parallel_workers'] - semaphore._value}/{model_config['parallel_workers']}")
@@ -286,7 +286,7 @@ def main():
     if not active_models:
         print("FATAL: No API keys found for any configured models. Stopping.")
         sys.exit(1)
-
+    
     initialize_concurrency_controls(active_models)
 
     run_specific_output_dir = BASE_OUTPUT_DIR / benchmark_run_name
@@ -294,7 +294,7 @@ def main():
     print(f"Base output directory for this run: {run_specific_output_dir.resolve()}")
 
     overall_start_time = time.time()
-
+    
     tasks = []
     for model_config in active_models:
         model_name_sanitized = model_config["name"].replace('/', '_')
@@ -307,30 +307,30 @@ def main():
                 "model_config": model_config,
                 "model_output_dir": model_output_dir
             })
-
+    
     total_tasks = len(tasks)
     print(f"Total prompts to process across all models: {total_tasks}")
-
+    
     # Calculate total max workers for the global pool
     # This is the theoretical max if all models run all their workers,
     # actual concurrency limited by semaphores and TPM.
     total_max_workers = sum(mc["parallel_workers"] for mc in active_models)
-
+    
     model_stats = {
         mc["name"]: {"success": 0, "api_error": 0, "other_failure": 0, "skipped": 0, "total_time": 0.0, "processed_count": 0, "num_prompts_for_model": len(prompts_to_process)}
         for mc in active_models
     }
-
+    
     completed_tasks = 0
 
     # Use a single ThreadPoolExecutor for all tasks
     with ThreadPoolExecutor(max_workers=total_max_workers) as executor:
         future_to_task_info = {
-            executor.submit(process_prompt_for_model,
-                            task["prompt_data"],
-                            task["model_config"],
-                            task["model_output_dir"],
-                            SYSTEM_PROMPT_BASE,
+            executor.submit(process_prompt_for_model, 
+                            task["prompt_data"], 
+                            task["model_config"], 
+                            task["model_output_dir"], 
+                            SYSTEM_PROMPT_BASE, 
                             USER_PROMPT_WRAPPER): task
             for task in tasks
         }
@@ -340,10 +340,10 @@ def main():
             model_name = task_info["model_config"]["name"]
             prompt_id_completed = task_info["prompt_data"]["prompt_id"]
             completed_tasks += 1
-
+            
             try:
                 _, _, status, time_taken = future.result() # model_name also returned, but we have it
-
+                
                 model_stats[model_name]["total_time"] += time_taken
                 model_stats[model_name]["processed_count"] += 1
 
@@ -355,13 +355,13 @@ def main():
                      model_stats[model_name]["api_error"] += 1
                 else: # client_init_failed, write_failed, etc.
                     model_stats[model_name]["other_failure"] += 1
-
+                
                 # print(f"  Progress: {completed_tasks}/{total_tasks} tasks. Last: {model_name} - {prompt_id_completed} ('{status}', {time_taken:.2f}s)")
             except Exception as e:
                 model_stats[model_name]["other_failure"] += 1
                 model_stats[model_name]["processed_count"] += 1
                 print(f"    ERROR processing result for {model_name} - {prompt_id_completed}: {e}")
-
+            
             # More detailed live progress per model
             current_model_progress = model_stats[model_name]["processed_count"]
             total_for_model = model_stats[model_name]["num_prompts_for_model"]
@@ -392,7 +392,7 @@ if __name__ == "__main__":
             active_models_count += 1
         else:
             print(f"  - Model {mc_idx+1}: '{mc['name']}' - WARNING: API Key NOT FOUND or empty. This model will be skipped.")
-
+    
     if active_models_count == 0 and MODELS_CONFIG:
         print("\nFATAL: No API keys found for any configured models. Please set them.")
         print("Stopping execution.")
@@ -402,5 +402,5 @@ if __name__ == "__main__":
         sys.exit(1)
     print(f"Found {active_models_count} model(s) with API keys to process.")
     print("-" * 30)
-
+    
     main()
